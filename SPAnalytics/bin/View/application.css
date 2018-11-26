@@ -3,3 +3,7 @@
 .jfx-slider #miami-red {
 	-fx-fill: red;
 }
+
+#login-screen{
+	 -fx-alignment: center;
+}

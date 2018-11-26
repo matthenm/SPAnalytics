@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-
-		// Handling any exceptions
 		try {
 
 			// Initializing the FXML loader
@@ -41,32 +39,20 @@ public class Main extends Application {
 							.getResource("/View/application.css")
 							.toExternalForm());
 
-			// Setting the stage
 			primaryStage.setScene(scene);
-
-			// Setting the title of the application
 			primaryStage.setTitle("SP Analytics");
-
-			// Making it full screen
 			primaryStage.setMaximized(true);
-
-			// Showing the scene
 			primaryStage.show();
-
 			
 		} catch (Exception e) {
-			// Alert the user to missing password
 			String msg = "Error";
 			System.out.println(msg);
 			Alert err = new Alert(AlertType.CONFIRMATION, msg);
 			err.show();
 		}
+	}
 
-	}// End of the 'start' method
-
-	// The main method
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-}// End of the 'Main' class
+}
