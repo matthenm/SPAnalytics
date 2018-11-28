@@ -13,6 +13,10 @@ import javafx.stage.Stage;
 public class Controller {
 	//login scene variables
 	@FXML
+	private JFXPasswordField		password;
+	@FXML
+	private JFXTextField			userName;
+	@FXML
 	private JFXButton				loginButton;
 	
 	
@@ -26,7 +30,8 @@ public class Controller {
 	private boolean	isLogin		= true;
 	
 	private final String	LOGIN_SCENE				= "/view/SPAnalytics-Login.fxml";
-	private final String	PLAYER_HOME					= "/view/PlayerHome.fxml";
+	private final String	PLAYER_HOME				= "/view/PlayerHome.fxml";
+	private final String	GOALIE_HOME				= "/view/GoalieHome.fxml";
 	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.fxml";
 	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
@@ -81,9 +86,13 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
-				// Switch to player card
+		if(userName.getText() == "test" && password.getText() == "test") {
 				loadScene(PLAYER_HOME);
-			}
+		} else {
+			loadScene(GOALIE_HOME);
+		}
+	}
+
 
 
 	/**
@@ -91,7 +100,6 @@ public class Controller {
 	 */
 	@FXML
 	public void PlayerCardClicked() {
-		// Switch to player card
 		loadScene(PLAYER_CARD);
 	}
 	
@@ -100,7 +108,6 @@ public class Controller {
 	 */
 	@FXML
 	public void HomeButtonClicked() {
-		// Switch to player card
 		loadScene(PLAYER_HOME);
 	}
 }
