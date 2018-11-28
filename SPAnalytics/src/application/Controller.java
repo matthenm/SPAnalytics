@@ -63,7 +63,7 @@ public class Controller {
 			scene = new Scene(parent, 600, 400);
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("Player Card");
+			primaryStage.setTitle("SP Analytics");
 			primaryStage.setMaximized(true);
 			primaryStage.setFullScreen(true);
 			primaryStage.show();

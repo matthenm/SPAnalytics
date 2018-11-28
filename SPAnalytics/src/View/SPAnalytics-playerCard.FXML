@@ -12,207 +12,217 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="650.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane prefHeight="410.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+      <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="650.0" style="-fx-background-color: black;">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1280.0" style="-fx-background-color: BLACK;">
                <children>
-                  <JFXButton buttonType="RAISED" layoutX="533.0" layoutY="189.0" prefHeight="29.0" prefWidth="80.0" style="-fx-background-color: #C42134;" text="Play All" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
-                  <Label alignment="CENTER" layoutX="331.0" layoutY="200.0" prefHeight="29.0" prefWidth="60.0" style="-fx-text-fill: #C42134;" text="Clip 1" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" layoutX="423.0" layoutY="200.0" prefHeight="29.0" prefWidth="60.0" style="-fx-text-fill: #C42134;" text="Clip 1" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutY="144.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Game Log:" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutY="180.0" prefHeight="20.0" prefWidth="100.0" style="-fx-text-fill: #C42134;" text="Select Layer:" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutY="219.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Providence:" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <JFXSlider id="miami-red" layoutX="321.0" layoutY="182.0" majorTickUnit="15.0" minorTickCount="1" prefHeight="16.0" prefWidth="80.0" />
-                  <JFXSlider id="miami-red" layoutX="426.0" layoutY="182.0" majorTickUnit="15.0" minorTickCount="1" prefHeight="16.0" prefWidth="80.0" />
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="351.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/play_pause.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="381.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/fastforward.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="321.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/rewind.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="485.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/fastforward.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="455.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/play_pause.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="425.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/rewind.jpg" />
-                     </image>
-                  </ImageView>
-                  <JFXButton buttonType="RAISED" layoutX="82.0" layoutY="146.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.6" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="115.0" layoutY="146.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.7" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="148.0" layoutY="146.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.8" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="181.0" layoutY="146.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.9" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="214.0" layoutY="146.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.10" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="249.0" layoutY="146.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.11" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="103.0" layoutY="183.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="1" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="136.0" layoutY="183.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="2" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="169.0" layoutY="183.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="3" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="107.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="1." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="85.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="127.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="1." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="147.0" layoutY="221.0" prefHeight="17.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="+1." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="173.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="3." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="195.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="217.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="239.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="261.0" layoutY="221.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <TableView editable="true" layoutX="96.0" layoutY="56.0" prefHeight="82.0" prefWidth="531.0" style="-fx-background-color: black; text-color: white;">
+                  <TableView editable="true" layoutX="147.0" layoutY="45.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                      <columns>
-                        <TableColumn prefWidth="54.0" text="Season" />
-                        <TableColumn prefWidth="28.0" text="GP" />
-                        <TableColumn prefWidth="19.0" text="G" />
-                        <TableColumn prefWidth="19.0" text="A" />
-                        <TableColumn prefWidth="33.0" text="PTS" />
-                        <TableColumn prefWidth="27.0" text="+/-" />
-                        <TableColumn prefWidth="36.0" text="SOG" />
-                        <TableColumn prefWidth="24.0" text="\%" />
-                        <TableColumn prefWidth="35.0" text="PPG" />
-                        <TableColumn prefWidth="35.0" text="PPA" />
-                        <TableColumn prefWidth="35.0" text="SHG" />
-                        <TableColumn prefWidth="40.0" text="GWG" />
-                        <TableColumn prefWidth="36.0" text="GTG" />
-                        <TableColumn prefWidth="48.0" text="TOI/G" />
-                        <TableColumn prefWidth="61.0" text="PROD" />
+                        <TableColumn prefWidth="59.0" text="Season" />
+                        <TableColumn prefWidth="59.0" text="GP" />
+                        <TableColumn prefWidth="59.0" text="G" />
+                        <TableColumn prefWidth="59.0" text="A" />
+                        <TableColumn prefWidth="59.0" text="PTS" />
+                        <TableColumn prefWidth="59.0" text="+/-" />
+                        <TableColumn prefWidth="59.0" text="SOG" />
+                        <TableColumn prefWidth="59.0" text="\%" />
+                        <TableColumn prefWidth="59.0" text="PPG" />
+                        <TableColumn prefWidth="59.0" text="PPA" />
+                        <TableColumn prefWidth="59.0" text="SHG" />
+                        <TableColumn prefWidth="59.0" text="GWG" />
+                        <TableColumn prefWidth="59.0" text="GTG" />
+                        <TableColumn prefWidth="59.0" text="TOI/G" />
+                        <TableColumn prefWidth="59.0" text="PROD" />
                      </columns>
                   </TableView>
-                  <ImageView fitHeight="138.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="247.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/Mahalak.jpg" />
                      </image>
                   </ImageView>
-                  <JFXTextArea layoutX="98.0" layoutY="1.0" prefHeight="56.0" prefWidth="215.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#10;Height: 5'9&quot; &#9;Weight: 161 Lbs&#10;Born: 9/14/98 &#9;Monroe, MI" unFocusColor="#ffffff00" />
-                  <JFXButton buttonType="RAISED" layoutX="527.0" layoutY="7.0" prefHeight="43.0" prefWidth="92.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
+                  <JFXTextArea layoutX="147.0" prefHeight="41.0" prefWidth="302.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#9;  Height: 5'9&quot;&#9;  Weight: 161 Lbs&#9;Born: 9/14/98&#9;  Monroe, MI" unFocusColor="#ffffff00" />
+                  <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="2.0" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <ImageView fitHeight="161.0" fitWidth="315.0" layoutX="15.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/rink.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="182.0" fitWidth="300.0" layoutX="348.0" layoutY="227.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/nchcTV.png" />
-                     </image>
-                  </ImageView>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
    </top>
+   <bottom>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1280.0" style="-fx-background-color: BLACK;">
+               <children>
+                  <ImageView fitHeight="283.0" fitWidth="564.0" layoutX="2.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/rink.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton buttonType="RAISED" layoutX="1072.0" layoutY="40.0" prefHeight="29.0" prefWidth="80.0" style="-fx-background-color: #C42134;" text="Play All" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <Label alignment="CENTER" layoutX="913.0" layoutY="76.0" prefHeight="29.0" prefWidth="60.0" style="-fx-text-fill: #C42134;" text="Clip 1" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="746.0" layoutY="73.0" prefHeight="29.0" prefWidth="60.0" style="-fx-text-fill: #C42134;" text="Clip 1" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="764.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/play_pause.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="794.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/fastforward.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="734.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/rewind.jpg" />
+                     </image>
+                  </ImageView>
+                  <JFXSlider id="miami-red" layoutX="736.0" layoutY="63.0" majorTickUnit="15.0" minorTickCount="1" prefHeight="16.0" prefWidth="80.0" />
+                  <JFXSlider id="miami-red" layoutX="902.0" layoutY="67.0" majorTickUnit="15.0" minorTickCount="1" prefHeight="16.0" prefWidth="80.0" />
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="961.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/fastforward.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="931.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/play_pause.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="901.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/rewind.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="427.0" fitWidth="781.0" layoutX="569.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/nchcTV.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="4.0" layoutY="12.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Game Log:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="4.0" layoutY="39.0" prefHeight="20.0" prefWidth="100.0" style="-fx-text-fill: #C42134;" text="Select Layer:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="5.0" layoutY="71.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Providence:" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.6" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="116.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.7" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="149.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.8" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="182.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.9" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="215.0" layoutY="15.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.10" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="250.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.11" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="98.0" layoutY="41.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="1" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="41.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="2" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="164.0" layoutY="41.0" prefHeight="15.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="3" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="113.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="1." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="91.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="133.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="1." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="153.0" layoutY="74.0" prefHeight="17.0" prefWidth="25.0" style="-fx-background-color: #C42134;" text="+1." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="179.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="3." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="201.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="223.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="245.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="267.0" layoutY="74.0" prefHeight="0.0" prefWidth="10.0" style="-fx-background-color: #C42134;" text="0." textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="9.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </bottom>
 </BorderPane>
