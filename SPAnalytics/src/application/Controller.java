@@ -25,11 +25,12 @@ public class Controller {
 	
 	private boolean	isLogin		= true;
 	
-	private final String	LOGIN_SCENE		= "/view/SPAnalytics-Login.fxml";
-	private final String	PLAYER_CARD	= "/view/SPAnalytics-playerCard.fxml";
-	private final String	GOALIE_CARD	= "/view/SPAnalytics-goalieCard.fxml";
-	private final String	GOALIE_CARD_PERCENT	= "/view/SPAnalytics-goalieCardPercent.fxml";
-	private final String	CSS				= "/view/application.css";
+	private final String	LOGIN_SCENE				= "/view/SPAnalytics-Login.fxml";
+	private final String	PLAYER_HOME					= "/view/PlayerHome.fxml";
+	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.fxml";
+	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
+	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
+	private final String	CSS						= "/view/application.css";
 	
 	/**
 	 * This is the method that will allow this Controller class to
@@ -74,23 +75,33 @@ public class Controller {
 	
 	
 	/**
-	 * This is the method that will switch to player card once login is clicked
-	 * Needs error handling for user login
+	 * This is the method that will switch to the home screen once login is clicked
+	 * Needs error handling for user login. If player --> player home screen.
+	 * If goalie --> goalie home screen
 	 */
 	@FXML
 	public void loginButtonClicked() {
 				// Switch to player card
-				loadScene("/View/SPAnalytics-playerCard.fxml");
+				loadScene(PLAYER_HOME);
 			}
 
 
 	/**
+	 * This is the method that will go to the player card scene.
+	 */
+	@FXML
+	public void PlayerCardClicked() {
+		// Switch to player card
+		loadScene(PLAYER_CARD);
+	}
+	
+	/**
 	 * This is the method that will go back the home scene.
 	 */
 	@FXML
-	public void homeButtonClicked() {
+	public void HomeButtonClicked() {
 		// Switch to player card
-		loadScene("/View/SPAnalytics-home.fxml");
+		loadScene(PLAYER_HOME);
 	}
 }
 
