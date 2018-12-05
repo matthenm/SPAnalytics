@@ -86,14 +86,16 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		if(userName.getText() == "test" && password.getText() == "test") {
-				loadScene(PLAYER_HOME);
-		} else {
-			loadScene(GOALIE_HOME);
-		}
+			loadScene(PLAYER_HOME);	
 	}
-
-
+	
+	/**
+	 * This is the method that will go to the goalie card scene.
+	 */
+	@FXML
+	public void GoalieCardClicked() {
+		loadScene(GOALIE_CARD);
+	}
 
 	/**
 	 * This is the method that will go to the player card scene.
