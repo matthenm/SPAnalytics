@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="621.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="621.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TableView editable="true" layoutX="98.0" layoutY="56.0" prefHeight="85.0" prefWidth="332.0" style="-fx-background-color: black; text-color: white;">
         <columns>
@@ -86,11 +93,6 @@
       <ImageView fitHeight="191.0" fitWidth="228.0" layoutX="1.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/goalieNet.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="163.0" fitWidth="284.0" layoutX="232.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Images/liveGoalie.png" />
          </image>
       </ImageView>
       <JFXButton buttonType="RAISED" layoutX="121.0" layoutY="195.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="7-1" textFill="WHITE">
@@ -188,5 +190,36 @@
             <Image url="@../Images/heatMap.png" />
          </image>
       </ImageView>
+      <TabPane layoutX="232.0" layoutY="227.0" prefHeight="179.0" prefWidth="277.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="NCHC">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField layoutX="157.0" layoutY="6.0" prefHeight="31.0" prefWidth="92.0" promptText="URL" />
+                        <TextArea layoutX="14.0" layoutY="21.0" prefHeight="112.0" prefWidth="124.0" promptText="Time stamps and notes" />
+                        <Text fill="WHITE" layoutX="14.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of timestamps to look at" wrappingWidth="142.703125">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="YouTube">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="129.0" prefWidth="345.0">
+                     <children>
+                        <TextField layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="55.0" promptText="URL" />
+                        <TextArea layoutX="14.0" layoutY="55.0" prefHeight="76.0" prefWidth="126.0" promptText="Timestamps/Notes" />
+                        <Button layoutX="77.0" layoutY="14.0" mnemonicParsing="false" text="Update" />
+                        <WebView layoutX="154.0" layoutY="14.0" prefHeight="116.0" prefWidth="114.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
    </children>
 </AnchorPane>
