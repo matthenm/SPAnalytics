@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextArea?>
@@ -12,7 +19,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
@@ -108,11 +115,6 @@
                   <ImageView fitHeight="29.0" fitWidth="21.0" layoutX="901.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/rewind.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="427.0" fitWidth="781.0" layoutX="569.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/nchcTV.png" />
                      </image>
                   </ImageView>
                   <Label layoutX="4.0" layoutY="12.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Game Log:" textFill="WHITE">
@@ -220,6 +222,37 @@
                         <Font name="System Bold" size="9.0" />
                      </font>
                   </JFXButton>
+                  <TabPane layoutX="582.0" layoutY="132.0" prefHeight="457.0" prefWidth="688.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="NCHC">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField layoutX="487.0" layoutY="14.0" promptText="URL" />
+                                    <TextArea layoutX="23.0" layoutY="57.0" prefHeight="347.0" prefWidth="654.0" promptText="Time stamps and notes" />
+                                    <Text fill="WHITE" layoutX="23.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of timestamps to look at" wrappingWidth="255.703125">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="YouTube">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField layoutX="14.0" layoutY="14.0" promptText="URL" />
+                                    <TextArea layoutX="14.0" layoutY="55.0" prefHeight="352.0" prefWidth="263.0" promptText="Timestamps/Notes" />
+                                    <Button layoutX="206.0" layoutY="14.0" mnemonicParsing="false" text="Update" />
+                                    <WebView layoutX="287.0" layoutY="14.0" prefHeight="395.0" prefWidth="391.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
                </children>
             </AnchorPane>
          </children>
