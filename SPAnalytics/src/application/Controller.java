@@ -86,11 +86,11 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		if(userName.getText() == "test" && password.getText() == "test") {
+		//if(userName.getText() == "test" && password.getText() == "test") {
 				loadScene(PLAYER_HOME);
-		} else {
-			loadScene(GOALIE_HOME);
-		}
+		//} else {
+			//loadScene(GOALIE_HOME);
+		//}
 	}
 
 
