@@ -8,9 +8,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 public class Controller {
+	
 	//login scene variables
 	@FXML
 	private JFXPasswordField		password;
@@ -86,15 +89,11 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		//if(userName.getText() == "test" && password.getText() == "test") {
-				loadScene(PLAYER_HOME);
-		//} else {
-			//loadScene(GOALIE_HOME);
-		//}
+		loadScene(PLAYER_HOME);
 	}
 
 
-
+// player card button functionalities 
 	/**
 	 * This is the method that will go to the player card scene.
 	 */
@@ -107,8 +106,26 @@ public class Controller {
 	 * This is the method that will go back the home scene.
 	 */
 	@FXML
-	public void HomeButtonClicked() {
+	public void PlayerHomeButtonClicked() {
 		loadScene(PLAYER_HOME);
 	}
+	
+// goalie card button functionalities
+	/**
+	 * This is the method that will go to the player card scene.
+	 */
+	@FXML
+	public void GoalieCardClicked() {
+		loadScene(GOALIE_CARD);
+	}
+	
+	/**
+	 * This is the method that will go back the home scene.
+	 */
+	@FXML
+	public void GoalieHomeButtonClicked() {
+		loadScene(GOALIE_HOME);
+	}
 }
+
 
