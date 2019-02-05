@@ -15,7 +15,7 @@ public class Main extends Application {
 
 			// Initializing the FXML loader
 			FXMLLoader loader = new FXMLLoader(
-					getClass().getResource("/View/SPAnalytics-Login.fxml"));
+					getClass().getResource("/View/SPAnalytics-goalieCard.fxml"));
 
 			// Creating an instance of the controller class
 			Controller controller = new Controller();
@@ -46,7 +46,7 @@ public class Main extends Application {
 			
 		} catch (Exception e) {
 			String msg = "Error";
-			System.out.println(msg);
+			System.out.println(e);
 			Alert err = new Alert(AlertType.CONFIRMATION, msg);
 			err.show();
 		}
