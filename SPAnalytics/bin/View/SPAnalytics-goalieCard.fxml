@@ -266,24 +266,9 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <Label fx:id="Hour" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="75.0" text="000 : " textFill="WHITE">
+                        <Label fx:id="Time" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="303.0" text="0:00:00.000" textAlignment="RIGHT" textFill="WHITE">
                            <font>
-                              <Font size="30.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="Minute" layoutX="88.0" layoutY="14.0" prefHeight="45.0" prefWidth="75.0" text="000 : " textFill="WHITE">
-                           <font>
-                              <Font size="30.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="Second" layoutX="163.0" layoutY="14.0" prefHeight="45.0" prefWidth="75.0" text="000 : " textFill="WHITE">
-                           <font>
-                              <Font size="30.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="Millisecond" layoutX="238.0" layoutY="14.0" prefHeight="45.0" prefWidth="75.0" text="0000" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
+                              <Font size="33.0" />
                            </font>
                         </Label>
                      </children>

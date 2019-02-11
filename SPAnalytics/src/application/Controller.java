@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Desktop;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
@@ -33,15 +34,9 @@ public class Controller {
 	private TextField NCHC_URL;
 
 	//Timer Variables
-	@FXML private Label Millisecond;
-	@FXML private Label Second;
-	@FXML private Label Minute;
-	@FXML private Label Hour;
-	static int milliseconds = 0;
-	static int seconds = 0;
-	static int minutes = 0;
-	static int hours = 0;
-
+	@FXML private Label Time;
+	private long timerStart;
+	private long timerPause = 0;
 	static boolean timerOn = false;	
 
 	//instance variables
@@ -99,6 +94,18 @@ public class Controller {
 		} catch (Exception err) {
 			System.out.println(err);
 		}
+	}
+
+	/**
+	 * Helper method that converts milliseconds to a stopwatch time format
+	 */
+	private static String formatTime(final long l)
+	{
+		final long hr = TimeUnit.MILLISECONDS.toHours(l);
+		final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+		final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+		final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+		return String.format("%01d:%02d:%02d.%03d", hr, min, sec, ms);
 	}
 
 
@@ -165,42 +172,27 @@ public class Controller {
 	@FXML
 	public void StartTimerClicked() {
 		timerOn = true;
+		timerStart = System.nanoTime();
 
 		Thread t = new Thread() {
 			public void run() {
-				for(;;) {
-					if(timerOn) {
-						try {
-							Thread.sleep(1);
+				while(timerOn) {
+					try {
+						long currentTime = (System.nanoTime() - timerStart) / 1000000 + timerPause;
+						String formattedTime = formatTime(currentTime);
 
-							if(milliseconds>=1000) {
-								milliseconds = 0; 
-								seconds++;
+						Thread.sleep(10);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								Time.setText(formattedTime);
 							}
-							if(seconds >= 60) {
-								seconds = 0;
-								minutes++;
-							}
-							if(minutes >= 60) {
-								minutes = 0;
-								hours++;
-							}
-							Platform.runLater(new Runnable() {
-								@Override
-								public void run() {
-									Millisecond.setText(" : " + milliseconds);
-									Second.setText(" : " + seconds);
-									Minute.setText(" : " + minutes);
-									Hour.setText("" + hours);	
-								}
-							});
+						});
 
-							milliseconds++;
-						} catch(Exception e) {
-							System.out.println(e.getMessage());
-						}
-					}	
-				}
+					} catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
+				}	
 			}
 		};
 		t.start();
@@ -213,6 +205,7 @@ public class Controller {
 	@FXML
 	public void StopTimerClicked() {
 		timerOn = false;
+		timerPause += (System.nanoTime() - timerStart) / 1000000;
 	}
 
 	/**
@@ -220,16 +213,9 @@ public class Controller {
 	 */
 	@FXML
 	public void ResetTimerClicked() {
-		timerOn = false;
-		hours = 0;
-		minutes = 0;
-		seconds = 0;
-		milliseconds = 0;
-
-		Hour.setText("00 : ");
-		Minute.setText("00 : ");
-		Second.setText("00 : ");
-		Millisecond.setText("00");
+		timerStart = System.nanoTime();
+		timerPause = 0;
+		Time.setText("0:00:00.000");
 	}
 }
 
