@@ -126,7 +126,13 @@ public class Controller {
 	public void loginButtonClicked() {
 		if(rosterList.getValue().equals("Ryan Larkin")) {
 			loadScene(GOALIE_HOME);
-		}else {
+		}else if(rosterList.getValue().equals("ADMIN")) {
+			String msg = "Enter your password";
+			Alert pass = new Alert(AlertType.CONFIRMATION, msg);
+			pass.show();
+			
+		}
+		else {	
 			loadScene(PLAYER_HOME);
 		}
 	}

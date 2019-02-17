@@ -33,6 +33,7 @@
    <ChoiceBox fx:id="rosterList" layoutX="319.0" layoutY="185.0" prefHeight="30.0" prefWidth="250.0" style="-fx-region-background: BLACK; -fx-border-color: #C42134;">
        <items>
             <FXCollections fx:factory="observableArrayList">
+            	<String fx:value="ADMIN" />
             	<String fx:value="Alec Mahalak" />
             	<String fx:value="Ryan Larkin" />
         	</FXCollections>
