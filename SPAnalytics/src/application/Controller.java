@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -22,13 +23,18 @@ import javafx.stage.Stage;
 public class Controller {
 
 	//login scene variables
+	/*
 	@FXML
 	private JFXPasswordField		password;
 	@FXML
 	private JFXTextField			userName;
+	*/
 	@FXML
 	private JFXButton				loginButton;
+	@FXML
+	private ChoiceBox<String>		rosterList;
 
+	
 	//Video tab scene variables
 	@FXML 
 	private TextField NCHC_URL;
@@ -55,6 +61,8 @@ public class Controller {
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
 	private final String	CSS						= "/view/application.css";
 
+	
+	
 	/**
 	 * This is the method that will allow this Controller class to
 	 * load new FXML files. 
@@ -68,11 +76,12 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
-		if (newScene.equals(LOGIN_SCENE)) {
+	 	if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
 		} else {
 			isLogin = false;
 		}
+		
 		try {
 			// Switch to player card scene
 			fxmlLoader = new FXMLLoader(
@@ -83,7 +92,6 @@ public class Controller {
 
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
-
 			scene = new Scene(parent, 600, 400);
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
@@ -107,18 +115,23 @@ public class Controller {
 		final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
 		return String.format("%01d:%02d:%02d.%03d", hr, min, sec, ms);
 	}
-
-
+	
+	
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
-	 * Needs error handling for user login. If player --> player home screen.
+	 * If player --> player home screen.
 	 * If goalie --> goalie home screen
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		loadScene(PLAYER_HOME);
+		if(rosterList.getValue().equals("Ryan Larkin")) {
+			loadScene(GOALIE_HOME);
+		}else {
+			loadScene(PLAYER_HOME);
+		}
 	}
 
+	
 
 	// player card button functionalities 
 	/**

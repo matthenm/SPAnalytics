@@ -15,7 +15,7 @@ public class Main extends Application {
 
 			// Initializing the FXML loader
 			FXMLLoader loader = new FXMLLoader(
-					getClass().getResource("/View/SPAnalytics-goalieCard.fxml"));
+					getClass().getResource("/View/SPAnalytics-login.fxml"));
 
 			// Creating an instance of the controller class
 			Controller controller = new Controller();
