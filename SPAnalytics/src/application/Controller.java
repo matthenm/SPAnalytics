@@ -15,9 +15,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -127,10 +131,15 @@ public class Controller {
 		if(rosterList.getValue().equals("Ryan Larkin")) {
 			loadScene(GOALIE_HOME);
 		}else if(rosterList.getValue().equals("ADMIN")) {
-			String msg = "Enter your password";
-			Alert pass = new Alert(AlertType.CONFIRMATION, msg);
-			pass.show();
-			
+			TextInputDialog dialog = new TextInputDialog("");
+			dialog.setTitle("Admin Password");
+			dialog.setHeaderText("Enter your password:");
+			dialog.setContentText("Password:");
+			dialog.show();
+			/*if(dialog.getContentText().equals("abc")) {
+				loadScene(GOALIE_CARD_PERCENT);
+			}
+			*/
 		}
 		else {	
 			loadScene(PLAYER_HOME);
