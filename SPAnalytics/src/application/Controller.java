@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -33,11 +34,16 @@ public class Controller {
 	@FXML 
 	private TextField NCHC_URL;
 
-	//Timer Variables
+	//Timer variables
 	@FXML private Label Time;
 	private long timerStart;
 	private long timerPause = 0;
+	private long currentTime = 0;
 	static boolean timerOn = false;	
+	
+	//TimeStamp variables
+	@FXML private TextArea TimeStamps;
+	@FXML private TextArea TimeStampNotes;
 
 	//instance variables
 	private Scene					scene;
@@ -104,8 +110,19 @@ public class Controller {
 		final long hr = TimeUnit.MILLISECONDS.toHours(l);
 		final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
 		final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-		final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-		return String.format("%01d:%02d:%02d.%03d", hr, min, sec, ms);
+		//final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+		return String.format("%01d:%02d:%02d", hr, min, sec);
+	}
+	
+	/**
+	 * Returns the current time on the timer
+	 */
+	public void getTime() {
+		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
+		String start = formatTime(Math.max(sTime, 0));
+		String end = formatTime(currentTime);
+		TimeStamps.appendText(start + " - " + end + "\n");
+		TimeStampNotes.appendText("Untitled\n");
 	}
 
 
@@ -178,7 +195,7 @@ public class Controller {
 			public void run() {
 				while(timerOn) {
 					try {
-						long currentTime = (System.nanoTime() - timerStart) / 1000000 + timerPause;
+						currentTime = (System.nanoTime() - timerStart) / 1000000 + timerPause;
 						String formattedTime = formatTime(currentTime);
 
 						Thread.sleep(10);
@@ -215,7 +232,8 @@ public class Controller {
 	public void ResetTimerClicked() {
 		timerStart = System.nanoTime();
 		timerPause = 0;
-		Time.setText("0:00:00.000");
+		currentTime = 0;
+		Time.setText("0:00:00");
 	}
 }
 
