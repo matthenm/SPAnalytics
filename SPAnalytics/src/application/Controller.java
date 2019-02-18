@@ -136,10 +136,6 @@ public class Controller {
 			dialog.setHeaderText("Enter your password:");
 			dialog.setContentText("Password:");
 			dialog.show();
-			/*if(dialog.getContentText().equals("abc")) {
-				loadScene(GOALIE_CARD_PERCENT);
-			}
-			*/
 		}
 		else {	
 			loadScene(PLAYER_HOME);
@@ -164,6 +160,15 @@ public class Controller {
 	public void PlayerHomeButtonClicked() {
 		loadScene(PLAYER_HOME);
 	}
+	
+	/**
+	 * This is the method that will logout and go back the login scene.
+	 */
+	@FXML
+	public void PlayerLogoutButtonClicked() {
+		loadScene(LOGIN_SCENE);
+	}
+	
 
 	// goalie card button functionalities
 	/**
@@ -180,6 +185,14 @@ public class Controller {
 	@FXML
 	public void GoalieHomeButtonClicked() {
 		loadScene(GOALIE_HOME);
+	}
+	
+	/**
+	 * This is the method that will logout and go back the login scene.
+	 */
+	@FXML
+	public void GoalieLogoutButtonClicked() {
+		loadScene(LOGIN_SCENE);
 	}
 
 	/**
