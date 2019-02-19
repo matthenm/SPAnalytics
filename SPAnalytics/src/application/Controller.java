@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Desktop;
 import java.net.URL;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
@@ -135,14 +136,19 @@ public class Controller {
 			dialog.setTitle("Admin Password");
 			dialog.setHeaderText("Enter your password:");
 			dialog.setContentText("Password:");
-			dialog.show();
+			Optional<String> result = dialog.showAndWait();
+			if (result.isPresent()){
+				if(result.get().equals("abc")) {
+					loadScene(GOALIE_CARD);
+				}
+			    
+			}
 		}
 		else {	
 			loadScene(PLAYER_HOME);
 		}
 	}
 
-	
 
 	// player card button functionalities 
 	/**
