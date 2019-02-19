@@ -141,7 +141,6 @@ public class Controller {
 				if(result.get().equals("abc")) {
 					loadScene(GOALIE_CARD);
 				}
-			    
 			}
 		}
 		else {	
