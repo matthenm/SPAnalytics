@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.web.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Button?>
@@ -26,11 +18,11 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1280.0">
+            <AnchorPane>
                <children>
                   <TableView editable="true" layoutX="147.0" layoutY="55.0" prefHeight="147.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                     <columns>
@@ -54,6 +46,11 @@
                   </ImageView>
                   <JFXTextArea layoutX="147.0" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
                   <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="2.0" onAction="#GoalieHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="50.0" onAction="#GoalieLogoutButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="LOGOUT" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -220,7 +217,7 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <TextField fx:id="NCHC_URL" layoutX="286.0" layoutY="14.0" prefHeight="31.0" prefWidth="270.0" promptText="URL" />
-                                    <TextArea fx:id="TimeStamps" layoutX="23.0" layoutY="57.0" prefHeight="347.0" prefWidth="335.0" promptText="Time Stamps" />
+                                    <TextArea layoutX="23.0" layoutY="57.0" prefHeight="347.0" prefWidth="654.0" promptText="Time stamps and notes" />
                                     <Text fill="WHITE" layoutX="23.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of timestamps to look at" wrappingWidth="255.703125">
                                        <font>
                                           <Font size="18.0" />
@@ -231,7 +228,6 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </JFXButton>
-                                    <TextArea fx:id="TimeStampNotes" layoutX="368.0" layoutY="57.0" prefHeight="347.0" prefWidth="307.0" promptText="Notes" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -267,7 +263,7 @@
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </JFXButton>
-                        <Label fx:id="Time" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="303.0" text="0:00:00" textAlignment="RIGHT" textFill="WHITE">
+                        <Label fx:id="Time" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="303.0" text="0:00:00.000" textAlignment="RIGHT" textFill="WHITE">
                            <font>
                               <Font size="33.0" />
                            </font>

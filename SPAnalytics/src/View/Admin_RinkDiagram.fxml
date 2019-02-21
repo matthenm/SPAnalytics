@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1280.0" style="-fx-background-color: black;">
+               <children>
+                  <ImageView fitHeight="576.0" fitWidth="1138.0" layoutX="71.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Images/rink.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <top>
+      <AnchorPane prefHeight="249.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane layoutX="417.0" layoutY="24.0" prefHeight="112.0" prefWidth="331.0">
+               <children>
+                  <JFXButton buttonType="RAISED" layoutX="111.0" layoutY="71.0" onAction="#StopTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Stop" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutY="71.0" onAction="#StartTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Start" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton buttonType="RAISED" layoutX="224.0" layoutY="71.0" onAction="#ResetTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Reset" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <Label fx:id="Time" alignment="TOP_CENTER" layoutY="12.0" prefHeight="50.0" prefWidth="210.0" text="20:00 1st" textAlignment="RIGHT" textFill="WHITE">
+                     <font>
+                        <Font size="33.0" />
+                     </font>
+                  </Label>
+                  <JFXButton buttonType="RAISED" layoutX="223.0" layoutY="10.0" onAction="#NextPeriodClicked" prefHeight="52.0" prefWidth="101.0" style="-fx-background-color: #C42134;" text="Next Period" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+            <TabPane layoutX="779.0" layoutY="14.0" prefHeight="132.0" prefWidth="487.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="NCHC">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="287.0" prefWidth="487.0">
+                           <children>
+                              <TextField fx:id="NCHC_URL" layoutX="114.0" layoutY="8.0" prefHeight="31.0" prefWidth="270.0" promptText="URL" />
+                              <Text fill="WHITE" layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Replay Link" wrappingWidth="135.703125">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <JFXButton buttonType="RAISED" layoutX="394.0" layoutY="8.0" onAction="#NCHCOpenButtonClicked" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #C42134;" text="OPEN" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXButton>
+                              <TextArea fx:id="TimeStampNotes" layoutX="281.0" layoutY="48.0" prefHeight="36.0" prefWidth="200.0" promptText="Note/Title" />
+                              <ComboBox fx:id="TimeStamps" layoutX="12.0" layoutY="51.0" prefHeight="31.0" prefWidth="261.0" promptText="Time Stamps" style="-fx-background-color: white;" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="YouTube">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="129.0" prefWidth="345.0">
+                           <children>
+                              <TextField layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="55.0" promptText="URL" />
+                              <TextArea layoutX="14.0" layoutY="55.0" prefHeight="76.0" prefWidth="126.0" promptText="Timestamps/Notes" />
+                              <Button layoutX="77.0" layoutY="14.0" mnemonicParsing="false" text="Update" />
+                              <WebView layoutX="154.0" layoutY="14.0" prefHeight="116.0" prefWidth="114.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>

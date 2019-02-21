@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -40,9 +41,11 @@ public class Controller {
 	private long timerPause = 0;
 	private long currentTime = 0;
 	static boolean timerOn = false;	
+	private static int periodIndex = 0;
+	private final static String[] PERIODS = {"1st", "2nd", "3rd"};
 	
 	//TimeStamp variables
-	@FXML private TextArea TimeStamps;
+	@FXML private ComboBox TimeStamps;
 	@FXML private TextArea TimeStampNotes;
 
 	//instance variables
@@ -107,11 +110,10 @@ public class Controller {
 	 */
 	private static String formatTime(final long l)
 	{
-		final long hr = TimeUnit.MILLISECONDS.toHours(l);
-		final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
-		final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-		//final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-		return String.format("%01d:%02d:%02d", hr, min, sec);
+		final long time = TimeUnit.MINUTES.toMillis(20) - l;
+		final long min = TimeUnit.MILLISECONDS.toMinutes(time);
+		final long sec = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(min));
+		return String.format("%02d:%02d %s", min, sec, PERIODS[periodIndex]);
 	}
 	
 	/**
@@ -121,7 +123,7 @@ public class Controller {
 		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
 		String start = formatTime(Math.max(sTime, 0));
 		String end = formatTime(currentTime);
-		TimeStamps.appendText(start + " - " + end + "\n");
+		//TimeStamps.appendText(start + " - " + end + "\n");
 		TimeStampNotes.appendText("Untitled\n");
 	}
 
@@ -172,6 +174,14 @@ public class Controller {
 	}
 
 	/**
+	 * This is the method that will logout and go back the login scene.
+	 */
+	@FXML
+	public void GoalieLogoutButtonClicked() {
+		loadScene(LOGIN_SCENE);
+	}
+	
+	/**
 	 * Method opens NCHC link on default browser
 	 */
 	@FXML
@@ -181,6 +191,14 @@ public class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Method increments the period
+	 */
+	@FXML
+	public void NextPeriodClicked() {
+		periodIndex = (periodIndex+1) % PERIODS.length;
 	}
 
 	/**
@@ -233,7 +251,8 @@ public class Controller {
 		timerStart = System.nanoTime();
 		timerPause = 0;
 		currentTime = 0;
-		Time.setText("0:00:00");
+		periodIndex = 0;
+		Time.setText("20:00 1st");
 	}
 }
 
