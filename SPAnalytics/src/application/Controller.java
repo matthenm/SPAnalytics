@@ -1,8 +1,11 @@
 package application;
 
 import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
@@ -38,6 +41,7 @@ public class Controller {
 	private JFXButton				loginButton;
 	@FXML
 	private ChoiceBox<String>		rosterList;
+	
 
 	
 	//Video tab scene variables
@@ -61,6 +65,7 @@ public class Controller {
 	private final String	LOGIN_SCENE				= "/view/SPAnalytics-Login.fxml";
 	private final String	PLAYER_HOME				= "/view/PlayerHome.fxml";
 	private final String	GOALIE_HOME				= "/view/GoalieHome.fxml";
+	private final String	TEAM_PROFILE			= "/view/TeamProfile.fxml";
 	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.fxml";
 	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
@@ -136,19 +141,19 @@ public class Controller {
 			dialog.setTitle("Admin Password");
 			dialog.setHeaderText("Enter your password:");
 			dialog.setContentText("Password:");
-			Optional<String> result = dialog.showAndWait();
+			Optional<String>result = dialog.showAndWait();
 			if (result.isPresent()){
-				if(result.get().equals("abc")) {
-					loadScene(GOALIE_CARD);
+				if(result.get().equals("test")) {
+					loadScene(TEAM_PROFILE);
 				}
 			}
-		}
+	}
 		else {	
 			loadScene(PLAYER_HOME);
 		}
 	}
-
-
+	
+	
 	// player card button functionalities 
 	/**
 	 * This is the method that will go to the player card scene.
