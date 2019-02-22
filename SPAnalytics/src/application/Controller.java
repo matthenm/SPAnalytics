@@ -19,6 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
@@ -48,11 +51,18 @@ public class Controller {
 	@FXML 
 	private TextField NCHC_URL;
 
-	//Timer Variables
+	//Timer variables
 	@FXML private Label Time;
 	private long timerStart;
 	private long timerPause = 0;
+	private long currentTime = 0;
 	static boolean timerOn = false;	
+	private static int periodIndex = 0;
+	private final static String[] PERIODS = {"1st", "2nd", "3rd"};
+	
+	//TimeStamp variables
+	@FXML private ComboBox TimeStamps;
+	@FXML private TextArea TimeStampNotes;
 
 	//instance variables
 	private Scene					scene;
@@ -119,11 +129,21 @@ public class Controller {
 	 */
 	private static String formatTime(final long l)
 	{
-		final long hr = TimeUnit.MILLISECONDS.toHours(l);
-		final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
-		final long sec = TimeUnit.MILLISECONDS.toSeconds(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-		final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-		return String.format("%01d:%02d:%02d.%03d", hr, min, sec, ms);
+		final long time = TimeUnit.MINUTES.toMillis(20) - l;
+		final long min = TimeUnit.MILLISECONDS.toMinutes(time);
+		final long sec = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(min));
+		return String.format("%02d:%02d %s", min, sec, PERIODS[periodIndex]);
+	}
+	
+	/**
+	 * Returns the current time on the timer
+	 */
+	public void getTime() {
+		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
+		String start = formatTime(Math.max(sTime, 0));
+		String end = formatTime(currentTime);
+		//TimeStamps.appendText(start + " - " + end + "\n");
+		TimeStampNotes.appendText("Untitled\n");
 	}
 	
 	
@@ -204,7 +224,7 @@ public class Controller {
 	public void GoalieLogoutButtonClicked() {
 		loadScene(LOGIN_SCENE);
 	}
-
+	
 	/**
 	 * Method opens NCHC link on default browser
 	 */
@@ -215,6 +235,14 @@ public class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Method increments the period
+	 */
+	@FXML
+	public void NextPeriodClicked() {
+		periodIndex = (periodIndex+1) % PERIODS.length;
 	}
 
 	/**
@@ -229,7 +257,7 @@ public class Controller {
 			public void run() {
 				while(timerOn) {
 					try {
-						long currentTime = (System.nanoTime() - timerStart) / 1000000 + timerPause;
+						currentTime = (System.nanoTime() - timerStart) / 1000000 + timerPause;
 						String formattedTime = formatTime(currentTime);
 
 						Thread.sleep(10);
@@ -266,7 +294,9 @@ public class Controller {
 	public void ResetTimerClicked() {
 		timerStart = System.nanoTime();
 		timerPause = 0;
-		Time.setText("0:00:00.000");
+		currentTime = 0;
+		periodIndex = 0;
+		Time.setText("20:00 1st");
 	}
 }
 
