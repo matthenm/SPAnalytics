@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Desktop;
 import java.net.URL;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
@@ -18,19 +19,30 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 public class Controller {
 
 	//login scene variables
+	/*
 	@FXML
 	private JFXPasswordField		password;
 	@FXML
 	private JFXTextField			userName;
+	*/
 	@FXML
 	private JFXButton				loginButton;
+	@FXML
+	private ChoiceBox<String>		rosterList;
 
+	
 	//Video tab scene variables
 	@FXML 
 	private TextField NCHC_URL;
@@ -64,6 +76,8 @@ public class Controller {
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
 	private final String	CSS						= "/view/application.css";
 
+	
+	
 	/**
 	 * This is the method that will allow this Controller class to
 	 * load new FXML files. 
@@ -77,11 +91,12 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
-		if (newScene.equals(LOGIN_SCENE)) {
+	 	if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
 		} else {
 			isLogin = false;
 		}
+		
 		try {
 			// Switch to player card scene
 			fxmlLoader = new FXMLLoader(
@@ -92,7 +107,6 @@ public class Controller {
 
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
-
 			scene = new Scene(parent, 600, 400);
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
@@ -126,16 +140,32 @@ public class Controller {
 		//TimeStamps.appendText(start + " - " + end + "\n");
 		TimeStampNotes.appendText("Untitled\n");
 	}
-
-
+	
+	
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
-	 * Needs error handling for user login. If player --> player home screen.
+	 * If player --> player home screen.
 	 * If goalie --> goalie home screen
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		loadScene(PLAYER_HOME);
+		if(rosterList.getValue().equals("Ryan Larkin")) {
+			loadScene(GOALIE_HOME);
+		}else if(rosterList.getValue().equals("ADMIN")) {
+			TextInputDialog dialog = new TextInputDialog("");
+			dialog.setTitle("Admin Password");
+			dialog.setHeaderText("Enter your password:");
+			dialog.setContentText("Password:");
+			Optional<String> result = dialog.showAndWait();
+			if (result.isPresent()){
+				if(result.get().equals("abc")) {
+					loadScene(GOALIE_CARD);
+				}
+			}
+		}
+		else {	
+			loadScene(PLAYER_HOME);
+		}
 	}
 
 
@@ -155,6 +185,15 @@ public class Controller {
 	public void PlayerHomeButtonClicked() {
 		loadScene(PLAYER_HOME);
 	}
+	
+	/**
+	 * This is the method that will logout and go back the login scene.
+	 */
+	@FXML
+	public void PlayerLogoutButtonClicked() {
+		loadScene(LOGIN_SCENE);
+	}
+	
 
 	// goalie card button functionalities
 	/**
@@ -172,7 +211,7 @@ public class Controller {
 	public void GoalieHomeButtonClicked() {
 		loadScene(GOALIE_HOME);
 	}
-
+	
 	/**
 	 * This is the method that will logout and go back the login scene.
 	 */
