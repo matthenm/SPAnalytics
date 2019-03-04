@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -17,19 +18,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sun.misc.GC;
 
 public class Controller {
 
@@ -58,11 +66,18 @@ public class Controller {
 	private long currentTime = 0;
 	static boolean timerOn = false;	
 	private static int periodIndex = 0;
-	private final static String[] PERIODS = {"1st", "2nd", "3rd"};
+	private final static String[] PERIODS = {"1st", "2nd", "3rd", "OT"};
+	private ArrayList<Clip> clips = new ArrayList<Clip>();
 	
 	//TimeStamp variables
-	@FXML private ComboBox TimeStamps;
+	@FXML private ComboBox<String> TimeStamps;
 	@FXML private TextArea TimeStampNotes;
+	
+	//RinkDiagram variables
+	@FXML private Canvas RinkCanvas;
+	@FXML private ColorPicker RinkCP;
+	@FXML private Slider RinkSlider;
+	private GraphicsContext gc;
 
 	//instance variables
 	private Scene					scene;
@@ -89,6 +104,15 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
+		
+		try {
+			RinkCP.setValue(Color.BLACK);
+			gc = RinkCanvas.getGraphicsContext2D();
+			gc.setStroke(RinkCP.getValue());
+			gc.setLineWidth(RinkSlider.getValue());
+		} catch(Exception e) {
+			
+		}
 	}
 
 
@@ -119,6 +143,7 @@ public class Controller {
 			primaryStage.setMaximized(true);
 			primaryStage.setFullScreen(true);
 			primaryStage.show();
+			
 		} catch (Exception err) {
 			System.out.println(err);
 		}
@@ -129,7 +154,16 @@ public class Controller {
 	 */
 	private static String formatTime(final long l)
 	{
-		final long time = TimeUnit.MINUTES.toMillis(20) - l;
+		final long time;
+		
+		if(periodIndex <= 2) {
+			time = TimeUnit.MINUTES.toMillis(20) - l;
+		} else {
+			time = TimeUnit.MINUTES.toMillis(5) - l;
+		}
+		if (time < 0) {
+			return String.format("%02d:%02d %s", 0, 0, PERIODS[periodIndex]);
+		}
 		final long min = TimeUnit.MILLISECONDS.toMinutes(time);
 		final long sec = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(min));
 		return String.format("%02d:%02d %s", min, sec, PERIODS[periodIndex]);
@@ -143,7 +177,9 @@ public class Controller {
 		String start = formatTime(Math.max(sTime, 0));
 		String end = formatTime(currentTime);
 		//TimeStamps.appendText(start + " - " + end + "\n");
-		TimeStampNotes.appendText("Untitled\n");
+		Clip c = new Clip(start + " - " + end, "Untitled");
+		TimeStamps.getItems().add(c.getTime());
+		clips.add(c);
 	}
 	
 	
@@ -243,6 +279,10 @@ public class Controller {
 	@FXML
 	public void NextPeriodClicked() {
 		periodIndex = (periodIndex+1) % PERIODS.length;
+		timerStart = System.nanoTime();
+		timerPause = 0;
+		currentTime = 0;
+		Time.setText(formatTime(currentTime));
 	}
 
 	/**
@@ -297,6 +337,69 @@ public class Controller {
 		currentTime = 0;
 		periodIndex = 0;
 		Time.setText("20:00 1st");
+	}
+	
+	/**
+	 * Method displays proper title for selected timestamp
+	 */
+	@FXML
+	public void TimeStampAction() {
+		int index = TimeStamps.getSelectionModel().getSelectedIndex();
+		TimeStampNotes.setText(clips.get(index).getTitle());
+	}
+	
+	/**
+	 * Method Saves the title of selected clip
+	 */
+	@FXML
+	public void SaveNotesButtonClicked() {
+		int index = TimeStamps.getSelectionModel().getSelectedIndex();
+		clips.get(index).setTitle(TimeStampNotes.getText());
+	}
+	
+	/**
+	 * Method saves the NCHC link
+	 * NOT YET IMPLEMENTED
+	 */
+	@FXML
+	public void NCHCSaveButtonClicked() {
+		
+	}
+	
+	/**
+	 * Method begins drawing on canvas when mouse pressed
+	 */
+	@FXML
+	public void CanvasMousePressed(MouseEvent e) {
+		gc.beginPath();
+		gc.lineTo(e.getX(), e.getY());
+		gc.stroke();
+	}
+	
+	/**
+	 * Method draws on canvas with mouse movement
+	 */
+	@FXML
+	public void CanvasMouseDragged(MouseEvent e) {
+		gc.lineTo(e.getX(), e.getY());
+		gc.stroke();
+	}
+	
+	/**
+	 * Method changes selected color
+	 */
+	@FXML
+	public void RinkCPColorChange() {
+		gc.setStroke(RinkCP.getValue());
+	}
+	
+	/**
+	 * Method updates line width
+	 */
+	@FXML
+	public void RinkSliderDropped() {
+		System.out.println(RinkSlider.getValue());
+		gc.setLineWidth(RinkSlider.getValue());
 	}
 }
 
