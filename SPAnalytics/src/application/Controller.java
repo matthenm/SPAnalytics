@@ -118,29 +118,29 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
-		try {
-			gc1 = netChartCanvas.getGraphicsContext2D();
-			gc1.setFill(Color.RED);
-		} catch(Exception e) {}
-		
-		try {
-			RinkCP.setValue(Color.BLACK);
-			rinkGC = RinkCanvas.getGraphicsContext2D();
-			rinkGC.setStroke(RinkCP.getValue());
-			rinkGC.setFill(RinkCP.getValue());
-			rinkGC.setLineWidth(RinkSlider.getValue());
-			rinkGC.setFont(new Font("Verdana", 18));
-			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					int index = TimeStamps.getSelectionModel().getSelectedIndex();
-					TimeStampNotes.setText(clips.get(index).getTitle());
-				}
-				
-			});
-		} catch(Exception e) {
-			
-		}
+//		try {
+//			gc1 = netChartCanvas.getGraphicsContext2D();
+//			gc1.setFill(Color.RED);
+//		} catch(Exception e) {System.out.println("NetChart scene failed");}
+//		
+//		try {
+//			RinkCP.setValue(Color.BLACK);
+//			rinkGC = RinkCanvas.getGraphicsContext2D();
+//			rinkGC.setStroke(RinkCP.getValue());
+//			rinkGC.setFill(RinkCP.getValue());
+//			rinkGC.setLineWidth(RinkSlider.getValue());
+//			rinkGC.setFont(new Font("Verdana", 18));
+//			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+//				@Override
+//				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//					int index = TimeStamps.getSelectionModel().getSelectedIndex();
+//					TimeStampNotes.setText(clips.get(index).getTitle());
+//				}
+//				
+//			});
+//		} catch(Exception e) {
+//			System.out.println("RinkDiagram scene failed");
+//		}
 	}
 
 
@@ -175,6 +175,27 @@ public class Controller {
 		} catch (Exception err) {
 			System.out.println(err);
 		}
+		try {
+			gc1 = netChartCanvas.getGraphicsContext2D();
+			gc1.setFill(Color.RED);
+		} catch(Exception e) {}
+		
+		try {
+			RinkCP.setValue(Color.BLACK);
+			rinkGC = RinkCanvas.getGraphicsContext2D();
+			rinkGC.setStroke(RinkCP.getValue());
+			rinkGC.setFill(RinkCP.getValue());
+			rinkGC.setLineWidth(RinkSlider.getValue());
+			rinkGC.setFont(new Font("Verdana", 18));
+			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					int index = TimeStamps.getSelectionModel().getSelectedIndex();
+					TimeStampNotes.setText(clips.get(index).getTitle());
+				}
+				
+			});
+		} catch(Exception e) {}
 	}
 
 	/**
