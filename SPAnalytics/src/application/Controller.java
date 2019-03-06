@@ -1,5 +1,7 @@
 package application;
 
+
+import java.awt.Component;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,10 +15,13 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
@@ -29,22 +34,23 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Controller {
 
 	//login scene variables
-	/*
-	@FXML
-	private JFXPasswordField		password;
-	@FXML
-	private JFXTextField			userName;
-	*/
 	@FXML
 	private JFXButton				loginButton;
 	@FXML
 	private ChoiceBox<String>		rosterList;
 	
+    
+	//netChart variables
+	@FXML private Canvas netChartCanvas;
+	private GraphicsContext gc1;
 
 	
 	//Video tab scene variables
@@ -79,6 +85,10 @@ public class Controller {
 	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.fxml";
 	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
+	private final String	ADMIN_SCORINGCHANCES	= "/view/Admin_ScoringChances.fxml";
+	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
+	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
+	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
 	private final String	CSS						= "/view/application.css";
 
 	
@@ -89,6 +99,10 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
+		try {
+			gc1 = netChartCanvas.getGraphicsContext2D();
+			gc1.setFill(Color.RED);
+		} catch(Exception e) {}
 	}
 
 
@@ -151,6 +165,7 @@ public class Controller {
 	 * This is the method that will switch to the home screen once login is clicked
 	 * If player --> player home screen.
 	 * If goalie --> goalie home screen
+	 * if admin --> admin home screen
 	 */
 	@FXML
 	public void loginButtonClicked() {
@@ -164,13 +179,46 @@ public class Controller {
 			Optional<String>result = dialog.showAndWait();
 			if (result.isPresent()){
 				if(result.get().equals("test")) {
-					loadScene(TEAM_PROFILE);
+					loadScene(ADMIN_HOME);
 				}
 			}
 	}
 		else {	
 			loadScene(PLAYER_HOME);
 		}
+	}
+	
+	//Admin card button functionalities
+	/**
+	 * This is the method that will go back to the previous scene.
+	 */
+	@FXML
+	public void goBack() {
+		loadScene(ADMIN_HOME);
+	}
+	
+	/**
+	 * This is the method that will go to the net chart scene.
+	 */
+	@FXML
+	public void NetChartClicked() {
+		loadScene(ADMIN_NETCHART);
+	}
+	
+	/**
+	 * This is the method that will go to the scoring chances scene.
+	 */
+	@FXML
+	public void ScoringChancesClicked() {
+		loadScene(ADMIN_SCORINGCHANCES);
+	}
+	
+	/**
+	 * This is the method that will go to the rink diagram scene.
+	 */
+	@FXML
+	public void RinkDiagramClicked() {
+		loadScene(ADMIN_RINKDIAGRAM);
 	}
 	
 	
@@ -224,6 +272,31 @@ public class Controller {
 	public void GoalieLogoutButtonClicked() {
 		loadScene(LOGIN_SCENE);
 	}
+	
+	/**
+	 * This is the method that will change the color of the circle to red
+	 */
+	@FXML
+	public void setColorRed() {
+		gc1.setFill(Color.RED);
+	}
+	
+	/**
+	 * This is the method that will change the color of the circle to green
+	 */
+	@FXML
+	public void setColorGreen() {
+		gc1.setFill(Color.GREEN);
+	}
+	
+	/**
+	 * This is the method that will draw circles when mouse released
+	 */
+	@FXML
+	public void drawCircle(MouseEvent e) {
+		gc1.fillOval(e.getX()-20, e.getY()-20, 40, 40);
+	}
+	
 	
 	/**
 	 * Method opens NCHC link on default browser

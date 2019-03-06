@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,23 +13,20 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="540.0" fitWidth="873.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="589.0" fitWidth="942.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Images/NetChart.jpg" />
+                  <Image url="@../Images/scoringChances.jpg" />
                </image>
             </ImageView>
-            <Canvas fx:id="netChartCanvas" height="538.0" layoutY="-1.0" onMousePressed="#drawCircle" width="872.0" />
-            <AnchorPane layoutX="874.0" layoutY="-1.0" prefHeight="540.0" prefWidth="408.0">
+            <AnchorPane layoutX="798.0" prefHeight="589.0" prefWidth="472.0">
                <children>
+                  <Circle fill="#ff213b" layoutX="74.0" layoutY="150.0" radius="50.0" stroke="#fcfcfc" strokeType="INSIDE" />
+                  <Circle fill="#39e15b" layoutX="74.0" layoutY="270.0" radius="50.0" stroke="WHITE" strokeType="INSIDE" />
                   <JFXButton buttonType="RAISED" layoutX="4.0" layoutY="1.0" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="DELETE" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="25.0" />
                      </font>
                   </JFXButton>
-                  <Circle fill="#ff213b" layoutX="74.0" layoutY="150.0" radius="50.0" stroke="WHITE" strokeType="INSIDE" />
-                  <Circle fill="#39e15b" layoutX="74.0" layoutY="270.0" radius="50.0" stroke="WHITE" strokeType="INSIDE" />
-                  <JFXButton layoutX="177.0" layoutY="113.0" maxWidth="89.0" onAction="#setColorRed" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: RED; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
-                  <JFXButton layoutX="176.0" layoutY="234.0" maxWidth="89.0" onAction="#setColorGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
                </children>
             </AnchorPane>
          </children>
@@ -39,7 +35,7 @@
    <top>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="425.0" layoutY="10.0" prefHeight="177.0" prefWidth="431.0" text="Net Chart" textAlignment="CENTER" textFill="#c42134">
+            <Label alignment="CENTER" layoutX="168.0" layoutY="10.0" prefHeight="177.0" prefWidth="938.0" text="Scoring Chances" textAlignment="CENTER" textFill="#c42134">
                <font>
                   <Font name="System Bold" size="75.0" />
                </font>
@@ -59,7 +55,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-            <JFXButton buttonType="RAISED" layoutX="5.0" layoutY="3.0" onAction="#goBack" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="BACK" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="4.0" layoutY="3.0" onAction="#goBack" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="BACK" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
