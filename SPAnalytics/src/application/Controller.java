@@ -14,6 +14,8 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +25,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -32,9 +35,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sun.misc.GC;
@@ -77,7 +82,8 @@ public class Controller {
 	@FXML private Canvas RinkCanvas;
 	@FXML private ColorPicker RinkCP;
 	@FXML private Slider RinkSlider;
-	private GraphicsContext gc;
+	@FXML private ToggleGroup RinkGroup;
+	private GraphicsContext rinkGC;
 
 	//instance variables
 	private Scene					scene;
@@ -107,9 +113,19 @@ public class Controller {
 		
 		try {
 			RinkCP.setValue(Color.BLACK);
-			gc = RinkCanvas.getGraphicsContext2D();
-			gc.setStroke(RinkCP.getValue());
-			gc.setLineWidth(RinkSlider.getValue());
+			rinkGC = RinkCanvas.getGraphicsContext2D();
+			rinkGC.setStroke(RinkCP.getValue());
+			rinkGC.setFill(RinkCP.getValue());
+			rinkGC.setLineWidth(RinkSlider.getValue());
+			rinkGC.setFont(new Font("Verdana", 18));
+			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					int index = TimeStamps.getSelectionModel().getSelectedIndex();
+					TimeStampNotes.setText(clips.get(index).getTitle());
+				}
+				
+			});
 		} catch(Exception e) {
 			
 		}
@@ -351,9 +367,13 @@ public class Controller {
 	/**
 	 * Method Saves the title of selected clip
 	 */
+	/**
+	 * NOTES FROM MEETING: Add drive tab, add numbers to drawing
+	 */
 	@FXML
 	public void SaveNotesButtonClicked() {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
+		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
 	}
 	
@@ -371,9 +391,14 @@ public class Controller {
 	 */
 	@FXML
 	public void CanvasMousePressed(MouseEvent e) {
-		gc.beginPath();
-		gc.lineTo(e.getX(), e.getY());
-		gc.stroke();
+		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
+		if(selected.getText().equals("Line")) {
+			rinkGC.beginPath();
+			rinkGC.lineTo(e.getX(), e.getY());
+			rinkGC.stroke();
+		} else if(selected.getText().equals("Text")) {
+			rinkGC.fillText("11", e.getX()-9, e.getY()+9);
+		}
 	}
 	
 	/**
@@ -381,8 +406,11 @@ public class Controller {
 	 */
 	@FXML
 	public void CanvasMouseDragged(MouseEvent e) {
-		gc.lineTo(e.getX(), e.getY());
-		gc.stroke();
+		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
+		if(selected.getText().equals("Line")) {
+			rinkGC.lineTo(e.getX(), e.getY());
+			rinkGC.stroke();
+		}
 	}
 	
 	/**
@@ -390,7 +418,7 @@ public class Controller {
 	 */
 	@FXML
 	public void RinkCPColorChange() {
-		gc.setStroke(RinkCP.getValue());
+		rinkGC.setStroke(RinkCP.getValue());
 	}
 	
 	/**
@@ -398,8 +426,7 @@ public class Controller {
 	 */
 	@FXML
 	public void RinkSliderDropped() {
-		System.out.println(RinkSlider.getValue());
-		gc.setLineWidth(RinkSlider.getValue());
+		rinkGC.setLineWidth(RinkSlider.getValue());
 	}
 }
 
