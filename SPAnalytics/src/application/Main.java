@@ -17,6 +17,7 @@ public class Main extends Application {
 		try {
 
 			// Initializing the FXML loader
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Admin_NetChart.fxml"));
 
 			// Creating an instance of the controller class
