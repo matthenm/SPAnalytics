@@ -32,7 +32,10 @@ public class Main extends Application {
 			// Giving the controller this instance of the primary
 			// stage
 			controller.setPrimaryStage(primaryStage);
-
+			
+			//Connect to database
+			Model m = new Model();
+			m.makeDatabase();
 			// Initializing the scene
 			Scene scene = new Scene(root, 600, 400);
 			
