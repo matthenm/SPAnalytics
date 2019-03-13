@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.javafx.css.Style;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -110,37 +111,12 @@ public class Controller {
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
 	private final String	CSS						= "/view/application.css";
 
-	
-	
 	/**
 	 * This is the method that will allow this Controller class to
 	 * load new FXML files. 
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
-//		try {
-//			gc1 = netChartCanvas.getGraphicsContext2D();
-//			gc1.setFill(Color.RED);
-//		} catch(Exception e) {System.out.println("NetChart scene failed");}
-//		
-//		try {
-//			RinkCP.setValue(Color.BLACK);
-//			rinkGC = RinkCanvas.getGraphicsContext2D();
-//			rinkGC.setStroke(RinkCP.getValue());
-//			rinkGC.setFill(RinkCP.getValue());
-//			rinkGC.setLineWidth(RinkSlider.getValue());
-//			rinkGC.setFont(new Font("Verdana", 18));
-//			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-//				@Override
-//				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//					int index = TimeStamps.getSelectionModel().getSelectedIndex();
-//					TimeStampNotes.setText(clips.get(index).getTitle());
-//				}
-//				
-//			});
-//		} catch(Exception e) {
-//			System.out.println("RinkDiagram scene failed");
-//		}
 	}
 
 
@@ -177,7 +153,8 @@ public class Controller {
 		}
 		try {
 			gc1 = netChartCanvas.getGraphicsContext2D();
-			gc1.setFill(Color.RED);
+			gc1.setStroke(Color.RED);
+			gc1.setLineWidth(7);
 		} catch(Exception e) {}
 		
 		try {
@@ -349,7 +326,7 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorRed() {
-		gc1.setFill(Color.RED);
+		gc1.setStroke(Color.color(196, 33, 52));
 	}
 	
 	/**
@@ -357,7 +334,7 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorGreen() {
-		gc1.setFill(Color.GREEN);
+		gc1.setStroke(Color.GREEN);
 	}
 	
 	/**
@@ -365,7 +342,8 @@ public class Controller {
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
-		gc1.fillOval(e.getX()-20, e.getY()-20, 40, 40);
+		gc1.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
+		gc1.fillText("1", e.getX()+3, e.getY()+10);
 	}
 	
 	
