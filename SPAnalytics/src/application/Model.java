@@ -32,7 +32,7 @@ public class Model {
 		public void makeDatabase() {
 			FileInputStream serviceAccount;
 			try {
-				serviceAccount = new FileInputStream("/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-b501c5de29.json");
+				serviceAccount = new FileInputStream("/Users/nicolematthews/Desktop/discovery-8d956-firebase-adminsdk-wib15-1d3864509e.json");
 				
 				// Initialize the app with a custom auth variable, limiting the server's access
 				GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
