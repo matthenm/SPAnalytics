@@ -77,6 +77,8 @@ public class Controller {
 	private static int periodIndex = 0;
 	private final static String[] PERIODS = {"1st", "2nd", "3rd", "OT"};
 	private ArrayList<Clip> clips = new ArrayList<Clip>();
+	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
+	private DrawnObject line;
 	
 	//TimeStamp variables
 	@FXML private ComboBox<String> TimeStamps;
@@ -87,6 +89,7 @@ public class Controller {
 	@FXML private ColorPicker RinkCP;
 	@FXML private Slider RinkSlider;
 	@FXML private ToggleGroup RinkGroup;
+	@FXML private TextArea RinkDiagramText;
 	private GraphicsContext rinkGC;
 
 	//instance variables
@@ -186,7 +189,7 @@ public class Controller {
 			rinkGC.setStroke(RinkCP.getValue());
 			rinkGC.setFill(RinkCP.getValue());
 			rinkGC.setLineWidth(RinkSlider.getValue());
-			rinkGC.setFont(new Font("Verdana", 18));
+			rinkGC.setFont(new Font("Verdana", 24));
 			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -485,11 +488,15 @@ public class Controller {
 	public void CanvasMousePressed(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
+			line = new DrawnObject(e.getX(), e.getY());
 			rinkGC.beginPath();
-			rinkGC.lineTo(e.getX(), e.getY());
+			rinkGC.lineTo(line.getLastX(), line.getLastY());
 			rinkGC.stroke();
+			drawList.add(line);
 		} else if(selected.getText().equals("Text")) {
-			rinkGC.fillText("11", e.getX()-9, e.getY()+9);
+			DrawnObject text = new DrawnObject(e.getX()-12, e.getY()+12, RinkDiagramText.getText());
+			rinkGC.fillText(text.getText(), text.getLastX(), text.getLastY());
+			drawList.add(text);
 		}
 	}
 	
@@ -500,9 +507,35 @@ public class Controller {
 	public void CanvasMouseDragged(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
-			rinkGC.lineTo(e.getX(), e.getY());
+			line.addXY(e.getX(), e.getY());
+			rinkGC.lineTo(line.getLastX(), line.getLastY());
 			rinkGC.stroke();
 		}
+	}
+	
+	/**
+	 * Method undos the last drawing action
+	 */
+	@FXML
+	public void UndoRinkClicked() {
+		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+		if(drawList.size() < 1) return;
+		
+		drawList.remove(drawList.size()-1);
+		for(int i = 0; i < drawList.size(); i++) {
+			DrawnObject obj = drawList.get(i);
+			if(obj.getText() == null) {
+				rinkGC.beginPath();
+				for(int xy = 0; xy < obj.getSize(); xy++) {
+					rinkGC.lineTo(obj.getxPos(xy), obj.getyPos(xy));
+					rinkGC.stroke();
+				}
+			} else {
+				rinkGC.fillText(obj.getText(), obj.getLastX(), obj.getLastY());
+			}
+		}
+		
+		//drawList.clear();
 	}
 	
 	/**
@@ -511,6 +544,7 @@ public class Controller {
 	@FXML
 	public void RinkCPColorChange() {
 		rinkGC.setStroke(RinkCP.getValue());
+		rinkGC.setFill(RinkCP.getValue());
 	}
 	
 	/**
