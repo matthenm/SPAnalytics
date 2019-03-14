@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -16,7 +17,7 @@
    <center>
       <AnchorPane id="login-screen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black; -fx-alignment: center;">
          <children>
-            <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="6.0" layoutY="50.0" nodeOrientation="INHERIT" pickOnBounds="true">
                <image>
                   <Image url="@../Images/miami-dark.jpg" />
@@ -30,7 +31,8 @@
             </JFXTextField>
             -->
             
-   <ChoiceBox fx:id="rosterList" layoutX="319.0" layoutY="185.0" prefHeight="30.0" prefWidth="250.0" style="-fx-region-background: Black; -fx-border-color: #C42134;">
+   <!-- 
+   <ChoiceBox fx:id="rosterList" layoutX="319.0" layoutY="140.0" prefHeight="30.0" prefWidth="250.0" style="-fx-region-background: Black; -fx-border-color: #C42134;">
        <items>
             <FXCollections fx:factory="observableArrayList">
             	<String fx:value="ADMIN" />
@@ -39,6 +41,8 @@
         	</FXCollections>
         </items>
 	</ChoiceBox>
+	-->
+            <JFXPasswordField fx:id="adminPass" focusColor="#ff0713" layoutX="319.0" layoutY="190.0" prefHeight="30.0" prefWidth="250.0" promptText="Enter Your Password" unFocusColor="RED" visible="false" />
             
            <!--
            <JFXPasswordField focusColor="#c42134" layoutX="319.0" layoutY="185.0" prefHeight="30.0" prefWidth="250.0" promptText="Password" unFocusColor="WHITE">
@@ -58,6 +62,15 @@
                   <Font size="20.0" />
                </font>
             </JFXButton>
+            <JFXComboBox fx:id="users" layoutX="319.0" layoutY="140.0" prefHeight="30.0" prefWidth="250.0" style="-fx-region-background: Black; -fx-border-color: #C42134;">
+            <items>
+    			  <FXCollections fx:factory="observableArrayList">
+      				<String fx:value="ADMIN" />
+      				<String fx:value="Alec Mahalak" />
+      				<String fx:value="Ryan Larkin" />
+  			</FXCollections>
+ 			 </items>
+            </JFXComboBox>
          </children>
       </AnchorPane>
    </center>

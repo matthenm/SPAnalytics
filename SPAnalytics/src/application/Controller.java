@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.css.Style;
@@ -58,12 +59,19 @@ public class Controller {
 	private JFXButton				loginButton;
 	@FXML
 	private ChoiceBox<String>		rosterList;
+	@FXML
+	private JFXComboBox<String>		users;
+	@FXML
+	private JFXPasswordField		adminPass;
 	
     
 	//netChart variables
 	@FXML private Canvas netChartCanvas;
 	private GraphicsContext gc1;
-
+	
+	//scoringChances variables
+	@FXML private Canvas scoringChancesCanvas;
+	private GraphicsContext gc2;
 	
 	//Video tab scene variables
 	@FXML 
@@ -158,6 +166,12 @@ public class Controller {
 		} catch(Exception e) {}
 		
 		try {
+			gc2 = scoringChancesCanvas.getGraphicsContext2D();
+			gc2.setStroke(Color.RED);
+			gc2.setLineWidth(7);
+		} catch(Exception e) {}
+		
+		try {
 			RinkCP.setValue(Color.BLACK);
 			rinkGC = RinkCanvas.getGraphicsContext2D();
 			rinkGC.setStroke(RinkCP.getValue());
@@ -217,19 +231,13 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
-		if(rosterList.getValue().equals("Ryan Larkin")) {
+		if(users.getValue().equals("Ryan Larkin")) {
 			loadScene(GOALIE_HOME);
-		}else if(rosterList.getValue().equals("ADMIN")) {
-			TextInputDialog dialog = new TextInputDialog("");
-			dialog.setTitle("Admin Password");
-			dialog.setHeaderText("Enter your password:");
-			dialog.setContentText("Password:");
-			Optional<String>result = dialog.showAndWait();
-			if (result.isPresent()){
-				if(result.get().equals("test")) {
-					loadScene(ADMIN_HOME);
-				}
-			}
+		}else if(users.getValue().equals("ADMIN")) {
+			adminPass.setVisible(true);
+			if(adminPass.getText().equals("test")) {
+				loadScene(ADMIN_HOME);
+			}		
 	}
 		else {	
 			loadScene(PLAYER_HOME);
@@ -338,12 +346,38 @@ public class Controller {
 	}
 	
 	/**
-	 * This is the method that will draw circles when mouse released
+	 * This is the method that will draw circles Net chart when mouse released
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
 		gc1.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
 		gc1.fillText("1", e.getX()+3, e.getY()+10);
+	}
+	
+	
+	/**
+	 * This is the method that will change the color of the circle to red
+	 */
+	@FXML
+	public void setRed() {
+		gc2.setStroke(Color.color(196, 33, 52));
+	}
+	
+	/**
+	 * This is the method that will change the color of the circle to green
+	 */
+	@FXML
+	public void setGreen() {
+		gc2.setStroke(Color.GREEN);
+	}
+	
+	/**
+	 * This is the method that will draw circles Scoring chances when mouse released
+	 */
+	@FXML
+	public void drawCircleScoring(MouseEvent e) {
+		gc2.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
+		gc2.fillText("2", e.getX()+3, e.getY()+10);
 	}
 	
 	
