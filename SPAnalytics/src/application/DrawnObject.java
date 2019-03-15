@@ -2,53 +2,60 @@ package application;
 
 import java.util.ArrayList;
 
+import javafx.scene.paint.Paint;
+
 public class DrawnObject {
-	private ArrayList<Double> xPoss, yPoss;
+	private ArrayList<Point> points;
 	private String text;
+	private double width;
 	private boolean hasText;
 	
-	public DrawnObject(double xPos, double yPos) {
-		this.xPoss = new ArrayList<Double>();
-		this.yPoss = new ArrayList<Double>();
-		xPoss.add(xPos);
-		yPoss.add(yPos);
+	public DrawnObject(double xPos, double yPos, Paint color, double width) {
+		points = new ArrayList<Point>();
+		Point p = new Point(xPos, yPos, color);
+		points.add(p);
+		this.width = width;
 		hasText = false;
 	}
 	
-	public DrawnObject(double xPos, double yPos, String text) {
-		this(xPos, yPos);
+	public DrawnObject(Point p, Paint color, double width) {
+		points = new ArrayList<Point>();
+		points.add(p);
+		this.width = width;
+		hasText = false;
+	}
+	
+	public DrawnObject(Point p, Paint color, double width, String text) {
+		this(p, color, width);
+		this.text = text;
+		hasText = true;
+	}
+	
+	public DrawnObject(double xPos, double yPos, Paint color, double width, String text) {
+		this(xPos, yPos, color, width);
 		this.text = text;
 		hasText = true;
 	}
 
-	public double getxPos(int i) {
-		return xPoss.get(i);
-	}
-
-	public double getyPos(int i) {
-		return yPoss.get(i);
+	public Point getPoint(int i) {
+		return points.get(i);
 	}
 	
-	public void addXY(double x, double y) {
-		xPoss.add(x);
-		yPoss.add(y);
+	public void addPoint(double x, double y, Paint color) {
+		Point p = new Point(x, y, color);
+		points.add(p);
 	}
 	
 	public int getSize() {
-		return xPoss.size();
+		return points.size();
 	}
 	
-	public double getLastX() {
-		return xPoss.get(xPoss.size()-1);
-	}
-	
-	public double getLastY() {
-		return yPoss.get(yPoss.size()-1);
+	public Point getLastPoint() {
+		return points.get(points.size()-1);
 	}
 	
 	public void removeLast() {
-		xPoss.remove(xPoss.size()-1);
-		yPoss.remove(yPoss.size()-1);
+		points.remove(points.size()-1);
 	}
 
 	public String getText() {
@@ -57,6 +64,9 @@ public class DrawnObject {
 		} else {
 			return null;
 		}
-		
+	}
+	
+	public double getWidth() {
+		return width;
 	}
 }

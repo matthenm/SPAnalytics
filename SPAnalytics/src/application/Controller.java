@@ -44,6 +44,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ToggleGroup;
@@ -63,8 +64,9 @@ public class Controller {
 	//netChart variables
 	@FXML private Canvas netChartCanvas;
 	private GraphicsContext gc1;
+	private ArrayList<DrawnObject> netChartItems = new ArrayList<DrawnObject>();
+	private int netChartIndex = 0;
 
-	
 	//Video tab scene variables
 	@FXML 
 	private TextField NCHC_URL;
@@ -78,9 +80,7 @@ public class Controller {
 	private static int periodIndex = 0;
 	private final static String[] PERIODS = {"1st", "2nd", "3rd", "OT"};
 	private ArrayList<Clip> clips = new ArrayList<Clip>();
-	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
-	private DrawnObject line;
-	
+
 	//TimeStamp variables
 	@FXML private ComboBox<String> TimeStamps;
 	@FXML private TextArea TimeStampNotes;
@@ -92,7 +92,9 @@ public class Controller {
 	@FXML private ToggleGroup RinkGroup;
 	@FXML private TextArea RinkDiagramText;
 	private GraphicsContext rinkGC;
-
+	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
+	private DrawnObject line;
+	
 	//instance variables
 	private Scene					scene;
 	private Stage					primaryStage;
@@ -144,6 +146,19 @@ public class Controller {
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
 			scene = new Scene(parent, 600, 400);
+			
+			//Setting a Scene KeyListener
+			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+				@Override
+				public void handle(KeyEvent event) {
+					switch (event.getCode()) {
+					case S: 
+						getTime();
+					break;
+					}
+				}
+			});
+			
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("SP Analytics");
@@ -156,7 +171,7 @@ public class Controller {
 		}
 		try {
 			gc1 = netChartCanvas.getGraphicsContext2D();
-			gc1.setStroke(Color.RED);
+			gc1.setStroke(Color.color(.77, .13, .2));
 			gc1.setLineWidth(7);
 		} catch(Exception e) {}
 		
@@ -172,6 +187,9 @@ public class Controller {
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 					int index = TimeStamps.getSelectionModel().getSelectedIndex();
 					TimeStampNotes.setText(clips.get(index).getTitle());
+					drawList = clips.get(index).getRinkDiagram();
+					rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+					drawLinesAndNumbers(drawList, rinkGC);
 				}
 				
 			});
@@ -201,7 +219,7 @@ public class Controller {
 	/**
 	 * Returns the current time on the timer
 	 */
-	public void getTime() {
+	private void getTime() {
 		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
 		String start = formatTime(Math.max(sTime, 0));
 		String end = formatTime(currentTime);
@@ -329,7 +347,7 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorRed() {
-		gc1.setStroke(Color.color(196, 33, 52));
+		gc1.setStroke(Color.color(.77, .13, .2));
 	}
 	
 	/**
@@ -345,10 +363,73 @@ public class Controller {
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
-		gc1.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
-		gc1.fillText("1", e.getX()+3, e.getY()+10);
+		Point p1 = new Point(e.getX()-20, e.getY()-20, gc1.getStroke());
+		gc1.strokeOval(p1.getX(), p1.getY(), 50, 50);
+		DrawnObject oval = new DrawnObject(p1, p1.getColor(), 50);
+		netChartItems.add(oval);
+				
+		Point p2 = new Point(e.getX()+3, e.getY()+10, gc1.getFill());
+		gc1.fillText(""+ ++netChartIndex, p2.getX(), p2.getY());
+		DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+netChartIndex);
+		netChartItems.add(number);
 	}
 	
+	/**
+	 * Method undos an item on the NetChartScene
+	 */
+	@FXML
+	public void NetChartUndoPressed() {
+		Color original = (Color) gc1.getStroke();
+		gc1.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
+		if(netChartItems.size() < 2) return;
+		
+		netChartItems.remove(netChartItems.size()-1);
+		netChartItems.remove(netChartItems.size()-1);
+		drawOvals(netChartItems, gc1);
+		netChartIndex--;
+		gc1.setStroke(original);
+		
+	}
+	
+	/**
+	 * Helper drawing method for any canvas using ovals
+	 */
+	private static void drawOvals(ArrayList<DrawnObject> d, GraphicsContext gc) {
+		for(int i = 0; i < d.size(); i++) {
+			DrawnObject obj = d.get(i);
+			if(obj.getText() == null) {
+				Point p = obj.getPoint(0);
+				gc.setStroke(p.getColor());
+				gc.strokeOval(p.getX(), p.getY(), obj.getWidth(), obj.getWidth());
+			} else {
+				Point p = obj.getPoint(0);;
+				gc.fillText(obj.getText(), p.getX(), p.getY());
+			}
+		}
+	}
+	
+	/**
+	 * Helper method to draw lines and numbers
+	 */
+	private static void drawLinesAndNumbers(ArrayList<DrawnObject> d, GraphicsContext gc) {
+		for(int i = 0; i < d.size(); i++) {
+			DrawnObject obj = d.get(i);
+			if(obj.getText() == null) {
+				gc.beginPath();
+				gc.setLineWidth(obj.getWidth());
+				for(int xy = 0; xy < obj.getSize(); xy++) {
+					Point p = obj.getPoint(xy);
+					gc.setStroke(p.getColor());
+					gc.lineTo(p.getX(), p.getY());
+					gc.stroke();
+				}
+			} else {
+				Point p = obj.getPoint(0);
+				gc.setFill(p.getColor());
+				gc.fillText(obj.getText(), p.getX(), p.getY());
+			}
+		}
+	}
 	
 	/**
 	 * Method opens NCHC link on default browser
@@ -429,19 +510,17 @@ public class Controller {
 	}
 	
 	/**
-	 * Method displays proper title for selected timestamp
+	 * Method saves diagram to current clip
 	 */
 	@FXML
-	public void TimeStampAction() {
+	public void SaveRinkClicked() {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
-		TimeStampNotes.setText(clips.get(index).getTitle());
+		if (index == -1) return;
+		clips.get(index).setRinkDiagram(drawList);
 	}
-	
+
 	/**
 	 * Method Saves the title of selected clip
-	 */
-	/**
-	 * NOTES FROM MEETING: Add drive tab, add numbers to drawing
 	 */
 	@FXML
 	public void SaveNotesButtonClicked() {
@@ -466,14 +545,14 @@ public class Controller {
 	public void CanvasMousePressed(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
-			line = new DrawnObject(e.getX(), e.getY());
+			line = new DrawnObject(e.getX(), e.getY(), rinkGC.getStroke(), rinkGC.getLineWidth());
 			rinkGC.beginPath();
-			rinkGC.lineTo(line.getLastX(), line.getLastY());
+			rinkGC.lineTo(line.getLastPoint().getX(), line.getLastPoint().getY());
 			rinkGC.stroke();
 			drawList.add(line);
 		} else if(selected.getText().equals("Text")) {
-			DrawnObject text = new DrawnObject(e.getX()-12, e.getY()+12, RinkDiagramText.getText());
-			rinkGC.fillText(text.getText(), text.getLastX(), text.getLastY());
+			DrawnObject text = new DrawnObject(e.getX()-12, e.getY()+12, rinkGC.getFill(), 0, RinkDiagramText.getText());
+			rinkGC.fillText(text.getText(), text.getLastPoint().getX(), text.getLastPoint().getY());
 			drawList.add(text);
 		}
 	}
@@ -485,8 +564,8 @@ public class Controller {
 	public void CanvasMouseDragged(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
-			line.addXY(e.getX(), e.getY());
-			rinkGC.lineTo(line.getLastX(), line.getLastY());
+			line.addPoint(e.getX(), e.getY(), rinkGC.getStroke());
+			rinkGC.lineTo(line.getLastPoint().getX(), line.getLastPoint().getY());
 			rinkGC.stroke();
 		}
 	}
@@ -500,19 +579,11 @@ public class Controller {
 		if(drawList.size() < 1) return;
 		
 		drawList.remove(drawList.size()-1);
-		for(int i = 0; i < drawList.size(); i++) {
-			DrawnObject obj = drawList.get(i);
-			if(obj.getText() == null) {
-				rinkGC.beginPath();
-				for(int xy = 0; xy < obj.getSize(); xy++) {
-					rinkGC.lineTo(obj.getxPos(xy), obj.getyPos(xy));
-					rinkGC.stroke();
-				}
-			} else {
-				rinkGC.fillText(obj.getText(), obj.getLastX(), obj.getLastY());
-			}
-		}
+		drawLinesAndNumbers(drawList, rinkGC);
 		
+		rinkGC.setStroke(RinkCP.getValue());
+		rinkGC.setFill(RinkCP.getValue());
+		rinkGC.setLineWidth(RinkSlider.getValue());
 		//drawList.clear();
 	}
 	

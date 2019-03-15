@@ -67,6 +67,11 @@
                      </font>
                   </JFXButton>
                   <TextArea fx:id="RinkDiagramText" layoutX="917.0" layoutY="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="130.0" promptText="Number to Add" />
+                  <JFXButton buttonType="RAISED" layoutX="1182.0" layoutY="7.0" onAction="#SaveRinkClicked" prefHeight="77.0" prefWidth="84.0" style="-fx-background-color: #C42134;" text="Save Diagram to Clip" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </AnchorPane>
          </children>
