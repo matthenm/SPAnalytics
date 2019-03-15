@@ -28,11 +28,14 @@ import java.util.concurrent.ExecutionException;
 import javafx.concurrent.Task;
 
 public class Model {
+	private DocumentReference docRef;
+	private DocumentReference docTeamRef;
+	private Firestore db;
 	//The database data is found here: https://console.firebase.google.com/u/0/project/discovery-8d956/database/discovery-8d956/data
 		public void makeDatabase() {
 			FileInputStream serviceAccount;
 			try {
-				serviceAccount = new FileInputStream("/Users/nicolematthews/Desktop/discovery-8d956-firebase-adminsdk-wib15-1d3864509e.json");
+				serviceAccount = new FileInputStream("/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-b501c5de29.json");
 				
 				// Initialize the app with a custom auth variable, limiting the server's access
 				GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -45,18 +48,18 @@ public class Model {
 				    .build();
 				FirebaseApp.initializeApp(options);
 			
-				Firestore db = FirestoreClient.getFirestore();
+				this.db = FirestoreClient.getFirestore();
 
 				FirebaseApp.initializeApp(options,"data");
-				DocumentReference docRef = db.collection("information").document("players");
-				
+				this.docRef = db.collection("information").document("players");
+				this.docTeamRef = db.collection("information").document("team");
 				//getPlayer(db, "6");
 				//getPlayers(db);
-				getGameStats(db, "Miami vs. Omaha");
+				//getGameStats("Miami vs. Omaha");
 				//addMember(docRef);
 				//addGoalie(docRef);
 				//deletePlayerGoalie(docRef);
-				DocumentReference docRefTeam = db.collection("information").document("team");
+				
 				//createTeam(docRefTeam);
 					
 			} catch (IOException e) {
@@ -67,8 +70,9 @@ public class Model {
 			
 		}
 
+
 		//example of adding a team
-		public void createTeam(DocumentReference docRefTeam) {
+		public void createTeam() {
 		// TODO Auto-generated method stub
 		Team team = new Team("Miami", 14, 44, 35, 468, 405,
 					"9-3-1-1");
@@ -87,7 +91,7 @@ public class Model {
 		team.games = games;
 		
 		//add to database
-		addTeam(docRefTeam, team);
+		addTeam(team);
 		
 	}
 
@@ -95,7 +99,7 @@ public class Model {
 		 * Example method of deleting a goalie
 		 * @param docRef
 		 */
-		public void deletePlayerGoalie(DocumentReference docRef) {
+		public void deletePlayerGoalie() {
 			Position position = new Position("goalie");
 			 Goalie goalie = new Goalie(4, 3, 2);
 			  position.goalie(goalie);
@@ -104,13 +108,13 @@ public class Model {
 			  stats.put(stats1.season, stats1);
 			  Player player = new Player(31, "Ryan Larkin", "6'1", "201 lbs", "6/10/97", "Clarkson, MI", stats);
 			 
-			deletePlayer(docRef, player);
+			deletePlayer(player);
 		}
 		/**
 		 * Example method of adding a goalie
 		 * @param docRef
 		 */
-		public void addGoalie(DocumentReference docRef) {
+		public void addGoalie() {
 			Position position = new Position("goalie");
 			 Goalie goalie = new Goalie(4, 3, 2);
 			 position.goalie(goalie);
@@ -119,13 +123,13 @@ public class Model {
 			  stats.put(stats1.season, stats1);
 			  Player player = new Player(31, "Ryan Larkin", "6'1", "201 lbs", "6/10/97", "Clarkson, MI", stats);
 			 
-			addPlayer(docRef, player);
+			addPlayer(player);
 		}
 		/**
 		 * Example method of adding a player
 		 * @param docRef
 		 */
-		public void addMember(DocumentReference docRef) {
+		public void addMember() {
 			Position position = new Position("defense");
 			 Member defense = new Member(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
 			  position.member(defense);
@@ -134,7 +138,7 @@ public class Model {
 			  stats.put(stats1.season, stats1);
 			  Player player = new Player(6, "Alec Mahalak", "5'9", "161 lbs", "9/14/98", "Monroe, MI", stats);
 			 
-			addPlayer(docRef, player);
+			addPlayer(player);
 		}
 
 		/**
@@ -142,13 +146,13 @@ public class Model {
 		 * @param docRef
 		 * @param player
 		 */
-		public void addPlayer(DocumentReference docRef, Player player) {
+		public void addPlayer(Player player) {
 
 			  Map<String, Player> players = new HashMap<>();
 			 
 			  players.put(""+player.jerseyNo, player);
 			  
-			  ApiFuture<WriteResult> result = docRef.set(players, SetOptions.merge());
+			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
 			try {
@@ -169,10 +173,10 @@ public class Model {
 		 * @param docRef
 		 * @param player
 		 */
-		public void addPlayers(DocumentReference docRef, Map<String, Player> players) {
+		public void addPlayers(Map<String, Player> players) {
 
 			  
-			  ApiFuture<WriteResult> result = docRef.set(players, SetOptions.merge());
+			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
 			try {
@@ -191,9 +195,9 @@ public class Model {
 		 * Removes all players from the document (essentially deleting the document players)
 		 * @param docRef
 		 */
-		public void removeAllPlayers(DocumentReference docRef) {
+		public void removeAllPlayers() {
 
-			  ApiFuture<WriteResult> result = docRef.delete();
+			  ApiFuture<WriteResult> result = this.docRef.delete();
 			// ...
 			// result.get() blocks on response
 			try {
@@ -212,13 +216,13 @@ public class Model {
 		/**
 		 * Remove existing player from database
 		 */
-		public void deletePlayer(DocumentReference docRef, Player player) {
+		public void deletePlayer(Player player) {
 
 			  Map<String, Object> players = new HashMap<>();
 			 
 			  players.put(""+player.jerseyNo, FieldValue.delete());
 			  
-			  ApiFuture<WriteResult> result = docRef.set(players, SetOptions.merge());
+			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
 			try {
@@ -239,12 +243,12 @@ public class Model {
 		 * @param docRef
 		 * @param team
 		 */
-		public void addTeam(DocumentReference docRef, Team team) {
+		public void addTeam(Team team) {
 			  Map<String, Team> teams = new HashMap<>();
 				 
 			  teams.put(team.teamName, team);
 			  
-			  ApiFuture<WriteResult> result = docRef.set(teams, SetOptions.merge());
+			  ApiFuture<WriteResult> result = this.docRef.set(teams, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
 			try {
@@ -264,10 +268,10 @@ public class Model {
 		 * @param jerseyNo
 		 * @return
 		 */
-		public HashMap getPlayer(Firestore db, String jerseyNo) {
+		public HashMap getPlayer(String jerseyNo) {
 			//asynchronously retrieve all documents
 			//asynchronously retrieve multiple documents
-			 DocumentReference docRef = db.collection("information").document("players");
+			 DocumentReference docRef = this.db.collection("information").document("players");
 			 ApiFuture<DocumentSnapshot> future = docRef.get();
 			 DocumentSnapshot document;
 			 
@@ -299,9 +303,9 @@ public class Model {
 		 * @param db
 		 * @return
 		 */
-		public Map<String, Object> getPlayers(Firestore db) {
+		public Map<String, Object> getPlayers() {
 			
-			 DocumentReference docRef = db.collection("information").document("players");
+			 DocumentReference docRef = this.db.collection("information").document("players");
 			 ApiFuture<DocumentSnapshot> future = docRef.get();
 			 DocumentSnapshot document;
 			try {
@@ -330,9 +334,9 @@ public class Model {
 		 * @param db
 		 * @return
 		 */
-		public Map<String, Object> getTeam(Firestore db) {
+		public Map<String, Object> getTeam() {
 			
-			 DocumentReference docRef = db.collection("information").document("team");
+			 DocumentReference docRef = this.db.collection("information").document("team");
 			 ApiFuture<DocumentSnapshot> future = docRef.get();
 			 DocumentSnapshot document;
 			try {
@@ -362,10 +366,10 @@ public class Model {
 		 * @param jerseyNo
 		 * @return
 		 */
-		public HashMap getGameStats(Firestore db, String game) {
+		public HashMap getGameStats(String game) {
 			//asynchronously retrieve all documents
 			//asynchronously retrieve multiple documents
-			 DocumentReference docRef = db.collection("information").document("team");
+			 DocumentReference docRef = this.db.collection("information").document("team");
 			 ApiFuture<DocumentSnapshot> future = docRef.get();
 			 DocumentSnapshot document;
 			 
@@ -385,15 +389,71 @@ public class Model {
 				e.printStackTrace();
 			}
 			return null;
-			
-			
-
-		//get the hashmap that contains the player stats
-		
-		
 
 		}
 		
+		//getPosition of a player
+		public String getPosition(String jerseyNo) {
+			String posName = null;
+			 DocumentReference docRef = db.collection("information").document("players");
+			 ApiFuture<DocumentSnapshot> future = docRef.get();
+			 DocumentSnapshot document;
+			 
+			try {
+				document = future.get();
+				HashMap map = (HashMap) document.get(jerseyNo+".stats");
+				
+				System.out.println(map);
+				if (map.size() > 0) {
+					
+				for (Object s: map.keySet()) { //for each game
+					Object detailsOnGame = map.get(s);
+					if (detailsOnGame instanceof HashMap && posName == null) {
+						HashMap details = (HashMap) detailsOnGame;
+						HashMap position = (HashMap) details.get("position");
+						posName = (String) position.get("namePosition");
+						}
+					}
+				}
+				
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+			return posName;
 		
 		
+		} //end getPosition
+		
+		//get the player jerseyNo (based on the player name)
+		public String getJerseyNo(String playerName) {
+			String jerseyNo = null;
+			 DocumentReference docRef = db.collection("information").document("players");
+			 ApiFuture<DocumentSnapshot> future = docRef.get();
+			 DocumentSnapshot document;
+			 
+			try {
+				document = future.get();
+				Map<String, Object> players = getPlayers();
+				
+				if (players.size() > 0) {
+					
+				for (Object s: players.keySet()) { //for each game
+					Object detailsOfPlayer = players.get(s);
+					if (detailsOfPlayer instanceof HashMap && jerseyNo == null) {
+						HashMap details = (HashMap) detailsOfPlayer;
+						if (details.get("name") == playerName) {
+						jerseyNo = s.toString();
+						}
+					}
+					}
+				}
+				
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			return jerseyNo;
+		}
 }

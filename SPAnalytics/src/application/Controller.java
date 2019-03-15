@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.css.Style;
 
@@ -63,7 +65,7 @@ public class Controller {
 	private JFXComboBox<String>		users;
 	@FXML
 	private JFXPasswordField		adminPass;
-	
+
     
 	//netChart variables
 	@FXML private Canvas netChartCanvas;
@@ -119,12 +121,17 @@ public class Controller {
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
 	private final String	CSS						= "/view/application.css";
 
+	//Database connection
+	Model m = new Model();
+	
 	/**
 	 * This is the method that will allow this Controller class to
 	 * load new FXML files. 
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
+		//connect to database
+				m.makeDatabase();
 	}
 
 
@@ -132,6 +139,8 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
+		
+		
 	 	if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
 		} else {
@@ -145,9 +154,30 @@ public class Controller {
 
 			// To keep the states of everything in this controller
 			fxmlLoader.setController(this);
-
+			
+			
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
+			
+			//Load the proper player
+			String jerseyNo = null;
+			if (newScene.equals(GOALIE_HOME)) {
+				jerseyNo = m.getJerseyNo("Ryan Larkin");//WILL NEED TO CHANGE TO ACCOMODATE MORE GOALIES
+			} else if (newScene.equals(PLAYER_HOME)) {
+				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
+			}
+			JFXTextArea textArea = (JFXTextArea) parent.lookup("#playerInfo");
+			if (textArea != null && jerseyNo != null) {
+				
+				HashMap playerInfo = m.getPlayer(jerseyNo); //based on jersey no
+				Object birthDate = playerInfo.get("birthDate");
+				Object name = playerInfo.get("name");
+				Object height = playerInfo.get("height");
+				Object weight = playerInfo.get("weight");
+				Object homeTown = playerInfo.get("homeTown");
+				Object position = m.getPosition(jerseyNo); //based on jersey no
+				textArea.setText("#"+jerseyNo+" "+name+" "+position+" Height: "+height+"\nWeight: "+weight+" Born: "+birthDate+"\n"+homeTown);
+			}
 			scene = new Scene(parent, 600, 400);
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
