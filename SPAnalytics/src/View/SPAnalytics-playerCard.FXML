@@ -123,13 +123,16 @@
                         <Font name="System Bold" size="9.0" />
                      </font>
                   </JFXButton>
+                 	
                   <JFXComboBox fx:id="gameLog" layoutX="90.0" layoutY="10.0" prefWidth="250.0" style="-fx-background-color: #C42134;" unFocusColor="BLACK">
                   	<items>
             			<FXCollections fx:factory="observableArrayList">
             				<String fx:value="10-3 Miami vs Omaha" />
         				</FXCollections>
         			</items>
-        		</JFXComboBox>
+        		</JFXComboBox> 
+        		
+        		
                </children>
             </AnchorPane>
          </children>
