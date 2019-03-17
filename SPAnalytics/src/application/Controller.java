@@ -3,6 +3,9 @@ package application;
 
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -25,6 +28,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -33,6 +37,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Scale;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -47,7 +52,10 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -56,6 +64,8 @@ import sun.misc.GC;
 
 public class Controller {
 
+	@FXML BorderPane bp;
+	
 	//login scene variables
 	@FXML
 	private JFXButton				loginButton;
@@ -75,6 +85,9 @@ public class Controller {
 	@FXML private Canvas scoringChancesCanvas;
 	private GraphicsContext gc2;
 	
+	private ArrayList<DrawnObject> netChartItems = new ArrayList<DrawnObject>();
+	private int netChartIndex = 0;
+
 	//Video tab scene variables
 	@FXML 
 	private TextField NCHC_URL;
@@ -88,7 +101,7 @@ public class Controller {
 	private static int periodIndex = 0;
 	private final static String[] PERIODS = {"1st", "2nd", "3rd", "OT"};
 	private ArrayList<Clip> clips = new ArrayList<Clip>();
-	
+
 	//TimeStamp variables
 	@FXML private ComboBox<String> TimeStamps;
 	@FXML private TextArea TimeStampNotes;
@@ -98,8 +111,11 @@ public class Controller {
 	@FXML private ColorPicker RinkCP;
 	@FXML private Slider RinkSlider;
 	@FXML private ToggleGroup RinkGroup;
+	@FXML private TextArea RinkDiagramText;
 	private GraphicsContext rinkGC;
-
+	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
+	private DrawnObject line;
+	
 	//instance variables
 	private Scene					scene;
 	private Stage					primaryStage;
@@ -179,6 +195,30 @@ public class Controller {
 				textArea.setText("#"+jerseyNo+" "+name+" "+position+" Height: "+height+"\nWeight: "+weight+" Born: "+birthDate+"\n"+homeTown);
 			}
 			scene = new Scene(parent, 600, 400);
+			Pane root = (Pane) parent;
+			scene = new Scene(new Group(root), 600, 400);
+			
+			//setting scaling
+			Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+			double width = resolution.getWidth();
+			double height = resolution.getHeight();
+			double w = width/bp.getPrefWidth();
+			double h = height/bp.getPrefHeight();
+			Scale scale = new Scale(w,h,0,0);
+			root.getTransforms().add(scale);
+			
+			//Setting a Scene KeyListener
+			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+				@Override
+				public void handle(KeyEvent event) {
+					switch (event.getCode()) {
+					case S: 
+						getTime();
+					break;
+					}
+				}
+			});
+			
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("SP Analytics");
@@ -191,7 +231,7 @@ public class Controller {
 		}
 		try {
 			gc1 = netChartCanvas.getGraphicsContext2D();
-			gc1.setStroke(Color.RED);
+			gc1.setStroke(Color.color(.77, .13, .2));
 			gc1.setLineWidth(7);
 		} catch(Exception e) {}
 		
@@ -207,18 +247,29 @@ public class Controller {
 			rinkGC.setStroke(RinkCP.getValue());
 			rinkGC.setFill(RinkCP.getValue());
 			rinkGC.setLineWidth(RinkSlider.getValue());
-			rinkGC.setFont(new Font("Verdana", 18));
+			rinkGC.setFont(new Font("Verdana", 24));
 			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 					int index = TimeStamps.getSelectionModel().getSelectedIndex();
 					TimeStampNotes.setText(clips.get(index).getTitle());
+					copyDrawList(clips.get(index).getRinkDiagram());
+					rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+					drawLinesAndNumbers(drawList, rinkGC);
 				}
 				
 			});
 		} catch(Exception e) {}
 	}
 
+	/**
+	 * Helper method to copy rink diagram from Clip object to the drawList
+	 */
+	private void copyDrawList(ArrayList<DrawnObject> dl) {
+		drawList = new ArrayList<DrawnObject>();
+		drawList.addAll(dl);
+	}
+	
 	/**
 	 * Helper method that converts milliseconds to a stopwatch time format
 	 */
@@ -242,7 +293,7 @@ public class Controller {
 	/**
 	 * Returns the current time on the timer
 	 */
-	public void getTime() {
+	private void getTime() {
 		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
 		String start = formatTime(Math.max(sTime, 0));
 		String end = formatTime(currentTime);
@@ -364,7 +415,7 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorRed() {
-		gc1.setStroke(Color.color(196, 33, 52));
+		gc1.setStroke(Color.color(.77, .13, .2));
 	}
 	
 	/**
@@ -380,10 +431,73 @@ public class Controller {
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
-		gc1.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
-		gc1.fillText("1", e.getX()+3, e.getY()+10);
+		Point p1 = new Point(e.getX()-20, e.getY()-20, gc1.getStroke());
+		gc1.strokeOval(p1.getX(), p1.getY(), 50, 50);
+		DrawnObject oval = new DrawnObject(p1, p1.getColor(), 50);
+		netChartItems.add(oval);
+				
+		Point p2 = new Point(e.getX()+3, e.getY()+10, gc1.getFill());
+		gc1.fillText(""+ ++netChartIndex, p2.getX(), p2.getY());
+		DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+netChartIndex);
+		netChartItems.add(number);
 	}
 	
+	/**
+	 * Method undos an item on the NetChartScene
+	 */
+	@FXML
+	public void NetChartUndoPressed() {
+		Color original = (Color) gc1.getStroke();
+		gc1.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
+		if(netChartItems.size() < 2) return;
+		
+		netChartItems.remove(netChartItems.size()-1);
+		netChartItems.remove(netChartItems.size()-1);
+		drawOvals(netChartItems, gc1);
+		netChartIndex--;
+		gc1.setStroke(original);
+		
+	}
+	
+	/**
+	 * Helper drawing method for any canvas using ovals
+	 */
+	private static void drawOvals(ArrayList<DrawnObject> d, GraphicsContext gc) {
+		for(int i = 0; i < d.size(); i++) {
+			DrawnObject obj = d.get(i);
+			if(obj.getText() == null) {
+				Point p = obj.getPoint(0);
+				gc.setStroke(p.getColor());
+				gc.strokeOval(p.getX(), p.getY(), obj.getWidth(), obj.getWidth());
+			} else {
+				Point p = obj.getPoint(0);;
+				gc.fillText(obj.getText(), p.getX(), p.getY());
+			}
+		}
+	}
+	
+	/**
+	 * Helper method to draw lines and numbers
+	 */
+	private static void drawLinesAndNumbers(ArrayList<DrawnObject> d, GraphicsContext gc) {
+		for(int i = 0; i < d.size(); i++) {
+			DrawnObject obj = d.get(i);
+			if(obj.getText() == null) {
+				gc.beginPath();
+				gc.setLineWidth(obj.getWidth());
+				for(int xy = 0; xy < obj.getSize(); xy++) {
+					Point p = obj.getPoint(xy);
+					gc.setStroke(p.getColor());
+					gc.lineTo(p.getX(), p.getY());
+					gc.stroke();
+				}
+			} else {
+				Point p = obj.getPoint(0);
+				gc.setFill(p.getColor());
+				gc.fillText(obj.getText(), p.getX(), p.getY());
+			}
+		}
+	}
 	
 	/**
 	 * This is the method that will change the color of the circle to red
@@ -490,25 +604,33 @@ public class Controller {
 	}
 	
 	/**
-	 * Method displays proper title for selected timestamp
+	 * Method saves diagram to current clip
 	 */
 	@FXML
-	public void TimeStampAction() {
+	public void SaveRinkClicked() {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
-		TimeStampNotes.setText(clips.get(index).getTitle());
+		if (index == -1) return;
+		clips.get(index).setRinkDiagram(drawList);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Saved");
+		alert.setHeaderText("Diagram Saved");
+		alert.setContentText("Rink Diagram saved to clip");
+		alert.show();
 	}
-	
+
 	/**
 	 * Method Saves the title of selected clip
-	 */
-	/**
-	 * NOTES FROM MEETING: Add drive tab, add numbers to drawing
 	 */
 	@FXML
 	public void SaveNotesButtonClicked() {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Saved");
+		alert.setHeaderText("Title Saved");
+		alert.setContentText("Title of clip saved");
+		alert.show();
 	}
 	
 	/**
@@ -527,11 +649,15 @@ public class Controller {
 	public void CanvasMousePressed(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
+			line = new DrawnObject(e.getX(), e.getY(), rinkGC.getStroke(), rinkGC.getLineWidth());
 			rinkGC.beginPath();
-			rinkGC.lineTo(e.getX(), e.getY());
+			rinkGC.lineTo(line.getLastPoint().getX(), line.getLastPoint().getY());
 			rinkGC.stroke();
+			drawList.add(line);
 		} else if(selected.getText().equals("Text")) {
-			rinkGC.fillText("11", e.getX()-9, e.getY()+9);
+			DrawnObject text = new DrawnObject(e.getX()-12, e.getY()+12, rinkGC.getFill(), 0, RinkDiagramText.getText());
+			rinkGC.fillText(text.getText(), text.getLastPoint().getX(), text.getLastPoint().getY());
+			drawList.add(text);
 		}
 	}
 	
@@ -542,9 +668,27 @@ public class Controller {
 	public void CanvasMouseDragged(MouseEvent e) {
 		RadioButton selected = (RadioButton) RinkGroup.getSelectedToggle();
 		if(selected.getText().equals("Line")) {
-			rinkGC.lineTo(e.getX(), e.getY());
+			line.addPoint(e.getX(), e.getY(), rinkGC.getStroke());
+			rinkGC.lineTo(line.getLastPoint().getX(), line.getLastPoint().getY());
 			rinkGC.stroke();
 		}
+	}
+	
+	/**
+	 * Method undos the last drawing action
+	 */
+	@FXML
+	public void UndoRinkClicked() {
+		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+		if(drawList.size() < 1) return;
+		
+		drawList.remove(drawList.size()-1);
+		drawLinesAndNumbers(drawList, rinkGC);
+		
+		rinkGC.setStroke(RinkCP.getValue());
+		rinkGC.setFill(RinkCP.getValue());
+		rinkGC.setLineWidth(RinkSlider.getValue());
+		//drawList.clear();
 	}
 	
 	/**
@@ -553,6 +697,7 @@ public class Controller {
 	@FXML
 	public void RinkCPColorChange() {
 		rinkGC.setStroke(RinkCP.getValue());
+		rinkGC.setFill(RinkCP.getValue());
 	}
 	
 	/**

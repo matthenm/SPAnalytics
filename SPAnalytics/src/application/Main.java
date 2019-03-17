@@ -33,18 +33,6 @@ public class Main extends Application {
 			
 			// Initializing the scene
 			Scene scene = new Scene(root, 600, 400);
-			
-			//Setting a Scene KeyListener
-			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
-				@Override
-				public void handle(KeyEvent event) {
-					switch (event.getCode()) {
-					case S: 
-						controller.getTime();
-					break;
-					}
-				}
-			});
 
 			// Adding the style sheet
 			scene.getStylesheets()
