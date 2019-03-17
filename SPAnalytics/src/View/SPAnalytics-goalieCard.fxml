@@ -44,7 +44,7 @@
                         <Image url="@../Images/Larkin.jpg" />
                      </image>
                   </ImageView>
-                  <JFXTextArea layoutX="147.0" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
+                  <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
                   <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="2.0" onAction="#GoalieHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="15.0" />
