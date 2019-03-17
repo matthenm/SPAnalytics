@@ -3,6 +3,9 @@ package application;
 
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -22,6 +25,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -30,6 +34,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Scale;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -46,6 +51,8 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
@@ -54,6 +61,8 @@ import sun.misc.GC;
 
 public class Controller {
 
+	@FXML BorderPane bp;
+	
 	//login scene variables
 	@FXML
 	private JFXButton				loginButton;
@@ -145,7 +154,17 @@ public class Controller {
 
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
-			scene = new Scene(parent, 600, 400);
+			Pane root = (Pane) parent;
+			scene = new Scene(new Group(root), 600, 400);
+			
+			//setting scaling
+			Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+			double width = resolution.getWidth();
+			double height = resolution.getHeight();
+			double w = width/bp.getPrefWidth();
+			double h = height/bp.getPrefHeight();
+			Scale scale = new Scale(w,h,0,0);
+			root.getTransforms().add(scale);
 			
 			//Setting a Scene KeyListener
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
@@ -187,7 +206,7 @@ public class Controller {
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 					int index = TimeStamps.getSelectionModel().getSelectedIndex();
 					TimeStampNotes.setText(clips.get(index).getTitle());
-					drawList = clips.get(index).getRinkDiagram();
+					copyDrawList(clips.get(index).getRinkDiagram());
 					rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 					drawLinesAndNumbers(drawList, rinkGC);
 				}
@@ -196,6 +215,14 @@ public class Controller {
 		} catch(Exception e) {}
 	}
 
+	/**
+	 * Helper method to copy rink diagram from Clip object to the drawList
+	 */
+	private void copyDrawList(ArrayList<DrawnObject> dl) {
+		drawList = new ArrayList<DrawnObject>();
+		drawList.addAll(dl);
+	}
+	
 	/**
 	 * Helper method that converts milliseconds to a stopwatch time format
 	 */
@@ -517,6 +544,11 @@ public class Controller {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setRinkDiagram(drawList);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Saved");
+		alert.setHeaderText("Diagram Saved");
+		alert.setContentText("Rink Diagram saved to clip");
+		alert.show();
 	}
 
 	/**
@@ -527,6 +559,11 @@ public class Controller {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Saved");
+		alert.setHeaderText("Title Saved");
+		alert.setContentText("Title of clip saved");
+		alert.show();
 	}
 	
 	/**
