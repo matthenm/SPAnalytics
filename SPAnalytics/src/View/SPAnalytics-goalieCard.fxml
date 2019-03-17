@@ -24,21 +24,22 @@
          <children>
             <AnchorPane>
                <children>
-                  <TableView editable="true" layoutX="147.0" layoutY="55.0" prefHeight="147.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
+                  <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="55.0" prefHeight="147.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                     <columns>
-                      <TableColumn minWidth="80.0" prefWidth="54.0" text="Season" />
-                      <TableColumn minWidth="80.0" prefWidth="28.0" text="GP" />
-                        <TableColumn minWidth="80.0" prefWidth="19.0" text="W" />
-                        <TableColumn minWidth="80.0" prefWidth="21.0" text="L" />
-                        <TableColumn minWidth="80.0" prefWidth="20.0" text="T" />
-                        <TableColumn minWidth="80.0" prefWidth="30.0" text="GA" />
-                        <TableColumn minWidth="80.0" prefWidth="36.0" text="GAA" />
-                        <TableColumn minWidth="80.0" prefWidth="28.0" text="SA" />
-                        <TableColumn minWidth="80.0" prefWidth="26.0" text="SV" />
-                        <TableColumn minWidth="80.0" prefWidth="36.0" text="SV%" />
-                        <TableColumn minWidth="80.0" prefWidth="32.0" text="SO" />
+                      <TableColumn fx:id="season" minWidth="80.0" prefWidth="54.0" text="Season" />
+                      <TableColumn fx:id="GP" minWidth="80.0" prefWidth="28.0" text="GP" />
+                        <TableColumn fx:id="W" minWidth="80.0" prefWidth="19.0" text="W" />
+                        <TableColumn fx:id="L" minWidth="80.0" prefWidth="21.0" text="L" />
+                        <TableColumn fx:id="T" minWidth="80.0" prefWidth="20.0" text="T" />
+                        <TableColumn fx:id="GA" minWidth="80.0" prefWidth="30.0" text="GA" />
+                        <TableColumn fx:id="GAA" minWidth="80.0" prefWidth="36.0" text="GAA" />
+                        <TableColumn fx:id="SA" minWidth="80.0" prefWidth="28.0" text="SA" />
+                        <TableColumn fx:id="SV" minWidth="80.0" prefWidth="26.0" text="SV" />
+                        <TableColumn fx:id="SVpercent" minWidth="80.0" prefWidth="36.0" text="SV%" />
+                        <TableColumn fx:id="SO" minWidth="80.0" prefWidth="32.0" text="SO" />
                     </columns>
                   </TableView>
+
                   <ImageView fitHeight="247.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/Larkin.jpg" />

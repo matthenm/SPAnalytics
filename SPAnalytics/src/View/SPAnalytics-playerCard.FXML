@@ -18,25 +18,26 @@
          <children>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1280.0" style="-fx-background-color: BLACK;">
                <children>
-                  <TableView editable="true" layoutX="147.0" layoutY="45.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
+                  <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="45.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                      <columns>
-                        <TableColumn prefWidth="59.0" text="Season" />
-                        <TableColumn prefWidth="59.0" text="GP" />
-                        <TableColumn prefWidth="59.0" text="G" />
-                        <TableColumn prefWidth="59.0" text="A" />
-                        <TableColumn prefWidth="59.0" text="PTS" />
-                        <TableColumn prefWidth="59.0" text="+/-" />
-                        <TableColumn prefWidth="59.0" text="SOG" />
-                        <TableColumn prefWidth="59.0" text="\%" />
-                        <TableColumn prefWidth="59.0" text="PPG" />
-                        <TableColumn prefWidth="59.0" text="PPA" />
-                        <TableColumn prefWidth="59.0" text="SHG" />
-                        <TableColumn prefWidth="59.0" text="GWG" />
-                        <TableColumn prefWidth="59.0" text="GTG" />
-                        <TableColumn prefWidth="59.0" text="TOI/G" />
-                        <TableColumn prefWidth="59.0" text="PROD" />
+                        <TableColumn fx:id="season" prefWidth="59.0" text="Season" />
+                        <TableColumn fx:id="GP" prefWidth="59.0" text="GP" />
+                        <TableColumn fx:id="G" prefWidth="59.0" text="G" />
+                        <TableColumn fx:id="A" prefWidth="59.0" text="A" />
+                        <TableColumn fx:id="PTS" prefWidth="59.0" text="PTS" />
+                        <TableColumn fx:id="plusMinus" prefWidth="59.0" text="+/-" />
+                        <TableColumn fx:id="SOG" prefWidth="59.0" text="SOG" />
+                        <TableColumn fx:id="percent" prefWidth="59.0" text="\%" />
+                        <TableColumn fx:id="PPG" prefWidth="59.0" text="PPG" />
+                        <TableColumn fx:id="PPA" prefWidth="59.0" text="PPA" />
+                        <TableColumn fx:id="SHG" prefWidth="59.0" text="SHG" />
+                        <TableColumn fx:id="GWG" prefWidth="59.0" text="GWG" />
+                        <TableColumn fx:id="GTG" prefWidth="59.0" text="GTG" />
+                        <TableColumn fx:id="TOI" prefWidth="59.0" text="TOI/G" />
+                        <TableColumn fx:id="PROD" prefWidth="59.0" text="PROD" />
                      </columns>
                   </TableView>
+
                   <ImageView fitHeight="247.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Images/Mahalak.jpg" />
