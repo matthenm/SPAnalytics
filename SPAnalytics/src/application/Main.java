@@ -15,9 +15,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
 			// Initializing the FXML loader
-
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/SPAnalytics-Login.fxml"));
 
 			// Creating an instance of the controller class

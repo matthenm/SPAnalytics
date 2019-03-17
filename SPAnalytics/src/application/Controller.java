@@ -110,7 +110,7 @@ public class Controller {
 	private final String	PLAYER_HOME				= "/view/PlayerHome.fxml";
 	private final String	GOALIE_HOME				= "/view/GoalieHome.fxml";
 	private final String	TEAM_PROFILE			= "/view/TeamProfile.fxml";
-	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.fxml";
+	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.FXML";
 	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
 	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
 	private final String	ADMIN_SCORINGCHANCES	= "/view/Admin_ScoringChances.fxml";
@@ -359,7 +359,7 @@ public class Controller {
 	 * This is the method that will change the color of the circle to red
 	 */
 	@FXML
-	public void setRed() {
+	public void setRed(MouseEvent e) {
 		gc2.setStroke(Color.color(196, 33, 52));
 	}
 	
@@ -367,7 +367,7 @@ public class Controller {
 	 * This is the method that will change the color of the circle to green
 	 */
 	@FXML
-	public void setGreen() {
+	public void setGreen(MouseEvent e) {
 		gc2.setStroke(Color.GREEN);
 	}
 	
