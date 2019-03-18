@@ -20,9 +20,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javafx.concurrent.Task;
@@ -57,10 +59,12 @@ public class Model {
 				//getPlayers(db);
 				//getGameStats("Miami vs. Omaha");
 				//addMember(docRef);
-				//addGoalie(docRef);
+				//addGoalie();
 				//deletePlayerGoalie(docRef);
-				
+				// getPlayerStats("6");
 				//createTeam(docRefTeam);
+//				ArrayList<Object> map = getGameStats();
+//				System.out.println(map);
 					
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -118,7 +122,7 @@ public class Model {
 			Position position = new Position("goalie");
 			 Goalie goalie = new Goalie(4, 3, 2);
 			 position.goalie(goalie);
-			  PlayerStats stats1 = new PlayerStats("16-17", 6, position);
+			  PlayerStats stats1 = new PlayerStats("17-17", 6, position);
 			  Map<String, PlayerStats> stats = new HashMap<String, PlayerStats>();
 			  stats.put(stats1.season, stats1);
 			  Player player = new Player(31, "Ryan Larkin", "6'1", "201 lbs", "6/10/97", "Clarkson, MI", stats);
@@ -279,7 +283,6 @@ public class Model {
 				document = future.get();
 				HashMap map = (HashMap) document.get(jerseyNo);
 				
-				System.out.println(map.get("stats").getClass());
 				if (map.size() > 0) {
 					return map;
 				}
@@ -299,9 +302,109 @@ public class Model {
 
 		}
 		/**
+		 * Get the player stats on the player based on jerseyNo. It creates a String which is the jerseyNo and the rest of the
+		 *  stats is a hashmap of all the seasons for that player
+		 * @param jerseyNo
+		 * @return String season and the rest of the stats
+		 */
+		public HashMap<String, HashMap> getPlayerStats(String jerseyNo) {
+			//asynchronously retrieve all documents
+			//asynchronously retrieve multiple documents
+			 DocumentReference docRef = this.db.collection("information").document("players");
+			 ApiFuture<DocumentSnapshot> future = docRef.get();
+			 DocumentSnapshot document;
+			 HashMap<String, HashMap> allStats = new HashMap<String, HashMap>();
+			 
+			try {
+				document = future.get();
+				HashMap map = (HashMap) document.get(jerseyNo+".stats");
+				
+				if (map.size() > 0) {
+					for (Object s: map.keySet()) { //for each game
+						//System.out.println(s);
+						Object detailsOnGame = map.get(s);
+					
+						if (detailsOnGame instanceof HashMap) {
+							
+							HashMap details = (HashMap) detailsOnGame;
+							//System.out.println("Details on "+s+" = " +details);
+							String season = (String) details.get("season");
+						
+							Long GP = (Long) details.get("GP");
+							HashMap position = (HashMap) details.get("position");
+							
+							if (position instanceof HashMap) {
+								HashMap positionG = (HashMap) position;
+								if (positionG.get("goalie") != null) {
+									//the player is a goalie
+								
+									Object posInfo = positionG.get("goalie");
+									
+									if (posInfo instanceof HashMap) {
+										HashMap member = (HashMap) posInfo;
+										//System.out.println("Details on goalie " + member);
+										//Create a hashmap for one season
+										HashMap<String, Object> info = new HashMap<String, Object>();
+										
+										info.put("season", season);
+										info.put("GP", GP);
+										info.put("W", member.get("W"));
+										info.put("L", member.get("L"));
+										info.put("T", member.get("T"));
+										info.put("GA", member.get("GA"));
+										info.put("GAA", member.get("GAA"));
+										info.put("SA", member.get("SA"));
+										info.put("SV", member.get("SV"));
+										info.put("SVpercent", member.get("SVpercent"));
+										info.put("SO", member.get("SO"));
+										allStats.put(season, info);
+										//System.out.println("info: "+info);
+									}	
+									
+								} else {
+									//the player cis a member
+									Object posInfo = positionG.get("member");
+									if (posInfo instanceof HashMap) {
+										HashMap member = (HashMap) posInfo;
+										
+										//Create a hashmap for one season
+										HashMap<String, Object> info = new HashMap<String, Object>();
+										info.put("season", season);
+										info.put("GP", GP);
+										info.put("PPA", member.get("PPA"));
+										info.put("A", member.get("A"));
+										info.put("PPG", member.get("PPG"));
+										info.put("G", member.get("G"));
+										info.put("SOG", member.get("SOG"));
+										info.put("percent", member.get("percent"));
+										info.put("PTS", member.get("PTS"));
+										info.put("PROD", member.get("PROD"));
+										info.put("SHG", member.get("SHG"));
+										info.put("GWG", member.get("GWG"));
+										info.put("winsOrLosses", member.get("winsOrLosses"));
+										info.put("GTG", member.get("GTG"));
+										info.put("TOIG", member.get("TOIG"));
+										allStats.put(season, info);
+									}
+									
+								}
+										
+								
+							}
+						}
+					}
+				}
+				return allStats;
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+
+		}
+		/**
 		 * get hashmap of all player stats (string being the jerseyNo and object being the rest of the player stats
-		 * @param db
-		 * @return
+		 * @return a map of all the players that exist
 		 */
 		public Map<String, Object> getPlayers() {
 			
@@ -331,8 +434,7 @@ public class Model {
 		
 		/**
 		 * get hashmap of all team stats (string being the jerseyNo and object being the rest of the player stats
-		 * @param db
-		 * @return
+		 * @return all the statistics about the team Miami
 		 */
 		public Map<String, Object> getTeam() {
 			
@@ -362,9 +464,8 @@ public class Model {
 		
 		/**
 		 * get information about a specific game
-		 * @param db
-		 * @param jerseyNo
-		 * @return
+		 * @param game
+		 * @return details about that game
 		 */
 		public HashMap getGameStats(String game) {
 			//asynchronously retrieve all documents
@@ -378,7 +479,7 @@ public class Model {
 
 				HashMap map = (HashMap) document.get("Miami.games");
 				//Returns about a specific game
-				System.out.println(map.get(game).toString());
+			//	System.out.println(map.get(game).toString());
 				if (map.size() > 0) {
 					return map;
 				}
@@ -392,7 +493,37 @@ public class Model {
 
 		}
 		
-		//getPosition of a player
+		/**
+		 * An ArrayList of Objects for all the games (The Objects are Strings)
+		 */
+		public ArrayList<Object> getGameStats() {
+			ArrayList<Object> list;
+			//asynchronously retrieve all documents
+			//asynchronously retrieve multiple documents
+			 DocumentReference docRef = this.db.collection("information").document("team");
+			 ApiFuture<DocumentSnapshot> future = docRef.get();
+			 DocumentSnapshot document;
+			 
+			try {
+				document = future.get();
+
+				HashMap map = (HashMap) document.get("Miami.games");
+				if (map.size() > 0) {
+				list = new ArrayList<Object>(Arrays.asList(map.keySet().toArray()));
+					return list;
+				}
+				// future.get() blocks on response
+				
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+
+		}
+		/**
+		 * Gives the position of the player (goalie, or member) by inputting a jersey no.
+		 */
 		public String getPosition(String jerseyNo) {
 			String posName = null;
 			 DocumentReference docRef = db.collection("information").document("players");
@@ -403,7 +534,7 @@ public class Model {
 				document = future.get();
 				HashMap map = (HashMap) document.get(jerseyNo+".stats");
 				
-				System.out.println(map);
+				//System.out.println(map);
 				if (map.size() > 0) {
 					
 				for (Object s: map.keySet()) { //for each game
@@ -426,7 +557,11 @@ public class Model {
 		
 		} //end getPosition
 		
-		//get the player jerseyNo (based on the player name)
+		/**
+		 * Get the jerseyNo of a player by inputting their name
+		 * @param playerName
+		 * @return jerseyNo
+		 */
 		public String getJerseyNo(String playerName) {
 			String jerseyNo = null;
 			 DocumentReference docRef = db.collection("information").document("players");
@@ -443,8 +578,10 @@ public class Model {
 					Object detailsOfPlayer = players.get(s);
 					if (detailsOfPlayer instanceof HashMap && jerseyNo == null) {
 						HashMap details = (HashMap) detailsOfPlayer;
-						if (details.get("name") == playerName) {
-						jerseyNo = s.toString();
+
+						
+						if (details.get("name").equals(playerName)) {
+						jerseyNo = details.get("jerseyNo").toString();
 						}
 					}
 					}

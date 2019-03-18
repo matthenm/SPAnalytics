@@ -1,4 +1,4 @@
-/bin/
-/target/
-.DS_Store
 .classpath
+bin/
+target/
+.DS_Store

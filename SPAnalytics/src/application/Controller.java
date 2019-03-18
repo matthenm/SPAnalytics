@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +28,8 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -49,6 +53,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
@@ -58,6 +64,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sun.misc.GC;
@@ -176,13 +183,38 @@ public class Controller {
 			parent = fxmlLoader.load();
 			
 			//Load the proper player
-			String jerseyNo = null;
-			if (newScene.equals(GOALIE_HOME)) {
-				jerseyNo = m.getJerseyNo("Ryan Larkin");//WILL NEED TO CHANGE TO ACCOMODATE MORE GOALIES
-			} else if (newScene.equals(PLAYER_HOME)) {
-				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
-			}
+			
 			JFXTextArea textArea = (JFXTextArea) parent.lookup("#playerInfo");
+			
+			
+			String jerseyNo = null;
+			if (newScene.equals(GOALIE_CARD)) {
+				jerseyNo = m.getJerseyNo("Ryan Larkin");
+				//Get the player stats needed
+				HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+				//make the observable list
+				ObservableList<GoalieModel> data = makeGoalieTable(map);
+				//find the table needed to be added to
+				TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
+				//add the items to be updated
+				tbData.setItems(data);
+				makeGoalieCols(tbData); //create the columns
+				
+
+		} else if (newScene.equals(PLAYER_CARD)) {
+				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
+				//Get the player stats
+				HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+				//make the observable list
+				ObservableList<MemberModel> data = makeMemberTable(map);
+				//find the table needed to be added to
+				TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
+				//add the items to be updated
+				tbData.setItems(data);
+				makeMemberCols(tbData); //create the columns
+				
+			}
+		
 			if (textArea != null && jerseyNo != null) {
 				
 				HashMap playerInfo = m.getPlayer(jerseyNo); //based on jersey no
@@ -706,6 +738,206 @@ public class Controller {
 	@FXML
 	public void RinkSliderDropped() {
 		rinkGC.setLineWidth(RinkSlider.getValue());
+	}
+	
+	/**
+	 * Method to initialize table for a player
+	 */
+	@FXML
+	public ObservableList<MemberModel> makeMemberTable(HashMap<String, HashMap> playerData) {
+		ObservableList<MemberModel> data = FXCollections.observableArrayList();;
+	
+		Iterator it = playerData.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	MemberModel model = new MemberModel();
+	        Map.Entry pair = (Map.Entry)it.next();
+	        HashMap values = (HashMap) pair.getValue();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        Iterator stats = values.entrySet().iterator();
+	        //each game would be a new row
+	        while (stats.hasNext()) {
+	        	Map.Entry details = (Map.Entry)stats.next();
+		        System.out.println(details.getKey() + " = " + details.getValue());
+		        //check what value it is and make the correct value
+		        if (details.getKey() == "PPA") {
+		        	model.setPPA(details.getValue());
+		        }
+		        else if (details.getKey() == "A") {
+		        	model.setA(details.getValue());
+		        }
+		        else if (details.getKey() == "PPG") {
+		        	model.setPPG(details.getValue());
+		        }
+		        else if (details.getKey() == "G") {
+		        	model.setG(details.getValue());
+		        }
+		        else if (details.getKey() == "GP") {
+		        	model.setGP(details.getValue());
+		        }
+		        else if (details.getKey() == "SOG") {
+		        	model.setSOG(details.getValue());
+		        }
+		        else if (details.getKey() == "percent") {
+		        	model.setPercent(details.getValue());
+		        }
+		        else if (details.getKey() == "PTS") {
+		        	model.setPTS(details.getValue());
+		        }
+		        else if (details.getKey() == "PROD") {
+		        	model.setPROD(details.getValue());
+		        }
+		        else if (details.getKey() == "SHG") {
+		        	model.setSHG(details.getValue());
+		        }
+		        else if (details.getKey() == "GWG") {
+		        	model.setGWG(details.getValue());
+		        }
+		        else if (details.getKey() == "winsOrLosses") {
+		        	model.setPlusMinus(details.getValue());
+		        }
+		        else if (details.getKey() == "season") {
+		        	model.setSeason(details.getValue());
+		        }
+		        else if (details.getKey() == "GTG") {
+		        	model.setGTG(details.getValue());
+		        }
+		        else if (details.getKey() == "TOIG") {
+		        	model.setTOI(details.getValue());
+		        }
+	        stats.remove();
+	        }
+	        it.remove(); // avoids a ConcurrentModificationException
+	        data.add(model);
+	        
+	        //here model goes out of scope
+	    }
+	    return data;
+	}
+	/**
+	 * Method to initialize table for a player
+	 */
+	@FXML
+	public ObservableList<GoalieModel> makeGoalieTable(HashMap<String, HashMap> playerData) {
+		ObservableList<GoalieModel> data = FXCollections.observableArrayList();
+	
+		Iterator it = playerData.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	GoalieModel model = new GoalieModel();
+	        Map.Entry pair = (Map.Entry)it.next();
+	        HashMap values = (HashMap) pair.getValue();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        Iterator stats = values.entrySet().iterator();
+	        //each game would be a new row
+	        while (stats.hasNext()) {
+	        	Map.Entry details = (Map.Entry)stats.next();
+		        System.out.println(details.getKey() + " = " + details.getValue());
+		        //check what value it is and make the correct value
+		        if (details.getKey() == "GP") {
+		        	TableColumn<GoalieModel,String> nameColumn=new TableColumn<>("GP");
+		        	model.setGP(details.getValue());
+		        }
+		        else if (details.getKey() == "season") {
+		        	model.setSeason(details.getValue());
+		        }
+		        else if (details.getKey() == "SV") {
+		        	model.setSV(details.getValue());
+		        }
+		        else if (details.getKey() == "T") {
+		        	model.setT(details.getValue());
+		        }
+		        else if (details.getKey() == "GAA" ) {
+		        	model.setGAA(details.getValue());
+		        }
+		        else if (details.getKey() == "W") {
+		        	model.setW(details.getValue());
+		        }
+		        else if (details.getKey() == "GA") {
+		        	model.setGA(details.getValue());
+		        }
+		        else if (details.getKey() == "SA") {
+		        	model.setSA(details.getValue());
+		        }
+		        else if (details.getKey() == "SVpercent") {
+		        	model.setSVpercent(details.getValue());
+		        }
+		        else if (details.getKey() == "L") {
+		        	model.setL(details.getValue());
+		        }
+		        else if (details.getKey() == "SO") {
+		        	model.setSO(details.getValue());
+		        }
+		        
+	        stats.remove();
+	        }
+	        it.remove(); // avoids a ConcurrentModificationException
+	        data.add(model);
+	        
+	        //here model goes out of scope
+	    }
+	    return data;
+	   
+
+	}
+	
+	public void makeGoalieCols(TableView<GoalieModel> tbData) {
+
+		TableColumn<GoalieModel, String> season = new TableColumn<GoalieModel, String>("Season");
+		season.setCellValueFactory(new PropertyValueFactory("season"));
+		TableColumn<GoalieModel, String> GP = new TableColumn<GoalieModel, String>("GP");
+		GP.setCellValueFactory(new PropertyValueFactory("GP"));
+		TableColumn<GoalieModel, String> W = new TableColumn<GoalieModel, String>("W");
+		W.setCellValueFactory(new PropertyValueFactory("W"));
+		TableColumn<GoalieModel, String> L = new TableColumn<GoalieModel, String>("L");
+		L.setCellValueFactory(new PropertyValueFactory("L"));
+		TableColumn<GoalieModel, String> T = new TableColumn<GoalieModel, String>("T");
+		T.setCellValueFactory(new PropertyValueFactory("T"));
+		TableColumn<GoalieModel, String> GA = new TableColumn<GoalieModel, String>("GA");
+		GA.setCellValueFactory(new PropertyValueFactory("GA"));
+		TableColumn<GoalieModel, String> GAA = new TableColumn<GoalieModel, String>("GAA");
+		GAA.setCellValueFactory(new PropertyValueFactory("GAA"));
+		TableColumn<GoalieModel, String> SA = new TableColumn<GoalieModel, String>("SA");
+		SA.setCellValueFactory(new PropertyValueFactory("SA"));
+		TableColumn<GoalieModel, String> SV = new TableColumn<GoalieModel, String>("SV");
+		SV.setCellValueFactory(new PropertyValueFactory("SV"));
+		TableColumn<GoalieModel, String> SVpercent = new TableColumn<GoalieModel, String>("SV%");
+		SVpercent.setCellValueFactory(new PropertyValueFactory("SVpercent"));
+		TableColumn<GoalieModel, String> SO = new TableColumn<GoalieModel, String>("SO");
+		SO.setCellValueFactory(new PropertyValueFactory("SO"));
+		
+		tbData.getColumns().setAll(season,GP,W,L,T,GA,GAA,SA,SV,SVpercent,SO);
+	}
+	
+	public void makeMemberCols(TableView<MemberModel> tbData) {
+		
+		TableColumn<MemberModel, String> season = new TableColumn<MemberModel, String>("Season");
+		season.setCellValueFactory(new PropertyValueFactory("season"));
+		TableColumn<MemberModel, String> GP = new TableColumn<MemberModel, String>("GP");
+		GP.setCellValueFactory(new PropertyValueFactory("GP"));
+		TableColumn<MemberModel, String> A = new TableColumn<MemberModel, String>("A");
+		A.setCellValueFactory(new PropertyValueFactory("A"));
+		TableColumn<MemberModel, String> PPG = new TableColumn<MemberModel, String>("PPG");
+		PPG.setCellValueFactory(new PropertyValueFactory("PPG"));
+		TableColumn<MemberModel, String> G = new TableColumn<MemberModel, String>("G");
+		G.setCellValueFactory(new PropertyValueFactory("G"));
+		TableColumn<MemberModel, String> SOG = new TableColumn<MemberModel, String>("SOG");
+		SOG.setCellValueFactory(new PropertyValueFactory("SOG"));
+		TableColumn<MemberModel, String> percent = new TableColumn<MemberModel, String>("\'%");
+		percent.setCellValueFactory(new PropertyValueFactory("percent"));
+		TableColumn<MemberModel, String> PTS = new TableColumn<MemberModel, String>("PTS");
+		PTS.setCellValueFactory(new PropertyValueFactory("PTS"));
+		TableColumn<MemberModel, String> PROD = new TableColumn<MemberModel, String>("PROD");
+		PROD.setCellValueFactory(new PropertyValueFactory("PROD"));
+		TableColumn<MemberModel, String> SHG = new TableColumn<MemberModel, String>("SHG");
+		SHG.setCellValueFactory(new PropertyValueFactory("SHG"));
+		TableColumn<MemberModel, String> GWG = new TableColumn<MemberModel, String>("GWG");
+		GWG.setCellValueFactory(new PropertyValueFactory("GWG"));
+		TableColumn<MemberModel, String> winsOrLosses = new TableColumn<MemberModel, String>("+/-");
+		winsOrLosses.setCellValueFactory(new PropertyValueFactory("plusMinus"));
+		TableColumn<MemberModel, String> GTG = new TableColumn<MemberModel, String>("GTG");
+		GTG.setCellValueFactory(new PropertyValueFactory("GTG"));
+		TableColumn<MemberModel, String> TOIG = new TableColumn<MemberModel, String>("TOI/G");
+		TOIG.setCellValueFactory(new PropertyValueFactory("TOI"));
+		tbData.getColumns().setAll(season,GP,A,PPG,G,SOG,percent,PTS,PROD,SHG,GWG, winsOrLosses, GTG, TOIG);
 	}
 }
 
