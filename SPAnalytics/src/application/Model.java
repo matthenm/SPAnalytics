@@ -63,8 +63,8 @@ public class Model {
 				//deletePlayerGoalie(docRef);
 				// getPlayerStats("6");
 				//createTeam(docRefTeam);
-				ArrayList<Object> map = getGameStats();
-				System.out.println(map);
+//				ArrayList<Object> map = getGameStats();
+//				System.out.println(map);
 					
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -321,11 +321,13 @@ public class Model {
 				
 				if (map.size() > 0) {
 					for (Object s: map.keySet()) { //for each game
+						//System.out.println(s);
 						Object detailsOnGame = map.get(s);
 					
 						if (detailsOnGame instanceof HashMap) {
+							
 							HashMap details = (HashMap) detailsOnGame;
-						
+							//System.out.println("Details on "+s+" = " +details);
 							String season = (String) details.get("season");
 						
 							Long GP = (Long) details.get("GP");
@@ -340,7 +342,7 @@ public class Model {
 									
 									if (posInfo instanceof HashMap) {
 										HashMap member = (HashMap) posInfo;
-										
+										//System.out.println("Details on goalie " + member);
 										//Create a hashmap for one season
 										HashMap<String, Object> info = new HashMap<String, Object>();
 										
@@ -355,7 +357,8 @@ public class Model {
 										info.put("SV", member.get("SV"));
 										info.put("SVpercent", member.get("SVpercent"));
 										info.put("SO", member.get("SO"));
-										allStats.put(jerseyNo, info);
+										allStats.put(season, info);
+										//System.out.println("info: "+info);
 									}	
 									
 								} else {
@@ -381,7 +384,7 @@ public class Model {
 										info.put("winsOrLosses", member.get("winsOrLosses"));
 										info.put("GTG", member.get("GTG"));
 										info.put("TOIG", member.get("TOIG"));
-										allStats.put(jerseyNo, info);
+										allStats.put(season, info);
 									}
 									
 								}
@@ -476,7 +479,7 @@ public class Model {
 
 				HashMap map = (HashMap) document.get("Miami.games");
 				//Returns about a specific game
-				System.out.println(map.get(game).toString());
+			//	System.out.println(map.get(game).toString());
 				if (map.size() > 0) {
 					return map;
 				}
@@ -531,7 +534,7 @@ public class Model {
 				document = future.get();
 				HashMap map = (HashMap) document.get(jerseyNo+".stats");
 				
-				System.out.println(map);
+				//System.out.println(map);
 				if (map.size() > 0) {
 					
 				for (Object s: map.keySet()) { //for each game
