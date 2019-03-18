@@ -44,6 +44,7 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -52,6 +53,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -119,6 +121,7 @@ public class Controller {
 	@FXML private Slider RinkSlider;
 	@FXML private ToggleGroup RinkGroup;
 	@FXML private TextArea RinkDiagramText;
+	@FXML private ListView<String> PlayerList;
 	private GraphicsContext rinkGC;
 	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
 	private DrawnObject line;
@@ -291,6 +294,11 @@ public class Controller {
 				}
 				
 			});
+			
+			PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+			PlayerList.getItems().add("Player 1");
+			PlayerList.getItems().add("Player 2");
+			PlayerList.getItems().add("Player 3");
 		} catch(Exception e) {}
 	}
 
