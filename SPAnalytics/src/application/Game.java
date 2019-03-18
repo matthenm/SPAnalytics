@@ -1,6 +1,8 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Game {
  public String gameName;
@@ -14,14 +16,20 @@ public class Game {
  public TeamScore offense;
  public TeamScore defense;
  public String finalScore;
+ public Map<String, Timestamp> timestamp= new HashMap<>();
+ public String url;
+ public String netChart;
+ public String scoringChart;
 
 public Game() {}
 
-public Game(String gameName, TeamScore offense, TeamScore defense, String finalScore) {
+public Game(String gameName, TeamScore offense, TeamScore defense, String finalScore,
+		Map<String, Timestamp> timestamp) {
 	this.gameName = gameName;
 	this.offense = offense;
 	this.defense = defense;
 	this.finalScore = finalScore;
+	this.timestamp = timestamp;
 }
  
 	

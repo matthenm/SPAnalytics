@@ -3,10 +3,13 @@ import java.util.ArrayList;
 
 public class Clip {
 
+	private String url;
 	private String time;
 	private String title;
 	private ArrayList<String> players;
 	private ArrayList<DrawnObject> rinkDiagram;
+	
+	public Clip() {}
 	
 	public Clip(String time, String title) {
 		this.time = time;

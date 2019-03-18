@@ -17,7 +17,7 @@
                   <Font size="30.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="400.0" layoutY="118.0" prefHeight="70.0" prefWidth="500.0" style="-fx-background-color: #C42134;" text="Team Profile" textFill="WHITE">
+            <JFXButton layoutX="400.0" layoutY="118.0" onAction="#GoalieTeamProfileClicked" prefHeight="70.0" prefWidth="500.0" style="-fx-background-color: #C42134;" text="Team Profile" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>

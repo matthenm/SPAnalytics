@@ -11,7 +11,7 @@ public String weight;
 public String birthDate;
 public String homeTown;
 public Map<String, PlayerStats> stats= new HashMap<>();
-
+public Map<String, Timestamp> timestamp= new HashMap<>();
 
 
 /**

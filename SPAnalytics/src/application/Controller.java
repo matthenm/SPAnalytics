@@ -437,6 +437,15 @@ public class Controller {
 		loadScene(GOALIE_CARD);
 	}
 
+		/**
+		 * This is the method that will go to the player card scene.
+		 */
+		@FXML
+		public void GoalieTeamProfileClicked() {
+			loadScene(TEAM_PROFILE);
+		}
+		
+
 	/**
 	 * This is the method that will go back the home scene.
 	 */
@@ -929,6 +938,70 @@ public class Controller {
 		TableColumn<MemberModel, String> TOIG = new TableColumn<MemberModel, String>("TOI/G");
 		TOIG.setCellValueFactory(new PropertyValueFactory("TOI"));
 		tbData.getColumns().setAll(season,GP,A,PPG,G,SOG,percent,PTS,PROD,SHG,GWG, winsOrLosses, GTG, TOIG);
+	}
+	
+	public  HashMap<String, HashMap<String, Object>> readMemberCols(TableView<MemberModel> tbData) {
+		HashMap<String, Object> values = new HashMap<String, Object>();
+		  HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
+		  ObservableList<TableColumn<MemberModel, ?>> columns = tbData.getColumns();
+		    
+		    for (Object row : tbData.getItems()) {
+		    	
+		      for (TableColumn column : columns) {
+		    	  System.out.println(column.getText());
+		    	  values.put(column.getText(), (Object) column.
+				          getCellObservableValue(row).
+				          getValue());
+		       
+		      }
+		      Object season = values.get("Season");
+		      allValues.put(season.toString(), values);
+		    }
+
+		    Iterator stats = allValues.entrySet().iterator();
+	        //each game would be a new row
+	        while (stats.hasNext()) {
+	        	Map.Entry details = (Map.Entry)stats.next();
+		        System.out.println(details.getKey() + " = " + details.getValue());
+		       
+	        }
+	        return allValues;
+	
+	}
+	//get
+	public  HashMap<String, HashMap<String, Object>> readGoalieCols(TableView<GoalieModel> tbData) {
+		  HashMap<String, Object> values = new HashMap<String, Object>();
+		  HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
+		  ObservableList<TableColumn<GoalieModel, ?>> columns = tbData.getColumns();
+		    
+		    for (Object row : tbData.getItems()) {
+		    	
+		      for (TableColumn column : columns) {
+		    	  System.out.println(column.getText());
+		    	  values.put(column.getText(), (Object) column.
+				          getCellObservableValue(row).
+				          getValue());
+		       
+		      }
+		      Object season = values.get("Season");
+		      allValues.put(season.toString(), values);
+		    }
+
+		    Iterator stats = allValues.entrySet().iterator();
+	        //each game would be a new row
+	        while (stats.hasNext()) {
+	        	Map.Entry details = (Map.Entry)stats.next();
+		        System.out.println(details.getKey() + " = " + details.getValue());
+		       
+	        }
+	        return allValues;
+	}
+	//delete player
+	public void deletePlayer(int jerseyNo, TableView<?> tbData,JFXTextArea textArea) {
+		tbData.getItems().clear();
+		textArea.clear();
+		m.deletePlayerByJerseyNo(jerseyNo);
+		
 	}
 }
 
