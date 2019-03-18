@@ -85,8 +85,8 @@ public class Model {
 		game1.gameName = "Miami vs. Omaha";
 		game1.finalScore = "3-1";
 	
-		TeamScore offense = new TeamScore("Miami", 4, 3, 6, 7);
-		TeamScore defense = new TeamScore("Omaha", 5, 2, 7, 1);
+		TeamScore offense = new TeamScore("Miami", 4, 3, 6, 7, "wb");
+		TeamScore defense = new TeamScore("Omaha", 5, 2, 7, 1, "wb");
 		
 		game1.offense = offense;
 		game1.defense = defense;
@@ -215,6 +215,24 @@ public class Model {
 			}
 			 
 			
+		}
+		public void deletePlayerByJerseyNo(long jerseyNo) {
+			Map<String, Object> players = new HashMap<>();
+			 
+			  players.put(""+jerseyNo, FieldValue.delete());
+			  
+			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
+			// ...
+			// result.get() blocks on response
+			try {
+				System.out.println("Update time : " + result.get().getUpdateTime());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		/**
