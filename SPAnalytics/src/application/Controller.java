@@ -90,10 +90,6 @@ public class Controller {
 	@FXML private Canvas netChartCanvas;
 	private GraphicsContext gc1;
 	
-	//scoringChances variables
-	@FXML private Canvas scoringChancesCanvas;
-	private GraphicsContext gc2;
-	
 	private ArrayList<DrawnObject> netChartItems = new ArrayList<DrawnObject>();
 	private int netChartIndex = 0;
 
@@ -268,12 +264,11 @@ public class Controller {
 			gc1 = netChartCanvas.getGraphicsContext2D();
 			gc1.setStroke(Color.color(.77, .13, .2));
 			gc1.setLineWidth(7);
+			netChartItems = new ArrayList<DrawnObject>();
+			netChartIndex = 0;
 		} catch(Exception e) {}
 		
 		try {
-			gc2 = scoringChancesCanvas.getGraphicsContext2D();
-			gc2.setStroke(Color.RED);
-			gc2.setLineWidth(7);
 		} catch(Exception e) {}
 		
 		try {
@@ -291,6 +286,11 @@ public class Controller {
 					copyDrawList(clips.get(index).getRinkDiagram());
 					rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 					drawLinesAndNumbers(drawList, rinkGC);
+					PlayerList.getSelectionModel().clearSelection();
+					for(String player : clips.get(index).getPlayers()) {
+						PlayerList.getSelectionModel().select(player);
+					}
+					
 				}
 				
 			});
@@ -299,6 +299,9 @@ public class Controller {
 			PlayerList.getItems().add("Player 1");
 			PlayerList.getItems().add("Player 2");
 			PlayerList.getItems().add("Player 3");
+			for(int i = 4; i <= 20; i++) {
+				PlayerList.getItems().add("Player " + i);
+			}
 		} catch(Exception e) {}
 	}
 
@@ -537,33 +540,7 @@ public class Controller {
 				gc.fillText(obj.getText(), p.getX(), p.getY());
 			}
 		}
-	}
-	
-	/**
-	 * This is the method that will change the color of the circle to red
-	 */
-	@FXML
-	public void setRed(MouseEvent e) {
-		gc2.setStroke(Color.color(196, 33, 52));
-	}
-	
-	/**
-	 * This is the method that will change the color of the circle to green
-	 */
-	@FXML
-	public void setGreen(MouseEvent e) {
-		gc2.setStroke(Color.GREEN);
-	}
-	
-	/**
-	 * This is the method that will draw circles Scoring chances when mouse released
-	 */
-	@FXML
-	public void drawCircleScoring(MouseEvent e) {
-		gc2.strokeOval(e.getX()-20, e.getY()-20, 50, 50);
-		gc2.fillText("2", e.getX()+3, e.getY()+10);
-	}
-	
+	}	
 	
 	/**
 	 * Method opens NCHC link on default browser
@@ -651,6 +628,12 @@ public class Controller {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setRinkDiagram(drawList);
+		ObservableList<String> players = PlayerList.getSelectionModel().getSelectedItems();
+		ArrayList<String> playersAL = new ArrayList<String>();
+		for(String player : players) {
+			playersAL.add(player);
+		}
+		clips.get(index).addPlayer(playersAL);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Saved");
 		alert.setHeaderText("Diagram Saved");

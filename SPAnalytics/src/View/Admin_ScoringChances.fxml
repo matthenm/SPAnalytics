@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
@@ -9,7 +16,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
          <children>
@@ -18,31 +25,26 @@
                   <Image url="@../images/half_rink.jpg" />
                </image>
             </ImageView>
-            <Canvas fx:id="scoringChancesCanvas" height="596.0" layoutX="4.0" layoutY="2.0" onMousePressed="#drawCircleScoring" width="684.0" />
-            <JFXButton buttonType="RAISED" layoutX="700.0" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="DELETE" textFill="WHITE">
+            <Canvas fx:id="netChartCanvas" height="596.0" layoutX="4.0" layoutY="2.0" onMousePressed="#drawCircle" width="684.0" />
+            <JFXButton buttonType="RAISED" layoutX="700.0" onAction="#NetChartUndoPressed" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="UNDO" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="716.0" layoutY="103.0" maxWidth="89.0" onMousePressed="#setRed" prefHeight="86.0" prefWidth="138.0" style="-fx-background-color: #C42134; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
-            <JFXButton layoutX="716.0" layoutY="220.0" maxWidth="89.0" onMousePressed="#setGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
+            <JFXButton layoutX="716.0" layoutY="103.0" maxWidth="89.0" onAction="#setColorRed" prefHeight="86.0" prefWidth="138.0" style="-fx-background-color: #C42134; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" text="Button" textFill="#f0050500" />
+            <JFXButton layoutX="716.0" layoutY="220.0" maxWidth="89.0" onAction="#setColorGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
          </children>
       </AnchorPane>
    </center>
    <top>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="133.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="327.0" layoutY="12.0" prefHeight="177.0" prefWidth="631.0" text="Scoring Chances" textAlignment="CENTER" textFill="#c42134">
+            <Label alignment="CENTER" layoutX="327.0" layoutY="12.0" prefHeight="75.0" prefWidth="631.0" text="Scoring Chances" textAlignment="CENTER" textFill="#c42134">
                <font>
                   <Font name="System Bold" size="75.0" />
                </font>
             </Label>
-            <ImageView fitHeight="200.0" fitWidth="200.0">
-               <image>
-                  <Image url="@../images/miami-dark.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="1080.0">
+            <ImageView fitHeight="110.0" fitWidth="101.0" layoutX="155.0" layoutY="12.0">
                <image>
                   <Image url="@../images/miami-dark.jpg" />
                </image>
