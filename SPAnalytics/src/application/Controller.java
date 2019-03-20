@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -87,11 +88,17 @@ public class Controller {
 
     
 	//netChart variables
-	@FXML private Canvas netChartCanvas;
-	private GraphicsContext gc1;
+	@FXML private Canvas AwayNetChartCanvas;
+	@FXML private Canvas HomeNetChartCanvas;
+	private Canvas netChartCanvas;
+	private GraphicsContext awayGC;
+	private GraphicsContext homeGC;
+	private int ovalWidth;
 	
-	private ArrayList<DrawnObject> netChartItems = new ArrayList<DrawnObject>();
-	private int netChartIndex = 0;
+	private ArrayList<DrawnObject> homeNetChartItems = new ArrayList<DrawnObject>();
+	private int homeNetChartIndex = 0;
+	private ArrayList<DrawnObject> awayNetChartItems = new ArrayList<DrawnObject>();
+	private int awayNetChartIndex = 0;
 
 	//Video tab scene variables
 	@FXML 
@@ -261,11 +268,26 @@ public class Controller {
 			System.out.println(err);
 		}
 		try {
-			gc1 = netChartCanvas.getGraphicsContext2D();
-			gc1.setStroke(Color.color(.77, .13, .2));
-			gc1.setLineWidth(7);
-			netChartItems = new ArrayList<DrawnObject>();
-			netChartIndex = 0;
+			netChartCanvas = HomeNetChartCanvas;
+			
+			homeGC = HomeNetChartCanvas.getGraphicsContext2D();
+			homeGC.setStroke(Color.color(.77, .13, .2));
+			homeGC.setLineWidth(7);
+			homeNetChartItems = new ArrayList<DrawnObject>();
+			homeNetChartIndex = 0;
+			
+			awayGC = AwayNetChartCanvas.getGraphicsContext2D();
+			awayGC.setStroke(Color.color(.77, .13, .2));
+			awayGC.setLineWidth(7);
+			awayNetChartItems = new ArrayList<DrawnObject>();
+			awayNetChartIndex = 0;
+			
+			if(newScene.equals(ADMIN_NETCHART)) {
+				ovalWidth = 40;
+			} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
+				ovalWidth = 20;
+			}
+
 		} catch(Exception e) {}
 		
 		try {
@@ -308,9 +330,9 @@ public class Controller {
 	/**
 	 * Helper method to copy rink diagram from Clip object to the drawList
 	 */
-	private void copyDrawList(ArrayList<DrawnObject> dl) {
+	private void copyDrawList(List<DrawnObject> list) {
 		drawList = new ArrayList<DrawnObject>();
-		drawList.addAll(dl);
+		drawList.addAll(list);
 	}
 	
 	/**
@@ -458,7 +480,8 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorRed() {
-		gc1.setStroke(Color.color(.77, .13, .2));
+		homeGC.setStroke(Color.color(.77, .13, .2));
+		awayGC.setStroke(Color.color(.77, .13, .2));
 	}
 	
 	/**
@@ -466,7 +489,8 @@ public class Controller {
 	 */
 	@FXML
 	public void setColorGreen() {
-		gc1.setStroke(Color.GREEN);
+		homeGC.setStroke(Color.GREEN);
+		awayGC.setStroke(Color.GREEN);
 	}
 	
 	/**
@@ -474,15 +498,45 @@ public class Controller {
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
-		Point p1 = new Point(e.getX()-20, e.getY()-20, gc1.getStroke());
-		gc1.strokeOval(p1.getX(), p1.getY(), 50, 50);
-		DrawnObject oval = new DrawnObject(p1, p1.getColor(), 50);
-		netChartItems.add(oval);
-				
-		Point p2 = new Point(e.getX()+3, e.getY()+10, gc1.getFill());
-		gc1.fillText(""+ ++netChartIndex, p2.getX(), p2.getY());
-		DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+netChartIndex);
-		netChartItems.add(number);
+		if(netChartCanvas == HomeNetChartCanvas) {
+			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), homeGC.getStroke());
+			homeGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
+			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
+			homeNetChartItems.add(oval);
+			
+			int xOff = 2*(int)(Math.log10(Math.max(1, homeNetChartIndex))+1);
+			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, homeGC.getFill());
+			homeGC.fillText(""+ ++homeNetChartIndex, p2.getX(), p2.getY());
+			DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+homeNetChartIndex);
+			homeNetChartItems.add(number);
+		} else if(netChartCanvas == AwayNetChartCanvas) {
+			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), awayGC.getStroke());
+			awayGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
+			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
+			awayNetChartItems.add(oval);
+					
+			int xOff = 2*(int)(Math.log10(Math.max(1, awayNetChartIndex))+1);
+			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, awayGC.getFill());
+			awayGC.fillText(""+ ++awayNetChartIndex, p2.getX(), p2.getY());
+			DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+awayNetChartIndex);
+			awayNetChartItems.add(number);
+		}
+	}
+	
+	/**
+	 * Method changes highlighted canvas to home
+	 */
+	@FXML
+	public void NetChartHomeSelected() {
+		netChartCanvas = HomeNetChartCanvas;
+	}
+	
+	/**
+	 * Method changes highlighted canvas to away
+	 */
+	@FXML
+	public void NetChartAwaySelected() {
+		netChartCanvas = AwayNetChartCanvas;
 	}
 	
 	/**
@@ -490,15 +544,28 @@ public class Controller {
 	 */
 	@FXML
 	public void NetChartUndoPressed() {
-		Color original = (Color) gc1.getStroke();
-		gc1.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
-		if(netChartItems.size() < 2) return;
-		
-		netChartItems.remove(netChartItems.size()-1);
-		netChartItems.remove(netChartItems.size()-1);
-		drawOvals(netChartItems, gc1);
-		netChartIndex--;
-		gc1.setStroke(original);
+		if(netChartCanvas == HomeNetChartCanvas) {
+			Color original = (Color) homeGC.getStroke();
+			homeGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
+			if(homeNetChartItems.size() < 2) return;
+			
+			homeNetChartItems.remove(homeNetChartItems.size()-1);
+			homeNetChartItems.remove(homeNetChartItems.size()-1);
+			drawOvals(homeNetChartItems, homeGC);
+			homeNetChartIndex--;
+			homeGC.setStroke(original);
+		} else if(netChartCanvas == AwayNetChartCanvas) {
+			Color original = (Color) awayGC.getStroke();
+			awayGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
+			if(awayNetChartItems.size() < 2) return;
+			
+			awayNetChartItems.remove(awayNetChartItems.size()-1);
+			awayNetChartItems.remove(awayNetChartItems.size()-1);
+			drawOvals(awayNetChartItems, awayGC);
+			awayNetChartIndex--;
+			awayGC.setStroke(original);
+		}
+
 		
 	}
 	

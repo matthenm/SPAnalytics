@@ -1,14 +1,26 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.paint.Paint;
 
 public class DrawnObject {
-	private ArrayList<Point> points;
+	private List<Point> points;
 	private String text;
 	private double width;
 	private boolean hasText;
+	
+	public DrawnObject() {
+		//required for db
+	}
+	
+	public DrawnObject(List<Point> points, String text, double width, boolean hasText) {
+		this.points = points;
+		this.text = text;
+		this.width = width;
+		this.hasText = hasText;
+	}
 	
 	public DrawnObject(double xPos, double yPos, Paint color, double width) {
 		points = new ArrayList<Point>();
@@ -68,5 +80,13 @@ public class DrawnObject {
 	
 	public double getWidth() {
 		return width;
+	}
+
+	public List<Point> getPoints() {
+		return points;
+	}
+
+	public boolean isHasText() {
+		return hasText;
 	}
 }
