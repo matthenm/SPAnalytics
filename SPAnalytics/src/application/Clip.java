@@ -8,16 +8,18 @@ public class Clip {
 	private String title;
 	private List<String> players;
 	private List<DrawnObject> rinkDiagram;
+	private String url;
 	
 	public Clip() {
 		//required for DB
 	}
 	
-	public Clip(String time, String title, List<String> players, List<DrawnObject> rinkDiagram) {
+	public Clip(String time, String title, List<String> players, List<DrawnObject> rinkDiagram, String url) {
 		this.time = time;
 		this.title = title;
 		this.players = players;
 		this.rinkDiagram = rinkDiagram;
+		this.url = url;
 	}
 	
 	public Clip(String time, String title) {
@@ -61,6 +63,14 @@ public class Clip {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	
