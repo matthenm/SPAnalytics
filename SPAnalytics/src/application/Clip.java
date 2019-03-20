@@ -1,13 +1,27 @@
 package application;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Clip {
 
 	private String url;
 	private String time;
 	private String title;
-	private ArrayList<String> players;
-	private ArrayList<DrawnObject> rinkDiagram;
+	private List<String> players;
+	private List<DrawnObject> rinkDiagram;
+	private String url;
+	
+	public Clip() {
+		//required for DB
+	}
+	
+	public Clip(String time, String title, List<String> players, List<DrawnObject> rinkDiagram, String url) {
+		this.time = time;
+		this.title = title;
+		this.players = players;
+		this.rinkDiagram = rinkDiagram;
+		this.url = url;
+	}
 	
 	public Clip() {}
 	
@@ -22,19 +36,19 @@ public class Clip {
 		players.add(p);
 	}
 	
-	public void addPlayer(ArrayList<String> p) {
+	public void addPlayer(List<String> p) {
 		players.addAll(p);
 	}
 	
-	public ArrayList<DrawnObject> getRinkDiagram() {
+	public List<DrawnObject> getRinkDiagram() {
 		return rinkDiagram;
 	}
 	
-	public void setRinkDiagram(ArrayList<DrawnObject> drawing) {
+	public void setRinkDiagram(List<DrawnObject> drawing) {
 		rinkDiagram = drawing;
 	}
 	
-	public ArrayList<String> getPlayers() {
+	public List<String> getPlayers() {
 		return players;
 	}
 
@@ -52,6 +66,14 @@ public class Clip {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	
