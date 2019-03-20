@@ -9,7 +9,6 @@ public class Clip {
 	private String title;
 	private List<String> players;
 	private List<DrawnObject> rinkDiagram;
-	private String url;
 	
 	public Clip() {
 		//required for DB
@@ -23,7 +22,6 @@ public class Clip {
 		this.url = url;
 	}
 	
-	public Clip() {}
 	
 	public Clip(String time, String title) {
 		this.time = time;
