@@ -3,19 +3,29 @@ import java.util.ArrayList;
 
 public class Clip {
 
-	private String url;
+	private String driveUrl;
 	private String time;
+	private String game;
 	private String title;
 	private ArrayList<String> players;
-	private ArrayList<DrawnObject> rinkDiagram;
+	private ArrayList<DrawnObject> rinkDiagram; //list of string
 	
 	public Clip() {}
 	
 	public Clip(String time, String title) {
 		this.time = time;
 		this.title = title;
+		
 		players = new ArrayList<String>();
 		rinkDiagram = new ArrayList<DrawnObject>();
+	}
+	public Clip(String time, String title, ArrayList<String> players, ArrayList<DrawnObject> rinkDiagram, String driveUrl, String game) {
+		this.time=time;
+		this.title=title;
+		this.players=players;
+		this.rinkDiagram=rinkDiagram;
+		this.driveUrl=driveUrl;
+		this.game=game;
 	}
 	
 	public void addPlayer(String p) {
@@ -38,6 +48,9 @@ public class Clip {
 		return players;
 	}
 
+	public void setPlayers(ArrayList<String> players) {
+		this.players=players;
+	}
 	public String getTime() {
 		return time;
 	}
@@ -52,6 +65,20 @@ public class Clip {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getURL() {
+		return driveUrl;
+	}
+
+	public void setURL(String driveUrl) {
+		this.driveUrl = driveUrl;
+	}
+	public String getGame() {
+		return game;
+	}
+	public void setGame(String game) {
+		this.game = game;
 	}
 	
 	

@@ -12,24 +12,21 @@ public class Game {
  //players will have multiple timestamps
  //for every game, has net chart image and scoring chance image
  //offense scoring chance image and defense scoring chance image
- //Points, x, y, width, height, color
  public TeamScore offense;
  public TeamScore defense;
  public String finalScore;
- public Map<String, Timestamp> timestamp= new HashMap<>();
  public String url;
  public String netChart;
  public String scoringChart;
 
 public Game() {}
 
-public Game(String gameName, TeamScore offense, TeamScore defense, String finalScore,
-		Map<String, Timestamp> timestamp) {
+public Game(String gameName, TeamScore offense, TeamScore defense, String finalScore) {
 	this.gameName = gameName;
 	this.offense = offense;
 	this.defense = defense;
 	this.finalScore = finalScore;
-	this.timestamp = timestamp;
+
 }
  
 	

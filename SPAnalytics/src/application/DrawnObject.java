@@ -10,6 +10,7 @@ public class DrawnObject {
 	private double width;
 	private boolean hasText;
 	
+	public DrawnObject() {}
 	public DrawnObject(double xPos, double yPos, Paint color, double width) {
 		points = new ArrayList<Point>();
 		Point p = new Point(xPos, yPos, color);
@@ -68,5 +69,19 @@ public class DrawnObject {
 	
 	public double getWidth() {
 		return width;
+	}
+	
+	public void setPoints(ArrayList<Point> points) {
+		this.points = points;
+	}
+
+	public void setHasText(boolean hasText) {
+		this.hasText = hasText;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+	public void setWidth(double width) {
+		this.width = width;
 	}
 }

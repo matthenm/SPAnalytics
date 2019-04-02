@@ -2,6 +2,7 @@ package application;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldPath;
@@ -28,16 +29,19 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javafx.concurrent.Task;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class Model {
 	private DocumentReference docRef;
 	private DocumentReference docTeamRef;
+	private DocumentReference docClipRef;
 	private Firestore db;
 	//The database data is found here: https://console.firebase.google.com/u/0/project/discovery-8d956/database/discovery-8d956/data
 		public void makeDatabase() {
 			FileInputStream serviceAccount;
 			try {
-				serviceAccount = new FileInputStream("/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-b501c5de29.json");
+				serviceAccount = new FileInputStream("/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-44a0a0b783.json");
 				
 				// Initialize the app with a custom auth variable, limiting the server's access
 				GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -55,9 +59,33 @@ public class Model {
 				FirebaseApp.initializeApp(options,"data");
 				this.docRef = db.collection("information").document("players");
 				this.docTeamRef = db.collection("information").document("team");
+				this.docClipRef = db.collection("information").document("clip");
+				ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
+				DrawnObject text = new DrawnObject(100-12, 100+12, Color.BLACK, 0, "Test");
+				drawList.add(text);
+				ArrayList<String> players = new ArrayList<String>();
+				players.add("TestName1");
+				players.add("TestName2");
+				Clip c = new Clip("TestTime", "TestTitle", players, drawList, "testurl","testGame");
+				Clip clip = new Clip("50th","test");
+				clip.setGame("Miami vs Omaha");
+				clip.setURL("testUrl");
+				Clip clip2 = new Clip("100th", "test2");
+				clip2.setGame("Miami vs Omaha");
+		//		addClip(c);
+		//		addClip(clip2);
+		//		getClips("Miami vs Omaha");
 				//getPlayer(db, "6");
 				//getPlayers(db);
-				//getGameStats("Miami vs. Omaha");
+				ArrayList<Clip> clips = getClips("testGame");
+				for (Clip cl: clips) {
+					for (DrawnObject drawn: cl.getRinkDiagram()) {
+						System.out.println(drawn.getText());
+					}
+				}
+//					System.out.println(cl.getTitle());
+					
+//				}
 				//addMember(docRef);
 				//addGoalie();
 				//deletePlayerGoalie(docRef);
@@ -73,8 +101,158 @@ public class Model {
 			
 			
 		}
-
-
+		
+		/**
+		 * Adds a new clip if it has a unique title or modifies an existing clip if one exists
+		 * @param clip
+		 */
+		@SuppressWarnings("unchecked")
+		public void addClip(Clip clip) {
+			DocumentReference ref = this.docClipRef.collection(clip.getGame()).document(clip.getTitle());
+			ApiFuture<WriteResult> result = ref.set(clip, SetOptions.merge());
+			
+				try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+		
+		
+		}
+		/**
+		 * Retrieve an arraylist of clips based on a string game
+		 * @param game
+		 * @return
+		 */
+		public ArrayList<Clip> getClips(String game) {
+		 ArrayList<Clip> clips = new ArrayList<Clip>();
+		 Iterable<CollectionReference> collections = this.docClipRef.getCollections();
+		 
+		 for(CollectionReference col:collections) {
+			 if (col.getId().toString().equals(game)) { //this means this collection we get clips
+				 ApiFuture<QuerySnapshot> future = col.get();
+				 try {
+					QuerySnapshot query = future.get();
+					List<QueryDocumentSnapshot> docs = query.getDocuments();
+					for(QueryDocumentSnapshot snap: docs) { //this gets every clip object for that game
+						String gameName = (String) snap.get("game"); //get game name
+						ArrayList<String> players = (ArrayList<String>) snap.get("players"); //get list of players
+						ArrayList<Object> rinkDiagram = (ArrayList<Object>) snap.get("rinkDiagram");
+						String time = (String) snap.get("time");
+						String title = (String) snap.get("title");
+						String url = (String) snap.get("url");
+						ArrayList<Point> points = new ArrayList<Point>();
+						ArrayList<DrawnObject> drawings = new ArrayList<DrawnObject>();
+							for (Object s: rinkDiagram) {
+								String text = null;
+								double width = 0;
+								boolean hasText = false;
+								DrawnObject drawnObject = new DrawnObject();  //create a new object
+							if (s instanceof HashMap) {
+								Map map = (HashMap) s;
+								for (Object obj:map.keySet()) {
+									Object value = map.get(obj);
+									if (value instanceof ArrayList) { //this is an arraylist of points
+										ArrayList result = (ArrayList) value;
+										for (Object v: result) {
+											if (v instanceof HashMap) { //for a single point
+												HashMap pointInfo = (HashMap) v;
+												double x = 0;
+												double y = 0;
+												Color color = new Color(0,0,0,0);
+												for (Object pointKeys: pointInfo.keySet()) {
+												System.out.println(pointKeys + " = " + pointInfo.get(pointKeys));
+												if (pointKeys.equals("x")) {
+													x = (double) pointInfo.get(pointKeys);
+												} else if (pointKeys.equals("y")) {
+													y = (double) pointInfo.get(pointKeys);
+												}
+												else { //color
+													
+													//System.out.println(pointInfo.get(pointKeys).getClass());
+													if (pointInfo.get(pointKeys) instanceof HashMap) {
+														HashMap colorCreate = (HashMap) pointInfo.get(pointKeys);
+														int r=0,g=0,b=0;
+														double opacity = 0.0;
+														for (Object colorVals: colorCreate.keySet()) {
+															if (colorVals.equals("red")) {
+																double val = (double) colorCreate.get(colorVals);
+																r = (int) Math.round(val);
+															} else if (colorVals.equals("green")) {
+																double val = (double) colorCreate.get(colorVals);
+																g = (int) Math.round(val);
+															} else if (colorVals.equals("blue")) {
+																double val = (double) colorCreate.get(colorVals);
+																b = (int) Math.round(val);
+															} else if (colorVals.equals("opacity")) {
+																opacity = (double) colorCreate.get(colorVals);
+															}//I am ignoring saturation, brightness, opague, hue
+															//System.out.println(colorVals + " = " + colorCreate.get(colorVals));
+														}
+														
+														color = Color.rgb(r, g, b, opacity);
+													}
+													
+												} //end color
+												}
+												//now set the point value
+												Point p = new Point(x,y,color);
+												points.add(p);
+											} //end point creation
+										
+										} //created a number of points
+										
+									} else if (!(value instanceof HashMap)) { //not include last point
+										System.out.println(obj +" = " + map.get(obj));
+										if (obj.equals("width")) {
+											width = (double) value;
+											System.out.println(width);
+										} else if (obj.equals("text")) {
+											text = (String) value;
+											System.out.println(text);
+										} else if (obj.equals("hasText")) {
+											hasText = (boolean) value;
+											System.out.println(hasText);
+										}
+										} //end search through words
+											
+									}
+									
+								}
+							drawnObject.setHasText(hasText);
+							drawnObject.setPoints(points);
+							drawnObject.setText(text);
+							drawnObject.setWidth(width);
+							drawings.add(drawnObject);
+					
+						} //stop parsing through rink
+							
+						
+						//Make a new clip object
+						Clip clip = new Clip();
+						clip.setGame(game);
+						clip.setRinkDiagram(drawings);
+						clip.setTime(time);
+						clip.setTitle(title);
+						clip.setURL(url);
+						clip.setPlayers(players);
+						
+						//add this clip to arraylist of clips
+						clips.add(clip);
+						
+					}
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break; //no need to look at other references
+			 }
+			 
+		 }
+		 return clips;
+	}
+		
 		//example of adding a team
 		public void createTeam() {
 		// TODO Auto-generated method stub
@@ -159,15 +337,12 @@ public class Model {
 			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			 
 			
 		}
@@ -178,20 +353,14 @@ public class Model {
 		 * @param player
 		 */
 		public void addPlayers(Map<String, Player> players) {
-
-			  
-			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
-			// ...
-			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
+			
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			 
 			
 		}
@@ -204,15 +373,12 @@ public class Model {
 			  ApiFuture<WriteResult> result = this.docRef.delete();
 			// ...
 			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			 
 			
 		}
@@ -224,15 +390,12 @@ public class Model {
 			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
 			// ...
 			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		
 		/**
@@ -245,17 +408,12 @@ public class Model {
 			  players.put(""+player.jerseyNo, FieldValue.delete());
 			  
 			  ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
-			// ...
-			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			 
 			
 		}
@@ -271,18 +429,14 @@ public class Model {
 			  teams.put(team.teamName, team);
 			  
 			  ApiFuture<WriteResult> result = this.docRef.set(teams, SetOptions.merge());
-			// ...
-			// result.get() blocks on response
-			try {
-				System.out.println("Update time : " + result.get().getUpdateTime());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			  try {
+					System.out.println("Update time : " + result.get().getUpdateTime());
+				} catch (InterruptedException | ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
+		
 		
 		/**
 		 * get a specific player based on their jersey no
@@ -611,4 +765,6 @@ public class Model {
 		}
 			return jerseyNo;
 		}
+		
+	 
 }
