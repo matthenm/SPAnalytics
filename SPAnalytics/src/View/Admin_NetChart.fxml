@@ -16,16 +16,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="540.0" fitWidth="873.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Images/NetChart.jpg" />
-               </image>
-            </ImageView>
-            <Canvas fx:id="netChartCanvas" height="525.0" layoutX="30.0" layoutY="12.0" onMousePressed="#drawCircle" width="804.0" />
             <AnchorPane layoutX="874.0" layoutY="-1.0" prefHeight="540.0" prefWidth="408.0">
                <children>
                   <JFXButton buttonType="RAISED" layoutX="4.0" layoutY="1.0" onAction="#NetChartUndoPressed" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="UNDO" textFill="WHITE">
@@ -37,6 +31,38 @@
                   <JFXButton layoutX="30.0" layoutY="220.0" maxWidth="89.0" onAction="#setColorGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
                </children>
             </AnchorPane>
+            <TabPane layoutY="9.0" prefHeight="510.0" prefWidth="817.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab onSelectionChanged="#NetChartHomeSelected" text="Miami">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="448.0" fitWidth="761.0" layoutX="43.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/NetChart.jpg" />
+                                 </image>
+                              </ImageView>
+                              <Canvas fx:id="HomeNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab onSelectionChanged="#NetChartAwaySelected" text="Opponent">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="448.0" fitWidth="761.0" layoutX="43.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/NetChart.jpg" />
+                                 </image>
+                              </ImageView>
+                              <Canvas fx:id="AwayNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
          </children>
       </AnchorPane>
    </center>

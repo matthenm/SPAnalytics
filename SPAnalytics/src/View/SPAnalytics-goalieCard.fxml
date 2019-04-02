@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Button?>
@@ -18,7 +26,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
          <children>
@@ -46,233 +54,121 @@
                      </image>
                   </ImageView>
                   <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
-                  <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="2.0" onAction="#GoalieHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="1178.0" layoutY="50.0" onAction="#GoalieLogoutButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="LOGOUT" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
                </children>
             </AnchorPane>
+            <JFXButton buttonType="RAISED" layoutX="1478.0" layoutY="11.0" onAction="#GoalieHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="1478.0" layoutY="59.0" onAction="#GoalieLogoutButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="LOGOUT" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <ComboBox fx:id="GamePicker" layoutX="1255.0" layoutY="161.0" prefHeight="31.0" prefWidth="183.0" promptText="Game" />
+            <JFXButton buttonType="RAISED" layoutX="1456.0" layoutY="156.0" onAction="#OpenGameButtonClicked" prefHeight="40.0" prefWidth="122.0" style="-fx-background-color: #C42134;" text="Open Game" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
    </top>
    <bottom>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="688.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1280.0" style="-fx-background-color: black;">
-               <children>
-                  <Label layoutX="4.0" layoutY="12.0" prefHeight="20.0" prefWidth="92.0" style="-fx-text-fill: #C42134;" text="Game Log:" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="4.0" layoutY="39.0" prefHeight="20.0" prefWidth="100.0" style="-fx-text-fill: #C42134;" text="U Conn:" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <JFXButton buttonType="RAISED" layoutX="83.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.6" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="116.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.7" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="149.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.8" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="181.0" layoutY="15.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="10.9" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="215.0" layoutY="15.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.10" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="250.0" layoutY="15.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.12" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="82.0" layoutY="41.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="W" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <ImageView fitHeight="283.0" fitWidth="564.0" layoutX="2.0" layoutY="315.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/goalieNet.png" />
-                     </image>
-                  </ImageView>
-                  <JFXButton buttonType="RAISED" layoutX="121.0" layoutY="41.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="7-1" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="160.0" layoutY="41.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="27" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="199.0" layoutY="41.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text="26" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="238.0" layoutY="41.0" prefHeight="0.0" prefWidth="33.0" style="-fx-background-color: #C42134;" text=".963" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="285.0" layoutY="15.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.13" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="320.0" layoutY="15.0" prefHeight="0.0" prefWidth="35.0" style="-fx-background-color: #C42134;" text="10.14" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="370.0" layoutY="15.0" prefHeight="0.0" prefWidth="75.0" style="-fx-background-color: #C42134;" text="SHOW ALL" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="350.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Goals" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="9.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="372.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Saves" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="446.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Goals" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="468.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Saves" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="534.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Goals" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="556.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="Saves" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="394.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="All" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="490.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="All" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton buttonType="RAISED" layoutX="450.0" layoutY="578.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="55.0" style="-fx-background-color: #C42134;" text="All" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </JFXButton>
-                  <ImageView fitHeight="43.0" fitWidth="46.0" layoutX="401.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/dot.png" />
-                     </image>
-                  </ImageView>
-                  <Label alignment="CENTER" layoutX="401.0" layoutY="457.0" prefHeight="43.0" prefWidth="43.0" style="-fx-background-color: white;" text="\%">
-                     <font>
-                        <Font name="System Bold" size="35.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="56.0" fitWidth="43.0" layoutX="401.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Images/heatMap.png" />
-                     </image>
-                  </ImageView>
-                  <TabPane layoutX="582.0" layoutY="132.0" prefHeight="457.0" prefWidth="688.0" tabClosingPolicy="UNAVAILABLE">
-                     <tabs>
-                        <Tab text="NCHC">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TextField fx:id="NCHC_URL" layoutX="286.0" layoutY="14.0" prefHeight="31.0" prefWidth="270.0" promptText="URL" />
-                                    <TextArea layoutX="23.0" layoutY="57.0" prefHeight="347.0" prefWidth="654.0" promptText="Time stamps and notes" />
-                                    <Text fill="WHITE" layoutX="23.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of timestamps to look at" wrappingWidth="255.703125">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <JFXButton buttonType="RAISED" layoutX="568.0" layoutY="13.0" onAction="#NCHCOpenButtonClicked" prefHeight="32.0" prefWidth="87.0" style="-fx-background-color: #C42134;" text="OPEN" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </JFXButton>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab text="YouTube">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="129.0" prefWidth="345.0">
-                                 <children>
-                                    <TextField layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="55.0" promptText="URL" />
-                                    <TextArea layoutX="14.0" layoutY="55.0" prefHeight="76.0" prefWidth="126.0" promptText="Timestamps/Notes" />
-                                    <Button layoutX="77.0" layoutY="14.0" mnemonicParsing="false" text="Update" />
-                                    <WebView layoutX="154.0" layoutY="14.0" prefHeight="116.0" prefWidth="114.0" />
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                     </tabs>
-                  </TabPane>
-                  <AnchorPane layoutX="873.0" layoutY="11.0" prefHeight="112.0" prefWidth="349.0">
-                     <children>
-                        <JFXButton buttonType="RAISED" layoutX="125.0" layoutY="67.0" onAction="#StopTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Stop" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="67.0" onAction="#StartTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Start" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="238.0" layoutY="67.0" onAction="#ResetTimerClicked" prefHeight="31.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="Reset" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                        <Label fx:id="Time" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefHeight="45.0" prefWidth="303.0" text="0:00:00.000" textAlignment="RIGHT" textFill="WHITE">
-                           <font>
-                              <Font size="33.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
+            <TabPane layoutX="14.0" layoutY="56.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Clips">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="551.0" prefWidth="1093.0">
+                           <children>
+                              <ImageView fitHeight="549.0" fitWidth="1157.0" layoutX="36.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Images/rink.png" />
+                                 </image>
+                              </ImageView>
+                              <Canvas fx:id="RinkCanvas" height="553.0" layoutX="36.0" layoutY="13.0" onMouseDragged="#CanvasMouseDragged" onMousePressed="#CanvasMousePressed" width="1094.0" />
+                              <ListView fx:id="PlayerList" layoutX="1130.0" layoutY="68.0" prefHeight="440.0" prefWidth="253.0" style="-fx-background-color: White; -fx-border-color: #C42134;" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Net Chart/Zone Chart">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TabPane layoutX="14.0" layoutY="1.0" prefHeight="578.0" prefWidth="614.0" tabClosingPolicy="UNAVAILABLE">
+                                 <tabs>
+                                    <Tab onSelectionChanged="#NetChartHomeSelected" text="Miami">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="533.0" prefWidth="622.0">
+                                             <children>
+                                                <ImageView fitHeight="537.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../images/half_rink.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <Canvas fx:id="HomeNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                    <Tab onSelectionChanged="#NetChartAwaySelected" text="Opponent">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="537.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../images/half_rink.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <Canvas fx:id="AwayNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                 </tabs>
+                              </TabPane>
+                              <TabPane layoutX="628.0" prefHeight="510.0" prefWidth="817.0" tabClosingPolicy="UNAVAILABLE">
+                                 <tabs>
+                                    <Tab onSelectionChanged="#NetChartHomeSelected" text="Miami">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="448.0" fitWidth="761.0" layoutX="43.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Images/NetChart.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <Canvas fx:id="HomeNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                    <Tab onSelectionChanged="#NetChartAwaySelected" text="Opponent">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="448.0" fitWidth="761.0" layoutX="43.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../Images/NetChart.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <Canvas fx:id="AwayNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                 </tabs>
+                              </TabPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
          </children>
       </AnchorPane>
    </bottom>
