@@ -6,10 +6,6 @@ public class Point {
 	private double x, y;
 	private Paint color;
 	
-	public Point() {
-		//needed for DB
-	}
-	
 	public Point(double x, double y, Paint color) {
 		this.x = x;
 		this.y = y;
