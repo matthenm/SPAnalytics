@@ -20,14 +20,14 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER">
          <children>
-            <JFXButton buttonType="RAISED" layoutX="678.0" layoutY="14.0" onAction="#NetChartUndoPressed" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="UNDO" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="1105.0" layoutY="14.0" onAction="#NetChartUndoPressed" prefHeight="60.0" prefWidth="150.0" style="-fx-background-color: #C42134;" text="UNDO" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
             </JFXButton>
-            <JFXButton layoutX="694.0" layoutY="117.0" maxWidth="89.0" onAction="#setColorRed" prefHeight="86.0" prefWidth="138.0" style="-fx-background-color: #C42134; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" text="Button" textFill="#f0050500" />
-            <JFXButton layoutX="694.0" layoutY="234.0" maxWidth="89.0" onAction="#setColorGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
-            <TabPane layoutX="14.0" layoutY="7.0" prefHeight="578.0" prefWidth="614.0" tabClosingPolicy="UNAVAILABLE">
+            <JFXButton layoutX="1121.0" layoutY="117.0" maxWidth="89.0" onAction="#setColorRed" prefHeight="86.0" prefWidth="138.0" style="-fx-background-color: #C42134; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" text="Button" textFill="#f0050500" />
+            <JFXButton layoutX="1121.0" layoutY="234.0" maxWidth="89.0" onAction="#setColorGreen" prefHeight="86.0" prefWidth="89.0" style="-fx-background-color: Green; -fx-background-radius: 10em; -fx-min-width: 50px; -fx-min-height: 50px; -fx-max-width: 50px; -fx-max-width: 90px;" textFill="#f0050500" />
+            <TabPane layoutX="14.0" layoutY="7.0" prefHeight="578.0" prefWidth="867.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab onSelectionChanged="#NetChartHomeSelected" text="Miami">
                   <content>
@@ -39,6 +39,11 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="HomeNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#NetChartSaveHomePressed" prefHeight="75.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Miami Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </JFXButton>
                            </children>
                         </AnchorPane>
                   </content>
@@ -53,6 +58,11 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="AwayNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#NetChartSaveAwayPressed" prefHeight="106.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Opponent Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </JFXButton>
                            </children>
                         </AnchorPane>
                   </content>

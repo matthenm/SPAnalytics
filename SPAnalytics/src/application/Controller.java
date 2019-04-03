@@ -75,7 +75,7 @@ import sun.misc.GC;
 public class Controller {
 
 	@FXML BorderPane bp;
-	
+
 	//login scene variables
 	@FXML
 	private JFXButton				loginButton;
@@ -86,7 +86,7 @@ public class Controller {
 	@FXML
 	private JFXPasswordField		adminPass;
 
-    
+
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
 	@FXML private Canvas HomeNetChartCanvas;
@@ -94,7 +94,7 @@ public class Controller {
 	private GraphicsContext awayGC;
 	private GraphicsContext homeGC;
 	private int ovalWidth;
-	
+
 	private ArrayList<DrawnObject> homeNetChartItems = new ArrayList<DrawnObject>();
 	private int homeNetChartIndex = 0;
 	private ArrayList<DrawnObject> awayNetChartItems = new ArrayList<DrawnObject>();
@@ -117,7 +117,7 @@ public class Controller {
 	//TimeStamp variables
 	@FXML private ComboBox<String> TimeStamps;
 	@FXML private TextArea TimeStampNotes;
-	
+
 	//RinkDiagram variables
 	@FXML private Canvas RinkCanvas;
 	@FXML private ColorPicker RinkCP;
@@ -128,7 +128,7 @@ public class Controller {
 	private GraphicsContext rinkGC;
 	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
 	private DrawnObject line;
-	
+
 	//instance variables
 	private Scene					scene;
 	private Stage					primaryStage;
@@ -152,7 +152,7 @@ public class Controller {
 
 	//Database connection
 	Model m = new Model();
-	
+
 	/**
 	 * This is the method that will allow this Controller class to
 	 * load new FXML files. 
@@ -160,7 +160,7 @@ public class Controller {
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
 		//connect to database
-				m.makeDatabase();
+		m.makeDatabase();
 	}
 
 
@@ -168,14 +168,14 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
-		
-		
-	 	if (newScene.equals(LOGIN_SCENE)) {
+
+
+		if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
 		} else {
 			isLogin = false;
 		}
-		
+
 		try {
 			// Switch to player card scene
 			fxmlLoader = new FXMLLoader(
@@ -183,16 +183,16 @@ public class Controller {
 
 			// To keep the states of everything in this controller
 			fxmlLoader.setController(this);
-			
-			
+
+
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
-			
+
 			//Load the proper player
-			
+
 			JFXTextArea textArea = (JFXTextArea) parent.lookup("#playerInfo");
-			
-			
+
+
 			String jerseyNo = null;
 			if (newScene.equals(GOALIE_CARD)) {
 				jerseyNo = m.getJerseyNo("Ryan Larkin");
@@ -205,9 +205,9 @@ public class Controller {
 				//add the items to be updated
 				tbData.setItems(data);
 				makeGoalieCols(tbData); //create the columns
-				
 
-		} else if (newScene.equals(PLAYER_CARD)) {
+
+			} else if (newScene.equals(PLAYER_CARD)) {
 				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
 				//Get the player stats
 				HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
@@ -218,11 +218,11 @@ public class Controller {
 				//add the items to be updated
 				tbData.setItems(data);
 				makeMemberCols(tbData); //create the columns
-				
+
 			}
-		
+
 			if (textArea != null && jerseyNo != null) {
-				
+
 				HashMap playerInfo = m.getPlayer(jerseyNo); //based on jersey no
 				Object birthDate = playerInfo.get("birthDate");
 				Object name = playerInfo.get("name");
@@ -235,7 +235,7 @@ public class Controller {
 			scene = new Scene(parent, 600, 400);
 			Pane root = (Pane) parent;
 			scene = new Scene(new Group(root), 600, 400);
-			
+
 			//setting scaling
 			Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
 			double width = resolution.getWidth();
@@ -252,79 +252,80 @@ public class Controller {
 					switch (event.getCode()) {
 					case S: 
 						getTime();
-					break;
+						break;
 					}
 				}
 			});
-			
+
 			scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("SP Analytics");
 			primaryStage.setMaximized(true);
 			primaryStage.setFullScreen(true);
 			primaryStage.show();
-			
+
 		} catch (Exception err) {
 			System.out.println(err);
 		}
-		try {
-			netChartCanvas = HomeNetChartCanvas;
-			
-			homeGC = HomeNetChartCanvas.getGraphicsContext2D();
-			homeGC.setStroke(Color.color(.77, .13, .2));
-			homeGC.setLineWidth(7);
-			homeNetChartItems = new ArrayList<DrawnObject>();
-			homeNetChartIndex = 0;
-			
-			awayGC = AwayNetChartCanvas.getGraphicsContext2D();
-			awayGC.setStroke(Color.color(.77, .13, .2));
-			awayGC.setLineWidth(7);
-			awayNetChartItems = new ArrayList<DrawnObject>();
-			awayNetChartIndex = 0;
-			
-			if(newScene.equals(ADMIN_NETCHART)) {
-				ovalWidth = 40;
-			} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
-				ovalWidth = 20;
-			}
+		if(newScene.equals(ADMIN_NETCHART) || newScene.equals(ADMIN_SCORINGCHANCES)) {
+			try {
+				netChartCanvas = HomeNetChartCanvas;
 
-		} catch(Exception e) {}
-		
-		try {
-		} catch(Exception e) {}
-		
-		try {
-			RinkCP.setValue(Color.BLACK);
-			rinkGC = RinkCanvas.getGraphicsContext2D();
-			rinkGC.setStroke(RinkCP.getValue());
-			rinkGC.setFill(RinkCP.getValue());
-			rinkGC.setLineWidth(RinkSlider.getValue());
-			rinkGC.setFont(new Font("Verdana", 24));
-			TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-					int index = TimeStamps.getSelectionModel().getSelectedIndex();
-					TimeStampNotes.setText(clips.get(index).getTitle());
-					copyDrawList(clips.get(index).getRinkDiagram());
-					rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
-					drawLinesAndNumbers(drawList, rinkGC);
-					PlayerList.getSelectionModel().clearSelection();
-					for(String player : clips.get(index).getPlayers()) {
-						PlayerList.getSelectionModel().select(player);
-					}
-					
+				homeGC = HomeNetChartCanvas.getGraphicsContext2D();
+				homeGC.setStroke(Color.color(.77, .13, .2));
+				homeGC.setLineWidth(7);
+				homeNetChartItems = new ArrayList<DrawnObject>();
+				homeNetChartIndex = 0;
+
+				awayGC = AwayNetChartCanvas.getGraphicsContext2D();
+				awayGC.setStroke(Color.color(.77, .13, .2));
+				awayGC.setLineWidth(7);
+				awayNetChartItems = new ArrayList<DrawnObject>();
+				awayNetChartIndex = 0;
+
+				if(newScene.equals(ADMIN_NETCHART)) {
+					ovalWidth = 40;
+				} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
+					ovalWidth = 20;
 				}
-				
-			});
-			
-			PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-			PlayerList.getItems().add("Player 1");
-			PlayerList.getItems().add("Player 2");
-			PlayerList.getItems().add("Player 3");
-			for(int i = 4; i <= 20; i++) {
-				PlayerList.getItems().add("Player " + i);
-			}
-		} catch(Exception e) {}
+
+			} catch(Exception e) {}
+		}
+
+		if(newScene.equals(ADMIN_RINKDIAGRAM)) {
+			try {
+				RinkCP.setValue(Color.BLACK);
+				rinkGC = RinkCanvas.getGraphicsContext2D();
+				rinkGC.setStroke(RinkCP.getValue());
+				rinkGC.setFill(RinkCP.getValue());
+				rinkGC.setLineWidth(RinkSlider.getValue());
+				rinkGC.setFont(new Font("Verdana", 24));
+				TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						int index = TimeStamps.getSelectionModel().getSelectedIndex();
+						TimeStampNotes.setText(clips.get(index).getTitle());
+						copyDrawList(clips.get(index).getRinkDiagram());
+						rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						drawLinesAndNumbers(drawList, rinkGC);
+						PlayerList.getSelectionModel().clearSelection();
+						for(String player : clips.get(index).getPlayers()) {
+							PlayerList.getSelectionModel().select(player);
+						}
+
+					}
+
+				});
+
+				PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+				PlayerList.getItems().add("Player 1");
+				PlayerList.getItems().add("Player 2");
+				PlayerList.getItems().add("Player 3");
+				for(int i = 4; i <= 20; i++) {
+					PlayerList.getItems().add("Player " + i);
+				}
+			} catch(Exception e) {}
+		}
 	}
 
 	/**
@@ -334,14 +335,14 @@ public class Controller {
 		drawList = new ArrayList<DrawnObject>();
 		drawList.addAll(list);
 	}
-	
+
 	/**
 	 * Helper method that converts milliseconds to a stopwatch time format
 	 */
 	private static String formatTime(final long l)
 	{
 		final long time;
-		
+
 		if(periodIndex <= 2) {
 			time = TimeUnit.MINUTES.toMillis(20) - l;
 		} else {
@@ -354,7 +355,7 @@ public class Controller {
 		final long sec = TimeUnit.MILLISECONDS.toSeconds(time - TimeUnit.MINUTES.toMillis(min));
 		return String.format("%02d:%02d %s", min, sec, PERIODS[periodIndex]);
 	}
-	
+
 	/**
 	 * Returns the current time on the timer
 	 */
@@ -366,6 +367,14 @@ public class Controller {
 		Clip c = new Clip(start + " - " + end, "Untitled");
 		TimeStamps.getItems().add(c.getTime());
 		clips.add(c);
+	}
+
+	/**
+	 * Opens NCHC link when clicked
+	 */
+	@FXML
+	public void OpenGameButtonClicked() {
+		
 	}
 	
 	
@@ -384,12 +393,12 @@ public class Controller {
 			if(adminPass.getText().equals("test")) {
 				loadScene(ADMIN_HOME);
 			}		
-	}
+		}
 		else {	
 			loadScene(PLAYER_HOME);
 		}
 	}
-	
+
 	//Admin card button functionalities
 	/**
 	 * This is the method that will go back to the previous scene.
@@ -398,7 +407,7 @@ public class Controller {
 	public void goBack() {
 		loadScene(ADMIN_HOME);
 	}
-	
+
 	/**
 	 * This is the method that will go to the net chart scene.
 	 */
@@ -406,7 +415,7 @@ public class Controller {
 	public void NetChartClicked() {
 		loadScene(ADMIN_NETCHART);
 	}
-	
+
 	/**
 	 * This is the method that will go to the scoring chances scene.
 	 */
@@ -414,7 +423,7 @@ public class Controller {
 	public void ScoringChancesClicked() {
 		loadScene(ADMIN_SCORINGCHANCES);
 	}
-	
+
 	/**
 	 * This is the method that will go to the rink diagram scene.
 	 */
@@ -422,8 +431,8 @@ public class Controller {
 	public void RinkDiagramClicked() {
 		loadScene(ADMIN_RINKDIAGRAM);
 	}
-	
-	
+
+
 	// player card button functionalities 
 	/**
 	 * This is the method that will go to the player card scene.
@@ -440,7 +449,7 @@ public class Controller {
 	public void PlayerHomeButtonClicked() {
 		loadScene(PLAYER_HOME);
 	}
-	
+
 	/**
 	 * This is the method that will logout and go back the login scene.
 	 */
@@ -448,7 +457,7 @@ public class Controller {
 	public void PlayerLogoutButtonClicked() {
 		loadScene(LOGIN_SCENE);
 	}
-	
+
 
 	// goalie card button functionalities
 	/**
@@ -459,14 +468,14 @@ public class Controller {
 		loadScene(GOALIE_CARD);
 	}
 
-		/**
-		 * This is the method that will go to the player card scene.
-		 */
-		@FXML
-		public void GoalieTeamProfileClicked() {
-			loadScene(TEAM_PROFILE);
-		}
-		
+	/**
+	 * This is the method that will go to the player card scene.
+	 */
+	@FXML
+	public void GoalieTeamProfileClicked() {
+		loadScene(TEAM_PROFILE);
+	}
+
 
 	/**
 	 * This is the method that will go back the home scene.
@@ -475,7 +484,7 @@ public class Controller {
 	public void GoalieHomeButtonClicked() {
 		loadScene(GOALIE_HOME);
 	}
-	
+
 	/**
 	 * This is the method that will logout and go back the login scene.
 	 */
@@ -483,7 +492,7 @@ public class Controller {
 	public void GoalieLogoutButtonClicked() {
 		loadScene(LOGIN_SCENE);
 	}
-	
+
 	/**
 	 * This is the method that will change the color of the circle to red
 	 */
@@ -492,7 +501,7 @@ public class Controller {
 		homeGC.setStroke(Color.color(.77, .13, .2));
 		awayGC.setStroke(Color.color(.77, .13, .2));
 	}
-	
+
 	/**
 	 * This is the method that will change the color of the circle to green
 	 */
@@ -501,7 +510,7 @@ public class Controller {
 		homeGC.setStroke(Color.GREEN);
 		awayGC.setStroke(Color.GREEN);
 	}
-	
+
 	/**
 	 * This is the method that will draw circles Net chart when mouse released
 	 */
@@ -512,7 +521,7 @@ public class Controller {
 			homeGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
 			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
 			homeNetChartItems.add(oval);
-			
+
 			int xOff = 2*(int)(Math.log10(Math.max(1, homeNetChartIndex))+1);
 			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, homeGC.getFill());
 			homeGC.fillText(""+ ++homeNetChartIndex, p2.getX(), p2.getY());
@@ -523,7 +532,7 @@ public class Controller {
 			awayGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
 			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
 			awayNetChartItems.add(oval);
-					
+
 			int xOff = 2*(int)(Math.log10(Math.max(1, awayNetChartIndex))+1);
 			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, awayGC.getFill());
 			awayGC.fillText(""+ ++awayNetChartIndex, p2.getX(), p2.getY());
@@ -531,7 +540,7 @@ public class Controller {
 			awayNetChartItems.add(number);
 		}
 	}
-	
+
 	/**
 	 * Method changes highlighted canvas to home
 	 */
@@ -539,7 +548,7 @@ public class Controller {
 	public void NetChartHomeSelected() {
 		netChartCanvas = HomeNetChartCanvas;
 	}
-	
+
 	/**
 	 * Method changes highlighted canvas to away
 	 */
@@ -547,7 +556,7 @@ public class Controller {
 	public void NetChartAwaySelected() {
 		netChartCanvas = AwayNetChartCanvas;
 	}
-	
+
 	/**
 	 * Method undos an item on the NetChartScene
 	 */
@@ -557,7 +566,7 @@ public class Controller {
 			Color original = (Color) homeGC.getStroke();
 			homeGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
 			if(homeNetChartItems.size() < 2) return;
-			
+
 			homeNetChartItems.remove(homeNetChartItems.size()-1);
 			homeNetChartItems.remove(homeNetChartItems.size()-1);
 			drawOvals(homeNetChartItems, homeGC);
@@ -567,7 +576,7 @@ public class Controller {
 			Color original = (Color) awayGC.getStroke();
 			awayGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
 			if(awayNetChartItems.size() < 2) return;
-			
+
 			awayNetChartItems.remove(awayNetChartItems.size()-1);
 			awayNetChartItems.remove(awayNetChartItems.size()-1);
 			drawOvals(awayNetChartItems, awayGC);
@@ -575,9 +584,9 @@ public class Controller {
 			awayGC.setStroke(original);
 		}
 
-		
+
 	}
-	
+
 	/**
 	 * Helper drawing method for any canvas using ovals
 	 */
@@ -594,7 +603,7 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	/**
 	 * Helper method to draw lines and numbers
 	 */
@@ -604,7 +613,7 @@ public class Controller {
 			if(obj.getText() == null) {
 				gc.beginPath();
 				gc.setLineWidth(obj.getWidth());
-				for(int xy = 0; xy < obj.getSize(); xy++) {
+				for(int xy = 0; xy < obj.size(); xy++) {
 					Point p = obj.getPoint(xy);
 					gc.setStroke(p.getColor());
 					gc.lineTo(p.getX(), p.getY());
@@ -617,7 +626,37 @@ public class Controller {
 			}
 		}
 	}	
-	
+
+	@FXML
+	/**
+	 * Method saves the home chart
+	 */
+	public void NetChartSaveHomePressed() {
+		for(DrawnObject obj : homeNetChartItems) {
+			if(obj.getText() != null) {
+				System.out.println(obj.getText());
+			} else {
+				Point p = obj.getLastPoint();
+				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
+			}
+		}
+	}
+
+	@FXML
+	/**
+	 * Method saves the away chart
+	 */
+	public void NetChartSaveAwayPressed() {
+		for(DrawnObject obj : awayNetChartItems) {
+			if(obj.getText() != null) {
+				System.out.println(obj.getText());
+			} else {
+				Point p = obj.getLastPoint();
+				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
+			}
+		}
+	}
+
 	/**
 	 * Method opens NCHC link on default browser
 	 */
@@ -629,7 +668,7 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Method increments the period
 	 */
@@ -695,7 +734,7 @@ public class Controller {
 		periodIndex = 0;
 		Time.setText("20:00 1st");
 	}
-	
+
 	/**
 	 * Method saves diagram to current clip
 	 */
@@ -731,16 +770,16 @@ public class Controller {
 		alert.setContentText("Title of clip saved");
 		alert.show();
 	}
-	
+
 	/**
 	 * Method saves the NCHC link
 	 * NOT YET IMPLEMENTED
 	 */
 	@FXML
 	public void NCHCSaveButtonClicked() {
-		
+
 	}
-	
+
 	/**
 	 * Method begins drawing on canvas when mouse pressed
 	 */
@@ -759,7 +798,7 @@ public class Controller {
 			drawList.add(text);
 		}
 	}
-	
+
 	/**
 	 * Method draws on canvas with mouse movement
 	 */
@@ -772,7 +811,7 @@ public class Controller {
 			rinkGC.stroke();
 		}
 	}
-	
+
 	/**
 	 * Method undos the last drawing action
 	 */
@@ -780,16 +819,16 @@ public class Controller {
 	public void UndoRinkClicked() {
 		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 		if(drawList.size() < 1) return;
-		
+
 		drawList.remove(drawList.size()-1);
 		drawLinesAndNumbers(drawList, rinkGC);
-		
+
 		rinkGC.setStroke(RinkCP.getValue());
 		rinkGC.setFill(RinkCP.getValue());
 		rinkGC.setLineWidth(RinkSlider.getValue());
 		//drawList.clear();
 	}
-	
+
 	/**
 	 * Method changes selected color
 	 */
@@ -798,7 +837,7 @@ public class Controller {
 		rinkGC.setStroke(RinkCP.getValue());
 		rinkGC.setFill(RinkCP.getValue());
 	}
-	
+
 	/**
 	 * Method updates line width
 	 */
@@ -806,79 +845,79 @@ public class Controller {
 	public void RinkSliderDropped() {
 		rinkGC.setLineWidth(RinkSlider.getValue());
 	}
-	
+
 	/**
 	 * Method to initialize table for a player
 	 */
 	@FXML
 	public ObservableList<MemberModel> makeMemberTable(HashMap<String, HashMap> playerData) {
 		ObservableList<MemberModel> data = FXCollections.observableArrayList();;
-	
+
 		Iterator it = playerData.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	MemberModel model = new MemberModel();
-	        Map.Entry pair = (Map.Entry)it.next();
-	        HashMap values = (HashMap) pair.getValue();
-	        System.out.println(pair.getKey() + " = " + pair.getValue());
-	        Iterator stats = values.entrySet().iterator();
-	        //each game would be a new row
-	        while (stats.hasNext()) {
-	        	Map.Entry details = (Map.Entry)stats.next();
-		        System.out.println(details.getKey() + " = " + details.getValue());
-		        //check what value it is and make the correct value
-		        if (details.getKey() == "PPA") {
-		        	model.setPPA(details.getValue());
-		        }
-		        else if (details.getKey() == "A") {
-		        	model.setA(details.getValue());
-		        }
-		        else if (details.getKey() == "PPG") {
-		        	model.setPPG(details.getValue());
-		        }
-		        else if (details.getKey() == "G") {
-		        	model.setG(details.getValue());
-		        }
-		        else if (details.getKey() == "GP") {
-		        	model.setGP(details.getValue());
-		        }
-		        else if (details.getKey() == "SOG") {
-		        	model.setSOG(details.getValue());
-		        }
-		        else if (details.getKey() == "percent") {
-		        	model.setPercent(details.getValue());
-		        }
-		        else if (details.getKey() == "PTS") {
-		        	model.setPTS(details.getValue());
-		        }
-		        else if (details.getKey() == "PROD") {
-		        	model.setPROD(details.getValue());
-		        }
-		        else if (details.getKey() == "SHG") {
-		        	model.setSHG(details.getValue());
-		        }
-		        else if (details.getKey() == "GWG") {
-		        	model.setGWG(details.getValue());
-		        }
-		        else if (details.getKey() == "winsOrLosses") {
-		        	model.setPlusMinus(details.getValue());
-		        }
-		        else if (details.getKey() == "season") {
-		        	model.setSeason(details.getValue());
-		        }
-		        else if (details.getKey() == "GTG") {
-		        	model.setGTG(details.getValue());
-		        }
-		        else if (details.getKey() == "TOIG") {
-		        	model.setTOI(details.getValue());
-		        }
-	        stats.remove();
-	        }
-	        it.remove(); // avoids a ConcurrentModificationException
-	        data.add(model);
-	        
-	        //here model goes out of scope
-	    }
-	    return data;
+		while (it.hasNext()) {
+			MemberModel model = new MemberModel();
+			Map.Entry pair = (Map.Entry)it.next();
+			HashMap values = (HashMap) pair.getValue();
+			System.out.println(pair.getKey() + " = " + pair.getValue());
+			Iterator stats = values.entrySet().iterator();
+			//each game would be a new row
+			while (stats.hasNext()) {
+				Map.Entry details = (Map.Entry)stats.next();
+				System.out.println(details.getKey() + " = " + details.getValue());
+				//check what value it is and make the correct value
+				if (details.getKey() == "PPA") {
+					model.setPPA(details.getValue());
+				}
+				else if (details.getKey() == "A") {
+					model.setA(details.getValue());
+				}
+				else if (details.getKey() == "PPG") {
+					model.setPPG(details.getValue());
+				}
+				else if (details.getKey() == "G") {
+					model.setG(details.getValue());
+				}
+				else if (details.getKey() == "GP") {
+					model.setGP(details.getValue());
+				}
+				else if (details.getKey() == "SOG") {
+					model.setSOG(details.getValue());
+				}
+				else if (details.getKey() == "percent") {
+					model.setPercent(details.getValue());
+				}
+				else if (details.getKey() == "PTS") {
+					model.setPTS(details.getValue());
+				}
+				else if (details.getKey() == "PROD") {
+					model.setPROD(details.getValue());
+				}
+				else if (details.getKey() == "SHG") {
+					model.setSHG(details.getValue());
+				}
+				else if (details.getKey() == "GWG") {
+					model.setGWG(details.getValue());
+				}
+				else if (details.getKey() == "winsOrLosses") {
+					model.setPlusMinus(details.getValue());
+				}
+				else if (details.getKey() == "season") {
+					model.setSeason(details.getValue());
+				}
+				else if (details.getKey() == "GTG") {
+					model.setGTG(details.getValue());
+				}
+				else if (details.getKey() == "TOIG") {
+					model.setTOI(details.getValue());
+				}
+				stats.remove();
+			}
+			it.remove(); // avoids a ConcurrentModificationException
+			data.add(model);
+
+			//here model goes out of scope
+		}
+		return data;
 	}
 	/**
 	 * Method to initialize table for a player
@@ -886,66 +925,66 @@ public class Controller {
 	@FXML
 	public ObservableList<GoalieModel> makeGoalieTable(HashMap<String, HashMap> playerData) {
 		ObservableList<GoalieModel> data = FXCollections.observableArrayList();
-	
+
 		Iterator it = playerData.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	GoalieModel model = new GoalieModel();
-	        Map.Entry pair = (Map.Entry)it.next();
-	        HashMap values = (HashMap) pair.getValue();
-	        System.out.println(pair.getKey() + " = " + pair.getValue());
-	        Iterator stats = values.entrySet().iterator();
-	        //each game would be a new row
-	        while (stats.hasNext()) {
-	        	Map.Entry details = (Map.Entry)stats.next();
-		        System.out.println(details.getKey() + " = " + details.getValue());
-		        //check what value it is and make the correct value
-		        if (details.getKey() == "GP") {
-		        	TableColumn<GoalieModel,String> nameColumn=new TableColumn<>("GP");
-		        	model.setGP(details.getValue());
-		        }
-		        else if (details.getKey() == "season") {
-		        	model.setSeason(details.getValue());
-		        }
-		        else if (details.getKey() == "SV") {
-		        	model.setSV(details.getValue());
-		        }
-		        else if (details.getKey() == "T") {
-		        	model.setT(details.getValue());
-		        }
-		        else if (details.getKey() == "GAA" ) {
-		        	model.setGAA(details.getValue());
-		        }
-		        else if (details.getKey() == "W") {
-		        	model.setW(details.getValue());
-		        }
-		        else if (details.getKey() == "GA") {
-		        	model.setGA(details.getValue());
-		        }
-		        else if (details.getKey() == "SA") {
-		        	model.setSA(details.getValue());
-		        }
-		        else if (details.getKey() == "SVpercent") {
-		        	model.setSVpercent(details.getValue());
-		        }
-		        else if (details.getKey() == "L") {
-		        	model.setL(details.getValue());
-		        }
-		        else if (details.getKey() == "SO") {
-		        	model.setSO(details.getValue());
-		        }
-		        
-	        stats.remove();
-	        }
-	        it.remove(); // avoids a ConcurrentModificationException
-	        data.add(model);
-	        
-	        //here model goes out of scope
-	    }
-	    return data;
-	   
+		while (it.hasNext()) {
+			GoalieModel model = new GoalieModel();
+			Map.Entry pair = (Map.Entry)it.next();
+			HashMap values = (HashMap) pair.getValue();
+			System.out.println(pair.getKey() + " = " + pair.getValue());
+			Iterator stats = values.entrySet().iterator();
+			//each game would be a new row
+			while (stats.hasNext()) {
+				Map.Entry details = (Map.Entry)stats.next();
+				System.out.println(details.getKey() + " = " + details.getValue());
+				//check what value it is and make the correct value
+				if (details.getKey() == "GP") {
+					TableColumn<GoalieModel,String> nameColumn=new TableColumn<>("GP");
+					model.setGP(details.getValue());
+				}
+				else if (details.getKey() == "season") {
+					model.setSeason(details.getValue());
+				}
+				else if (details.getKey() == "SV") {
+					model.setSV(details.getValue());
+				}
+				else if (details.getKey() == "T") {
+					model.setT(details.getValue());
+				}
+				else if (details.getKey() == "GAA" ) {
+					model.setGAA(details.getValue());
+				}
+				else if (details.getKey() == "W") {
+					model.setW(details.getValue());
+				}
+				else if (details.getKey() == "GA") {
+					model.setGA(details.getValue());
+				}
+				else if (details.getKey() == "SA") {
+					model.setSA(details.getValue());
+				}
+				else if (details.getKey() == "SVpercent") {
+					model.setSVpercent(details.getValue());
+				}
+				else if (details.getKey() == "L") {
+					model.setL(details.getValue());
+				}
+				else if (details.getKey() == "SO") {
+					model.setSO(details.getValue());
+				}
+
+				stats.remove();
+			}
+			it.remove(); // avoids a ConcurrentModificationException
+			data.add(model);
+
+			//here model goes out of scope
+		}
+		return data;
+
 
 	}
-	
+
 	public void makeGoalieCols(TableView<GoalieModel> tbData) {
 
 		TableColumn<GoalieModel, String> season = new TableColumn<GoalieModel, String>("Season");
@@ -970,12 +1009,12 @@ public class Controller {
 		SVpercent.setCellValueFactory(new PropertyValueFactory("SVpercent"));
 		TableColumn<GoalieModel, String> SO = new TableColumn<GoalieModel, String>("SO");
 		SO.setCellValueFactory(new PropertyValueFactory("SO"));
-		
+
 		tbData.getColumns().setAll(season,GP,W,L,T,GA,GAA,SA,SV,SVpercent,SO);
 	}
-	
+
 	public void makeMemberCols(TableView<MemberModel> tbData) {
-		
+
 		TableColumn<MemberModel, String> season = new TableColumn<MemberModel, String>("Season");
 		season.setCellValueFactory(new PropertyValueFactory("season"));
 		TableColumn<MemberModel, String> GP = new TableColumn<MemberModel, String>("GP");
@@ -1006,69 +1045,69 @@ public class Controller {
 		TOIG.setCellValueFactory(new PropertyValueFactory("TOI"));
 		tbData.getColumns().setAll(season,GP,A,PPG,G,SOG,percent,PTS,PROD,SHG,GWG, winsOrLosses, GTG, TOIG);
 	}
-	
+
 	public  HashMap<String, HashMap<String, Object>> readMemberCols(TableView<MemberModel> tbData) {
 		HashMap<String, Object> values = new HashMap<String, Object>();
-		  HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
-		  ObservableList<TableColumn<MemberModel, ?>> columns = tbData.getColumns();
-		    
-		    for (Object row : tbData.getItems()) {
-		    	
-		      for (TableColumn column : columns) {
-		    	  System.out.println(column.getText());
-		    	  values.put(column.getText(), (Object) column.
-				          getCellObservableValue(row).
-				          getValue());
-		       
-		      }
-		      Object season = values.get("Season");
-		      allValues.put(season.toString(), values);
-		    }
+		HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
+		ObservableList<TableColumn<MemberModel, ?>> columns = tbData.getColumns();
 
-		    Iterator stats = allValues.entrySet().iterator();
-	        //each game would be a new row
-	        while (stats.hasNext()) {
-	        	Map.Entry details = (Map.Entry)stats.next();
-		        System.out.println(details.getKey() + " = " + details.getValue());
-		       
-	        }
-	        return allValues;
-	
+		for (Object row : tbData.getItems()) {
+
+			for (TableColumn column : columns) {
+				System.out.println(column.getText());
+				values.put(column.getText(), (Object) column.
+						getCellObservableValue(row).
+						getValue());
+
+			}
+			Object season = values.get("Season");
+			allValues.put(season.toString(), values);
+		}
+
+		Iterator stats = allValues.entrySet().iterator();
+		//each game would be a new row
+		while (stats.hasNext()) {
+			Map.Entry details = (Map.Entry)stats.next();
+			System.out.println(details.getKey() + " = " + details.getValue());
+
+		}
+		return allValues;
+
 	}
 	//get
 	public  HashMap<String, HashMap<String, Object>> readGoalieCols(TableView<GoalieModel> tbData) {
-		  HashMap<String, Object> values = new HashMap<String, Object>();
-		  HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
-		  ObservableList<TableColumn<GoalieModel, ?>> columns = tbData.getColumns();
-		    
-		    for (Object row : tbData.getItems()) {
-		    	
-		      for (TableColumn column : columns) {
-		    	  System.out.println(column.getText());
-		    	  values.put(column.getText(), (Object) column.
-				          getCellObservableValue(row).
-				          getValue());
-		       
-		      }
-		      Object season = values.get("Season");
-		      allValues.put(season.toString(), values);
-		    }
+		HashMap<String, Object> values = new HashMap<String, Object>();
+		HashMap<String, HashMap<String, Object>> allValues = new  HashMap<String, HashMap<String, Object>>();
+		ObservableList<TableColumn<GoalieModel, ?>> columns = tbData.getColumns();
 
-		    Iterator stats = allValues.entrySet().iterator();
-	        //each game would be a new row
-	        while (stats.hasNext()) {
-	        	Map.Entry details = (Map.Entry)stats.next();
-		        System.out.println(details.getKey() + " = " + details.getValue());
-		       
-	        }
-	        return allValues;
+		for (Object row : tbData.getItems()) {
+
+			for (TableColumn column : columns) {
+				System.out.println(column.getText());
+				values.put(column.getText(), (Object) column.
+						getCellObservableValue(row).
+						getValue());
+
+			}
+			Object season = values.get("Season");
+			allValues.put(season.toString(), values);
+		}
+
+		Iterator stats = allValues.entrySet().iterator();
+		//each game would be a new row
+		while (stats.hasNext()) {
+			Map.Entry details = (Map.Entry)stats.next();
+			System.out.println(details.getKey() + " = " + details.getValue());
+
+		}
+		return allValues;
 	}
 	//delete player
 	public void deletePlayer(int jerseyNo, TableView<?> tbData,JFXTextArea textArea) {
 		tbData.getItems().clear();
 		textArea.clear();
 		m.deletePlayerByJerseyNo(jerseyNo);
-		
+
 	}
 }
 

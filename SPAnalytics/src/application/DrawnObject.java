@@ -47,7 +47,7 @@ public class DrawnObject {
 		points.add(p);
 	}
 	
-	public int getSize() {
+	public int size() {
 		return points.size();
 	}
 	
