@@ -16,8 +16,7 @@ public class Game {
  public TeamScore defense;
  public String finalScore;
  public String url;
- public String netChart;
- public String scoringChart;
+
 
 public Game() {}
 
