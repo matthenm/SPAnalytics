@@ -141,6 +141,7 @@ public class Controller {
 	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
 	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
+	private final String	KEY						= "/view/Admin_Key.fxml";
 	private final String	CSS						= "/view/application.css";
 
 	//Database connection
@@ -353,20 +354,46 @@ public class Controller {
 	 * If goalie --> goalie home screen
 	 * if admin --> admin home screen
 	 */
+	
+	boolean isGoalie = false;
+	boolean isPlayer = false;
+	boolean isAdmin = false;
 	@FXML
 	public void loginButtonClicked() {
 		if(users.getValue().equals("Ryan Larkin")) {
+			//isGoalie = true;
+			//loadScene(KEY);
 			loadScene(GOALIE_HOME);
 		}else if(users.getValue().equals("ADMIN")) {
 			adminPass.setVisible(true);
 			if(adminPass.getText().equals("test")) {
+				//isAdmin = true;
+				//loadScene(KEY);
 				loadScene(ADMIN_HOME);
 			}		
 	}
 		else {	
+			//isPlayer = true;
+			//loadScene(KEY);
 			loadScene(PLAYER_HOME);
 		}
 	}
+	
+	
+	/*
+	@FXML
+	public void submitKey() {
+		if(isGoalie = true) {
+			loadScene(GOALIE_HOME);
+		}else if(isPlayer = true) {
+			loadScene(PLAYER_HOME);
+		}else {
+			loadScene(ADMIN_HOME);
+		}
+		
+	}
+	*/
+	
 	
 	//Admin card button functionalities
 	/**
@@ -408,7 +435,9 @@ public class Controller {
 	 */
 	@FXML
 	public void PlayerCardClicked() {
+		System.out.print("player card clicked");
 		loadScene(PLAYER_CARD);
+		
 	}
 
 	/**
