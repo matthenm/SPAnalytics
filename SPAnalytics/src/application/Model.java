@@ -38,13 +38,9 @@ public class Model {
 	private DocumentReference docClipRef;
 	private Firestore db;
 
-	// The database data is found here:
-	// https://console.firebase.google.com/u/0/project/discovery-8d956/database/discovery-8d956/data
 	public void makeDatabase() {
 		FileInputStream serviceAccount;
 		try {
-			serviceAccount = new FileInputStream(
-					"/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-44a0a0b783.json");
 
 			// Initialize the app with a custom auth variable, limiting the server's access
 			GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -812,6 +808,40 @@ public class Model {
 			e.printStackTrace();
 		}
 		return jerseyNo;
+	}
+	
+	public ArrayList<String> playerNames() {
+
+		ArrayList<String> names = new ArrayList<String>();
+
+		Map<String, Object> players = getPlayers();
+
+		for (String obj: players.keySet()) {
+
+			Object value = players.get(obj);
+
+			if (value instanceof HashMap) {
+
+				HashMap val = (HashMap) value;
+
+				if (val.containsKey("name")) {
+
+					Object name = val.get("name");
+
+					names.add((String) name);
+
+				}
+
+				
+
+			}
+
+	
+
+		}		
+
+		return names;
+
 	}
 
 	// position = defense or offense, and string game

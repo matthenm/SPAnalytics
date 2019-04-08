@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.jfoenix.controls.JFXButton;
@@ -83,8 +84,16 @@ public class Controller {
 	private ChoiceBox<String>		rosterList;
 	@FXML
 	private JFXComboBox<String>		users;
+	private ObservableList<String>	loadedUsers;
+	
 	@FXML
 	private JFXPasswordField		adminPass;
+	
+	//Player/Goalie card variables
+	@FXML ComboBox GamePicker;
+	@FXML ListView ClipList;
+	ArrayList<Clip> goalieClips;
+	ArrayList<Object> gamesList;
 
 
 	//netChart variables
@@ -161,6 +170,13 @@ public class Controller {
 		primaryStage = inStage;
 		//connect to database
 		m.makeDatabase();
+		
+		ArrayList<String> playersList = m.playerNames();
+		for(String s : playersList) {
+			users.getItems().add(s);
+		}
+		loadedUsers = users.getItems();
+		
 	}
 
 
@@ -169,9 +185,10 @@ public class Controller {
 	 */
 	private void loadScene(String newScene) {
 
-
 		if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
+			users.setItems(loadedUsers);
+			System.out.println(users.getItems());
 		} else {
 			isLogin = false;
 		}
@@ -205,6 +222,17 @@ public class Controller {
 				//add the items to be updated
 				tbData.setItems(data);
 				makeGoalieCols(tbData); //create the columns
+				
+				rinkGC = RinkCanvas.getGraphicsContext2D();
+				goalieClips = m.getClips("testGame");
+				for(Clip c : goalieClips) {
+					ClipList.getItems().add(c.getTitle());
+				}
+				gamesList = m.getGameStats();
+				for(Object s : gamesList) {
+					GamePicker.getItems().add(s.toString());
+				}
+				
 
 
 			} else if (newScene.equals(PLAYER_CARD)) {
@@ -375,6 +403,23 @@ public class Controller {
 	@FXML
 	public void OpenGameButtonClicked() {
 		
+	}
+	
+	/*
+	 * Method Draws selected Clip's diagram
+	 */
+	@FXML
+	public void ClipListSelectionChanged() {
+		String clipName = ClipList.getSelectionModel().getSelectedItem().toString();
+		Clip c = new Clip();
+		for(int i = 0; i < goalieClips.size(); i++) {
+			if(goalieClips.get(i).getTitle().equals(clipName)) {
+				c = goalieClips.get(i);
+				break;
+			}
+		}
+		//System.out.println(c.getRinkDiagram().get(0).getText());
+		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
 	}
 	
 	

@@ -27,6 +27,28 @@ public Game(String gameName, TeamScore offense, TeamScore defense, String finalS
 	this.finalScore = finalScore;
 
 }
+
+public String getGameName() {
+	return gameName;
+}
+
+public TeamScore getOffense() {
+	return offense;
+}
+
+public TeamScore getDefense() {
+	return defense;
+}
+
+public String getFinalScore() {
+	return finalScore;
+}
+
+public String getUrl() {
+	return url;
+}
+
+
  
 	
 }

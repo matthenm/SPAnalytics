@@ -90,7 +90,7 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="RinkCanvas" height="553.0" layoutX="36.0" layoutY="13.0" onMouseDragged="#CanvasMouseDragged" onMousePressed="#CanvasMousePressed" width="1094.0" />
-                              <ListView fx:id="PlayerList" layoutX="1130.0" layoutY="68.0" prefHeight="440.0" prefWidth="253.0" style="-fx-background-color: White; -fx-border-color: #C42134;" />
+                              <ListView fx:id="ClipList" editable="true" layoutX="1130.0" layoutY="68.0" onMouseReleased="#ClipListSelectionChanged" prefHeight="440.0" prefWidth="253.0" style="-fx-background-color: White; -fx-border-color: #C42134;" />
                            </children>
                         </AnchorPane>
                   </content>

@@ -66,8 +66,6 @@
             <items>
     			  <FXCollections fx:factory="observableArrayList">
       				<String fx:value="ADMIN" />
-      				<String fx:value="Alec Mahalak" />
-      				<String fx:value="Ryan Larkin" />
   			</FXCollections>
  			 </items>
             </JFXComboBox>
