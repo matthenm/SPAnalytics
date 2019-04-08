@@ -1,5 +1,8 @@
 package application;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -16,7 +20,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			// Initializing the FXML loader
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/SPAnalytics-Login.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/Admin_Key.fxml"));
 
 			// Creating an instance of the controller class
 			Controller controller = new Controller();
@@ -32,7 +36,8 @@ public class Main extends Application {
 			controller.setPrimaryStage(primaryStage);
 			
 			// Initializing the scene
-			Scene scene = new Scene(root, 600, 400);
+			Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+			Scene scene = new Scene(root, resolution.getWidth(), resolution.getHeight());
 
 			// Adding the style sheet
 			scene.getStylesheets()
@@ -40,9 +45,18 @@ public class Main extends Application {
 							.getResource("/View/application.css")
 							.toExternalForm());
 
+			//setting scaling
+			double width = resolution.getWidth();
+			double height = resolution.getHeight();
+			double w = width/scene.getWidth();
+			double h = height/scene.getHeight();
+			Scale scale = new Scale(w,h,0,0);
+			root.getTransforms().add(scale);
+			
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("SP Analytics");
 			primaryStage.setMaximized(true);
+			primaryStage.setFullScreen(true);
 			primaryStage.show();
 			
 		} catch (Exception e) {

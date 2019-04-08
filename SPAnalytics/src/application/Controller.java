@@ -83,18 +83,17 @@ public class Controller {
 	@FXML
 	private ChoiceBox<String>		rosterList;
 	@FXML
-	private JFXComboBox<String>		users;
-	private ObservableList<String>	loadedUsers;
+	private ComboBox<String>		users;
 	
 	@FXML
-	private JFXPasswordField		adminPass;
+	private PasswordField			adminPass;
 	
 	//Player/Goalie card variables
 	@FXML ComboBox GamePicker;
 	@FXML ListView ClipList;
 	ArrayList<Clip> goalieClips;
 	ArrayList<Object> gamesList;
-
+	ArrayList<String> playersList;
 
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
@@ -171,12 +170,6 @@ public class Controller {
 		//connect to database
 		m.makeDatabase();
 		
-		ArrayList<String> playersList = m.playerNames();
-		for(String s : playersList) {
-			users.getItems().add(s);
-		}
-		loadedUsers = users.getItems();
-		
 	}
 
 
@@ -184,11 +177,9 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
-
+		
 		if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
-			users.setItems(loadedUsers);
-			System.out.println(users.getItems());
 		} else {
 			isLogin = false;
 		}
@@ -204,6 +195,11 @@ public class Controller {
 
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
+			
+			playersList = m.playerNames();
+			users.getItems().add("ADMIN");
+			users.getItems().addAll(playersList);
+			System.out.println(users.getItems().size());
 
 			//Load the proper player
 
@@ -316,6 +312,8 @@ public class Controller {
 				} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
 					ovalWidth = 20;
 				}
+				
+				GamePicker.getItems().addAll(m.getGameStats());
 
 			} catch(Exception e) {}
 		}
@@ -344,14 +342,14 @@ public class Controller {
 					}
 
 				});
-
-				PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-				PlayerList.getItems().add("Player 1");
-				PlayerList.getItems().add("Player 2");
-				PlayerList.getItems().add("Player 3");
-				for(int i = 4; i <= 20; i++) {
-					PlayerList.getItems().add("Player " + i);
+				
+				gamesList = m.getGameStats();
+				for(Object s : gamesList) {
+					GamePicker.getItems().add(s.toString());
 				}
+				
+				PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+				PlayerList.getItems().addAll(m.playerNames());
 			} catch(Exception e) {}
 		}
 	}
@@ -403,6 +401,14 @@ public class Controller {
 	@FXML
 	public void OpenGameButtonClicked() {
 		
+	}
+	
+	/**
+	 * Opens login page
+	 */
+	@FXML
+	public void submitKey() {
+		loadScene(LOGIN_SCENE);
 	}
 	
 	/*

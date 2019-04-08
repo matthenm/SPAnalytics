@@ -66,7 +66,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-            <ComboBox fx:id="GamePicker" layoutX="1255.0" layoutY="161.0" prefHeight="31.0" prefWidth="183.0" promptText="Game" />
+            <ComboBox fx:id="GamePicker" layoutX="1255.0" layoutY="161.0" prefHeight="31.0" prefWidth="183.0" promptText="Game" style="-fx-background-color: White;" />
             <JFXButton buttonType="RAISED" layoutX="1456.0" layoutY="156.0" onAction="#OpenGameButtonClicked" prefHeight="40.0" prefWidth="122.0" style="-fx-background-color: #C42134;" text="Open Game" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />

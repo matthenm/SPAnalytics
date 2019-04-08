@@ -117,7 +117,7 @@
                   </Tab>
                </tabs>
             </TabPane>
-            <ComboBox layoutX="170.0" layoutY="56.0" prefHeight="31.0" prefWidth="186.0" promptText="Select Game" style="-fx-background-color: white;" />
+            <ComboBox fx:id="GamePicker" layoutX="170.0" layoutY="56.0" prefHeight="31.0" prefWidth="186.0" promptText="Select Game" style="-fx-background-color: white;" />
             <Text fill="WHITE" layoutX="173.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Games" textAlignment="CENTER" wrappingWidth="180.703125">
                <font>
                   <Font size="18.0" />
