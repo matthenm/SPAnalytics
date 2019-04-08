@@ -33,11 +33,11 @@ public class Model {
 	private DocumentReference docRef;
 	private DocumentReference docTeamRef;
 	private Firestore db;
-	//The database data is found here: https://console.firebase.google.com/u/0/project/discovery-8d956/database/discovery-8d956/data
-		public void makeDatabase() {
+		public boolean makeDatabase(String key) {
+			boolean authenticated = false;
 			FileInputStream serviceAccount;
 			try {
-				serviceAccount = new FileInputStream("/Users/Valeria/capstoneProject/discovery-8d956-firebase-adminsdk-wib15-b501c5de29.json");
+				serviceAccount = new FileInputStream(key);
 				
 				// Initialize the app with a custom auth variable, limiting the server's access
 				GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
@@ -49,9 +49,8 @@ public class Model {
 				    .setCredentials(credentials).setFirestoreOptions(firestoreOptions)
 				    .build();
 				FirebaseApp.initializeApp(options);
-			
+				authenticated = true;
 				this.db = FirestoreClient.getFirestore();
-
 				FirebaseApp.initializeApp(options,"data");
 				this.docRef = db.collection("information").document("players");
 				this.docTeamRef = db.collection("information").document("team");
@@ -71,7 +70,7 @@ public class Model {
 				e.printStackTrace();
 			}
 			
-			
+			return authenticated;
 		}
 
 

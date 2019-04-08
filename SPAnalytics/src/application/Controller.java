@@ -81,11 +81,18 @@ public class Controller {
 	@FXML
 	private ChoiceBox<String>		rosterList;
 	@FXML
-	private JFXComboBox<String>		users;
+	private ComboBox<String>		users;
 	@FXML
-	private JFXPasswordField		adminPass;
+	private PasswordField		adminPass;
 
+	
+	//key scene variables
+	@FXML
+	private JFXButton			keySubmit;
+	@FXML
+	private JFXTextField		databaseKey;
     
+	
 	//netChart variables
 	@FXML private Canvas netChartCanvas;
 	private GraphicsContext gc1;
@@ -153,8 +160,6 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
-		//connect to database
-				m.makeDatabase();
 	}
 
 
@@ -347,6 +352,23 @@ public class Controller {
 		clips.add(c);
 	}
 	
+	/**
+	 * Checks the database connection before login
+	 */
+	@FXML
+	public void submitKey() {
+		String key = databaseKey.getText();
+		boolean authenticated = m.makeDatabase(key);
+		if(authenticated == true) {
+			loadScene(LOGIN_SCENE);		
+		} else {
+			String msg = "Error on getting key";
+			Alert err = new Alert(AlertType.CONFIRMATION, msg);
+			err.show();
+		}
+	}
+	
+	
 	
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
@@ -354,45 +376,21 @@ public class Controller {
 	 * If goalie --> goalie home screen
 	 * if admin --> admin home screen
 	 */
-	
-	boolean isGoalie = false;
-	boolean isPlayer = false;
-	boolean isAdmin = false;
 	@FXML
 	public void loginButtonClicked() {
 		if(users.getValue().equals("Ryan Larkin")) {
-			//isGoalie = true;
-			//loadScene(KEY);
 			loadScene(GOALIE_HOME);
 		}else if(users.getValue().equals("ADMIN")) {
 			adminPass.setVisible(true);
 			if(adminPass.getText().equals("test")) {
-				//isAdmin = true;
-				//loadScene(KEY);
 				loadScene(ADMIN_HOME);
 			}		
 	}
-		else {	
-			//isPlayer = true;
-			//loadScene(KEY);
+		else {
 			loadScene(PLAYER_HOME);
 		}
 	}
 	
-	
-	/*
-	@FXML
-	public void submitKey() {
-		if(isGoalie = true) {
-			loadScene(GOALIE_HOME);
-		}else if(isPlayer = true) {
-			loadScene(PLAYER_HOME);
-		}else {
-			loadScene(ADMIN_HOME);
-		}
-		
-	}
-	*/
 	
 	
 	//Admin card button functionalities
