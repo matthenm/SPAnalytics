@@ -22,7 +22,7 @@
          <children>
             <ImageView fitHeight="195.0" fitWidth="273.0" layoutX="429.0" layoutY="261.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Images/miami-dark.jpg" />
+                  <Image url= "@../Images/miami-dark.jpg" />
                </image>
             </ImageView>
             <Label layoutX="751.0" layoutY="183.0" prefHeight="92.0" prefWidth="318.0" text="SP Analytics" textFill="WHITE">

@@ -95,6 +95,15 @@ public class Controller {
 	ArrayList<Object> gamesList;
 	ArrayList<String> playersList;
 
+
+	
+	//key scene variables
+	@FXML
+	private JFXButton			keySubmit;
+	@FXML
+	private JFXTextField		databaseKey;
+    
+	
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
 	@FXML private Canvas HomeNetChartCanvas;
@@ -156,6 +165,7 @@ public class Controller {
 	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
 	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
+	private final String	KEY						= "/view/Admin_Key.fxml";
 	private final String	CSS						= "/view/application.css";
 
 	//Database connection
@@ -167,9 +177,7 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
-		//connect to database
-		m.makeDatabase();
-		
+
 	}
 
 
@@ -403,14 +411,6 @@ public class Controller {
 		
 	}
 	
-	/**
-	 * Opens login page
-	 */
-	@FXML
-	public void submitKey() {
-		loadScene(LOGIN_SCENE);
-	}
-	
 	/*
 	 * Method Draws selected Clip's diagram
 	 */
@@ -427,6 +427,23 @@ public class Controller {
 		//System.out.println(c.getRinkDiagram().get(0).getText());
 		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
 	}
+	
+	/**
+	 * Checks the database connection before login
+	 */
+	@FXML
+	public void submitKey() {
+		String key = databaseKey.getText();
+		boolean authenticated = m.makeDatabase(key);
+		if(authenticated == true) {
+			loadScene(LOGIN_SCENE);		
+		} else {
+			String msg = "Error on getting key";
+			Alert err = new Alert(AlertType.CONFIRMATION, msg);
+			err.show();
+		}
+	}
+	
 	
 	
 	/**
@@ -449,7 +466,6 @@ public class Controller {
 			loadScene(PLAYER_HOME);
 		}
 	}
-
 	//Admin card button functionalities
 	/**
 	 * This is the method that will go back to the previous scene.
@@ -490,7 +506,9 @@ public class Controller {
 	 */
 	@FXML
 	public void PlayerCardClicked() {
+		System.out.print("player card clicked");
 		loadScene(PLAYER_CARD);
+		
 	}
 
 	/**

@@ -37,70 +37,46 @@ public class Model {
 	private DocumentReference docTeamRef;
 	private DocumentReference docClipRef;
 	private Firestore db;
+		
+		public boolean makeDatabase(String key) {
+			boolean authenticated = false;
+			FileInputStream serviceAccount;
+			try {
+				serviceAccount = new FileInputStream(key);
+				
+				// Initialize the app with a custom auth variable, limiting the server's access
+				GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+				
+				FirestoreOptions firestoreOptions = 
+						FirestoreOptions.newBuilder().setTimestampsInSnapshotsEnabled(true).build();
 
-	public void makeDatabase() {
-		FileInputStream serviceAccount;
-		try {
-
-			// Initialize the app with a custom auth variable, limiting the server's access
-			GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-
-			FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder().setTimestampsInSnapshotsEnabled(true)
-					.build();
-
-			FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(credentials)
-					.setFirestoreOptions(firestoreOptions).build();
-			FirebaseApp.initializeApp(options);
-
-			this.db = FirestoreClient.getFirestore();
-
-			FirebaseApp.initializeApp(options, "data");
-			this.docRef = db.collection("information").document("players");
-			this.docTeamRef = db.collection("information").document("team");
-			this.docClipRef = db.collection("information").document("clip");
-//				ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
-//				DrawnObject text = new DrawnObject(100-12, 100+12, Color.BLACK, 0, "Test");
-//				drawList.add(text);
-//				ArrayList<String> players = new ArrayList<String>();
-//				players.add("TestName1");
-//				players.add("TestName2");
-//				Clip c = new Clip("TestTime", "TestTitle", players, drawList, "testurl","testGame");
-//				Clip clip = new Clip("50th","test");
-//				clip.setGame("Miami vs Omaha");
-//				clip.setURL("testUrl");
-//				Clip clip2 = new Clip("100th", "test2");
-//				clip2.setGame("Miami vs Omaha");
-			// addClip(c);
-			// addClip(clip2);
-			// getClips("Miami vs Omaha");
-			// getPlayer(db, "6");
-			// getPlayers(db);
-//				ArrayList<Clip> clips = getClips("testGame");
-//				for (Clip cl: clips) {
-//					for (DrawnObject drawn: cl.getRinkDiagram()) {
-//						System.out.println(drawn.getText());
-//					}
-//				}
-//					System.out.println(cl.getTitle());
-
-//				}
-			// addMember(docRef);
-			// addGoalie();
-			// deletePlayerGoalie(docRef);
-			// getPlayerStats("6");
-			// createTeam();
-			ArrayList<DrawnObject> objs = getChart("defense", "Miami vs. Test2", "netChart");
-			for (DrawnObject o : objs) {
-				System.out.println(o.getText());
-			}
+				FirebaseOptions options = new FirebaseOptions.Builder()
+				    .setCredentials(credentials).setFirestoreOptions(firestoreOptions)
+				    .build();
+				FirebaseApp.initializeApp(options);
+				authenticated = true;
+				this.db = FirestoreClient.getFirestore();
+				FirebaseApp.initializeApp(options,"data");
+				this.docRef = db.collection("information").document("players");
+				this.docTeamRef = db.collection("information").document("team");
+				//getPlayer(db, "6");
+				//getPlayers(db);
+				//getGameStats("Miami vs. Omaha");
+				//addMember(docRef);
+				//addGoalie();
+				//deletePlayerGoalie(docRef);
+				// getPlayerStats("6");
+				//createTeam(docRefTeam);
 //				ArrayList<Object> map = getGameStats();
 //				System.out.println(map);
-
-		} catch (IOException e) {
-			e.printStackTrace();
+					
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return authenticated;
 		}
-
-	}
 
 	/**
 	 * Adds a new clip if it has a unique title or modifies an existing clip if one
