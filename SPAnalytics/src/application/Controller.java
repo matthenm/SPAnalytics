@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.css.Style;
@@ -102,6 +103,8 @@ public class Controller {
 	private JFXButton			keySubmit;
 	@FXML
 	private JFXTextField		databaseKey;
+	@FXML
+	private JFXSpinner			loading;
     
 	
 	//netChart variables
@@ -165,6 +168,7 @@ public class Controller {
 	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
 	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
+	private final String	ADMIN_ADD				= "/view/ADMIN_ADD.fxml";
 	private final String	KEY						= "/view/Admin_Key.fxml";
 	private final String	CSS						= "/view/application.css";
 
@@ -428,11 +432,19 @@ public class Controller {
 		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
 	}
 	
+	@FXML
+	public void showLoader() {
+		//System.out.println("mouse entered");
+		keySubmit.setVisible(false);
+		loading.setVisible(true);
+	}
+	
 	/**
 	 * Checks the database connection before login
 	 */
 	@FXML
 	public void submitKey() {
+		//System.out.println("mouse exited");
 		String key = databaseKey.getText();
 		boolean authenticated = m.makeDatabase(key);
 		if(authenticated == true) {
@@ -474,6 +486,14 @@ public class Controller {
 	public void goBack() {
 		loadScene(ADMIN_HOME);
 	}
+	
+	/**
+	 * This is the method that will go to the admin database.
+	 */
+	@FXML
+	public void databaseClicked() {
+		loadScene(ADMIN_ADD);
+	}
 
 	/**
 	 * This is the method that will go to the net chart scene.
@@ -490,6 +510,7 @@ public class Controller {
 	public void ScoringChancesClicked() {
 		loadScene(ADMIN_SCORINGCHANCES);
 	}
+	
 
 	/**
 	 * This is the method that will go to the rink diagram scene.
