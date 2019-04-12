@@ -712,6 +712,30 @@ public class Model {
 		return null;
 
 	}
+	
+	
+	/**
+	 * Add a game with string opponent and string date
+	 */
+	public void addGame(String opponent, String date) {
+		Game game = new Game();
+		game.gameName = opponent + " " + date;
+		TeamScore offense = new TeamScore();
+		offense.teamName = "Miami";
+		TeamScore defense = new TeamScore();
+		defense.teamName = opponent;
+		game.offense = offense;
+		game.defense = defense;
+		Team team = new Team();
+		team.teamName = "Miami";
+		Map<String, Game> games = new HashMap<String, Game>();
+		//include this if prefer to add a game as Miami vs. opponent 
+                //games.put("Miami vs. " + opponent, game);
+		games.put(game.gameName, game);
+		team.games = games;
+		addTeam(team);
+	}
+	
 
 	/**
 	 * Gives the position of the player (goalie, or member) by inputting a jersey

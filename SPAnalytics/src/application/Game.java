@@ -28,6 +28,10 @@ public Game(String gameName, TeamScore offense, TeamScore defense, String finalS
 
 }
 
+public Game(String gameName) {
+	this.gameName = gameName;
+}
+
 public String getGameName() {
 	return gameName;
 }

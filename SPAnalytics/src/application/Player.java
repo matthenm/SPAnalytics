@@ -53,6 +53,22 @@ public Player(int jerseyNo, String name, String height, String weight, String bi
 }
 
 
+//add player in database
+public Player(int jerseyNo, String name, String height, String weight, String birthDate,
+		String homeTown) {
+	this.jerseyNo = jerseyNo;
+	this.name = name;
+	this.height = height;
+	this.weight = weight;
+	this.birthDate = birthDate;
+	this.homeTown = homeTown;	
+}
+
+//remove player from database
+public Player(int jerseyNo) {
+	this.jerseyNo = jerseyNo;
+}
+
 
 
 }

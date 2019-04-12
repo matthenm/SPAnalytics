@@ -172,6 +172,42 @@ public class Controller {
 	private final String	KEY						= "/view/Admin_Key.fxml";
 	private final String	CSS						= "/view/application.css";
 
+	
+	//add player to database variables
+	@FXML
+	private JFXTextField		fullName;
+	@FXML
+	private JFXTextField		birthDate;
+	@FXML
+	private JFXTextField		height;
+	@FXML
+	private JFXTextField		weight;
+	@FXML
+	private JFXTextField		homeTown;
+	@FXML
+	private JFXTextField		addJerseyNumber;
+	@FXML
+	private JFXButton			addPlayer;
+	
+	
+	//remove player to database variables
+	@FXML
+	private JFXTextField		removeJerseyNumber;
+	@FXML
+	private JFXButton			removePlayer;
+	
+	
+	//add a game to database variables
+	@FXML
+	private JFXTextField		opponent;
+	@FXML
+	private JFXTextField		date;
+	@FXML
+	private JFXButton			addGame;
+	
+	
+	
+	
 	//Database connection
 	Model m = new Model();
 
@@ -432,12 +468,6 @@ public class Controller {
 		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
 	}
 	
-	@FXML
-	public void showLoader() {
-		//System.out.println("mouse entered");
-		keySubmit.setVisible(false);
-		loading.setVisible(true);
-	}
 	
 	/**
 	 * Checks the database connection before login
@@ -494,6 +524,42 @@ public class Controller {
 	public void databaseClicked() {
 		loadScene(ADMIN_ADD);
 	}
+	
+	
+	/**
+	 * This is the method that will add a player to the database.
+	 */
+	@FXML
+	public void addPlayer() {
+		Player player = new Player(Integer.parseInt(addJerseyNumber.getText()), fullName.getText(), 
+									height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
+		m.addPlayer(player);
+	}
+	
+	
+	/**
+	 * This is the method that will remove player from the database.
+	 */
+	@FXML
+	public void removePlayer() {
+		Player Removeplayer = new Player(Integer.parseInt(removeJerseyNumber.getText()));
+		m.deletePlayer(Removeplayer);
+	}
+	
+
+	/**
+	 * This is the method that will add a game to the database.
+	 */
+	@FXML
+	public void addGame() {
+		String opp = opponent.getText();
+		String day = date.getText();
+		String name = opp + " " + day;
+		//System.out.println(name);
+		Game game = new Game(name);
+		m.addGame(opp, day);
+	}
+	
 
 	/**
 	 * This is the method that will go to the net chart scene.
