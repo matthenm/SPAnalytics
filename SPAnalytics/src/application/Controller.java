@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,9 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -102,10 +106,8 @@ public class Controller {
 	@FXML
 	private JFXButton			keySubmit;
 	@FXML
-	private JFXTextField		databaseKey;
-	@FXML
-	private JFXSpinner			loading;
-    
+	private TextField			databaseKey;
+
 	
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
@@ -474,7 +476,6 @@ public class Controller {
 	 */
 	@FXML
 	public void submitKey() {
-		//System.out.println("mouse exited");
 		String key = databaseKey.getText();
 		boolean authenticated = m.makeDatabase(key);
 		if(authenticated == true) {
@@ -486,8 +487,8 @@ public class Controller {
 		}
 	}
 	
-	
-	
+
+
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
 	 * If player --> player home screen.
@@ -534,6 +535,11 @@ public class Controller {
 		Player player = new Player(Integer.parseInt(addJerseyNumber.getText()), fullName.getText(), 
 									height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
 		m.addPlayer(player);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("SP Analytics");
+		alert.setHeaderText(null);
+		alert.setContentText(fullName.getText() +" has been added to the database!");
+		alert.show();
 	}
 	
 	
@@ -544,6 +550,11 @@ public class Controller {
 	public void removePlayer() {
 		Player Removeplayer = new Player(Integer.parseInt(removeJerseyNumber.getText()));
 		m.deletePlayer(Removeplayer);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("SP Analytics");
+		alert.setHeaderText(null);
+		alert.setContentText(Integer.parseInt(removeJerseyNumber.getText()) + " has been removed from the database!");
+		alert.showAndWait();
 	}
 	
 
@@ -558,6 +569,11 @@ public class Controller {
 		//System.out.println(name);
 		Game game = new Game(name);
 		m.addGame(opp, day);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("SP Analytics");
+		alert.setHeaderText(null);
+		alert.setContentText("The game " + name + " has been removed from the database!");
+		alert.showAndWait();
 	}
 	
 
