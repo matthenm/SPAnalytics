@@ -31,6 +31,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.css.Style;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.beans.value.ChangeListener;
@@ -76,6 +77,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sun.misc.GC;
 
 public class Controller {
@@ -190,6 +192,13 @@ public class Controller {
 	private JFXTextField		addJerseyNumber;
 	@FXML
 	private JFXButton			addPlayer;
+	@FXML 
+	private Label 				playerSuccess;
+	@FXML 
+	private Label 				playerRemoved;
+	@FXML 
+	private Label 				gameSuccess;
+	
 	
 	
 	//remove player to database variables
@@ -526,7 +535,7 @@ public class Controller {
 		loadScene(ADMIN_ADD);
 	}
 	
-	
+
 	/**
 	 * This is the method that will add a player to the database.
 	 */
@@ -535,13 +544,15 @@ public class Controller {
 		Player player = new Player(Integer.parseInt(addJerseyNumber.getText()), fullName.getText(), 
 									height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
 		m.addPlayer(player);
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("SP Analytics");
-		alert.setHeaderText(null);
-		alert.setContentText(fullName.getText() +" has been added to the database!");
-		alert.show();
+		playerSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> playerSuccess.setVisible(false)
+		);
+		visiblePause.play();	
 	}
-	
 	
 	/**
 	 * This is the method that will remove player from the database.
@@ -550,11 +561,14 @@ public class Controller {
 	public void removePlayer() {
 		Player Removeplayer = new Player(Integer.parseInt(removeJerseyNumber.getText()));
 		m.deletePlayer(Removeplayer);
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("SP Analytics");
-		alert.setHeaderText(null);
-		alert.setContentText(Integer.parseInt(removeJerseyNumber.getText()) + " has been removed from the database!");
-		alert.showAndWait();
+		playerRemoved.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> playerRemoved.setVisible(false)
+		);
+		visiblePause.play();	
 	}
 	
 
@@ -569,11 +583,15 @@ public class Controller {
 		//System.out.println(name);
 		Game game = new Game(name);
 		m.addGame(opp, day);
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("SP Analytics");
-		alert.setHeaderText(null);
-		alert.setContentText("The game " + name + " has been removed from the database!");
-		alert.showAndWait();
+		
+		gameSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> gameSuccess.setVisible(false)
+		);
+		visiblePause.play();	
 	}
 	
 
