@@ -737,6 +737,109 @@ public class Model {
 		addTeam(team);
 	}
 	
+	/**
+	 * Update game info (charts)
+	 */
+	public void addGame(Game g) {
+		Game game = g;
+		Team team = new Team();
+		team.teamName = "Miami";
+		Map<String, Game> games = new HashMap<String, Game>();
+		games.put(game.gameName, game);
+		team.games = games;
+		addTeam(team);
+	}
+	
+	/**
+	 * add chart info based on game, chart, offense/defense
+	 */
+	public void addChart(String position, String game, String chart, ArrayList<DrawnObject> diagram) {
+		System.out.println("Game: " + game);
+		HashMap games = getGameStats(game);
+		System.out.println(games.keySet().toString());
+		HashMap currentGame = (HashMap) games.get(game);
+		System.out.println(currentGame.keySet().toString());
+		
+		//Recreate the Game object
+		Game gameData = new Game();
+		if(currentGame.get("gameName") != null) {
+			String gameName = (String) currentGame.get("gameName");
+			System.out.println("gameName: " + gameName);
+			gameData.gameName = gameName;
+		}
+		if(currentGame.get("finalScore") != null) {
+			String finalScore = (String) currentGame.get("finalScore");
+			gameData.finalScore = finalScore;
+		}
+		if(currentGame.get("url") != null) {
+			String url = (String) currentGame.get("url");
+			gameData.url = url;
+		}
+		
+		//offense for Game object
+		HashMap offense = (HashMap) currentGame.get("offense");
+		System.out.println(offense.keySet().toString());
+		String teamName = (String) offense.get("teamName");
+		int shotsFor = ((Long) offense.get("shotsFor")).intValue();
+		int goalsFor = ((Long) offense.get("goalsFor")).intValue();
+		int shotsAgainst = ((Long) offense.get("shotsAgainst")).intValue();
+		int goalsAgainst = ((Long) offense.get("shotsFor")).intValue();
+		TeamScore oScore = new TeamScore(teamName, goalsFor, goalsAgainst, shotsFor, shotsAgainst);
+		if(offense.get("netChart") != null) {
+			//recreate netChart object
+			oScore.setNetChart(getChart("offense", game, "netChart"));
+		}
+		if(offense.get("scoringChart") != null) {
+			//recreate scoringChart
+			oScore.setScoringChart(getChart("offense", game, "scoringChart"));
+		}
+		
+		//replace with desired chart
+		if(position.equals("offense")) {
+			if(chart.equals("netChart")) {
+				oScore.setNetChart(diagram);
+			}
+			else if(chart.equals("scoringChart")) {
+				oScore.setScoringChart(diagram);
+			}
+		}
+		//set offense
+		gameData.offense = oScore;
+		
+		//defense for Game object
+		HashMap defense = (HashMap) currentGame.get("defense");
+		System.out.println(defense.keySet().toString());
+		teamName = (String) defense.get("teamName");
+		shotsFor = ((Long) defense.get("shotsFor")).intValue();
+		goalsFor = ((Long) defense.get("goalsFor")).intValue();
+		shotsAgainst = ((Long) defense.get("shotsAgainst")).intValue();
+		goalsAgainst = ((Long) defense.get("shotsFor")).intValue();
+		TeamScore dScore = new TeamScore(teamName, goalsFor, goalsAgainst, shotsFor, shotsAgainst);
+		if(defense.get("netChart") != null) {
+			//recreate netChart object
+			dScore.setNetChart(getChart("defense", game, "netChart"));
+		}
+		if(defense.get("scoringChart") != null) {
+			//recreate scoringChart
+			dScore.setScoringChart(getChart("defense", game, "scoringChart"));
+		}
+		
+		//replace with desired chart
+		if(position.equals("defense")) {
+			if(chart.equals("netChart")) {
+				dScore.setNetChart(diagram);
+			}
+			else if(chart.equals("scoringChart")) {
+				dScore.setScoringChart(diagram);
+			}
+		}
+		
+		//set defense
+		gameData.defense = dScore;
+		
+		addGame(gameData);
+	}
+	
 
 	/**
 	 * Gives the position of the player (goalie, or member) by inputting a jersey

@@ -346,8 +346,11 @@ public class Controller {
 						homeSCItems = m.getChart("offense", game, "scoringChart");
 						awaySCItems = m.getChart("defense", game, "scoringChart");
 
-						System.out.println(homeNetChartItems.size());
-
+						homeGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						homeGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						awayGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						awayGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						
 						drawOvals(homeNetChartItems, homeGC);
 						drawOvals(awayNetChartItems, awayGC);
 						drawOvals(homeSCItems, homeGC1);
@@ -564,6 +567,7 @@ public class Controller {
 		}
 
 		//System.out.println(c.getRinkDiagram().get(0).getText());
+		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 		drawLinesAndNumbers(currentClip.getRinkDiagram(), rinkGC);
 	}
 
@@ -924,21 +928,54 @@ public class Controller {
 				gc.fillText(obj.getText(), p.getX(), p.getY());
 			}
 		}
-	}	
+	}
+	
+	@FXML
+	/**
+	 * Saving the home scoring chart
+	 */
+	public void ScoringChartSaveHomePressed() {
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
+		}
+		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", homeNetChartItems);
+	}
+	
+	@FXML
+	/**
+	 * Saving the home scoring chart
+	 */
+	public void ScoringChartSaveAwayPressed() {
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
+		}
+		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", awayNetChartItems);
+	}
 
 	@FXML
 	/**
 	 * Method saves the home chart
 	 */
 	public void NetChartSaveHomePressed() {
-		for(DrawnObject obj : homeNetChartItems) {
-			if(obj.getText() != null) {
-				System.out.println(obj.getText());
-			} else {
-				Point p = obj.getLastPoint();
-				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
-			}
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
 		}
+		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", homeNetChartItems);
 	}
 
 	@FXML
@@ -946,14 +983,15 @@ public class Controller {
 	 * Method saves the away chart
 	 */
 	public void NetChartSaveAwayPressed() {
-		for(DrawnObject obj : awayNetChartItems) {
-			if(obj.getText() != null) {
-				System.out.println(obj.getText());
-			} else {
-				Point p = obj.getLastPoint();
-				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
-			}
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
 		}
+		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", awayNetChartItems);
 	}
 
 	/**

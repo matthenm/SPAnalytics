@@ -39,7 +39,7 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="HomeNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
-                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#NetChartSaveHomePressed" prefHeight="75.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Miami Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#ScoringChartSaveHomePressed" prefHeight="75.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Miami Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
@@ -58,7 +58,7 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="AwayNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
-                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#NetChartSaveAwayPressed" prefHeight="106.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Opponent Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                              <JFXButton buttonType="RAISED" layoutX="660.0" layoutY="25.0" onAction="#ScoringChartSaveAwayPressed" prefHeight="106.0" prefWidth="161.0" style="-fx-background-color: #C42134;" text="Save Opponent Chart" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="20.0" />
                                  </font>
