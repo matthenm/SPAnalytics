@@ -59,6 +59,7 @@ public class Model {
 				FirebaseApp.initializeApp(options,"data");
 				this.docRef = db.collection("information").document("players");
 				this.docTeamRef = db.collection("information").document("team");
+				this.docClipRef = db.collection("information").document("clip");
 				//getPlayer(db, "6");
 				//getPlayers(db);
 				//getGameStats("Miami vs. Omaha");
@@ -121,10 +122,10 @@ public class Model {
 						String time = (String) snap.get("time");
 						String title = (String) snap.get("title");
 						String url = (String) snap.get("url");
-						ArrayList<Point> points = new ArrayList<Point>();
 						ArrayList<DrawnObject> drawings = new ArrayList<DrawnObject>();
 						for (Object s : rinkDiagram) {
 							// start passing diagram
+							ArrayList<Point> points = new ArrayList<Point>();
 							String text = null;
 							double width = 0;
 							boolean hasText = false;

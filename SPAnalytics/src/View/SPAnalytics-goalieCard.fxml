@@ -90,7 +90,7 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="RinkCanvas" height="553.0" layoutX="36.0" layoutY="13.0" onMouseDragged="#CanvasMouseDragged" onMousePressed="#CanvasMousePressed" width="1094.0" />
-                              <ListView fx:id="ClipList" editable="true" layoutX="1130.0" layoutY="68.0" onMouseReleased="#ClipListSelectionChanged" prefHeight="440.0" prefWidth="253.0" style="-fx-background-color: White; -fx-border-color: #C42134;" />
+                              <ListView fx:id="ClipList" layoutX="1130.0" layoutY="68.0" onMouseReleased="#ClipListSelectionChanged" prefHeight="440.0" prefWidth="253.0" style="-fx-background-color: White; -fx-border-color: #C42134;" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -110,7 +110,7 @@
                                                       <Image url="@../images/half_rink.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="HomeNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                                <Canvas fx:id="HomeSCCanvas" height="537.0" width="611.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -124,7 +124,7 @@
                                                       <Image url="@../images/half_rink.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="AwayNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                                <Canvas fx:id="AwaySCCanvas" height="537.0" width="611.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -142,7 +142,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="HomeNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="HomeNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -156,7 +156,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="AwayNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="AwayNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
