@@ -22,11 +22,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="234.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="45.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
+            <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="78.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                <columns>
                   <TableColumn fx:id="season" prefWidth="59.0" text="Season" />
                   <TableColumn fx:id="GP" prefWidth="59.0" text="GP" />
@@ -51,7 +51,7 @@
                   <Image url="@../Images/Mahalak.jpg" />
                </image>
             </ImageView>
-            <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="41.0" prefWidth="302.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#9;  Height: 5'9&quot;&#9;  Weight: 161 Lbs&#9;Born: 9/14/98&#9;  Monroe, MI" unFocusColor="#ffffff00" />
+            <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="72.0" prefWidth="353.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#9;  Height: 5'9&quot;&#9;  Weight: 161 Lbs&#9;Born: 9/14/98&#9;  Monroe, MI" unFocusColor="#ffffff00" />
             <JFXButton buttonType="RAISED" layoutX="1490.0" layoutY="2.0" onAction="#PlayerHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
@@ -74,7 +74,7 @@
    <center>
       <AnchorPane prefHeight="688.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <TabPane layoutX="14.0" layoutY="56.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="14.0" layoutY="24.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Clips">
                   <content>

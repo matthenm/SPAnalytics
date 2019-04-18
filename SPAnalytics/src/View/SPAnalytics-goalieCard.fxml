@@ -30,9 +30,9 @@
    <top>
       <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane>
+            <AnchorPane prefHeight="234.0" prefWidth="1032.0">
                <children>
-                  <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="55.0" prefHeight="147.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
+                  <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="74.0" prefHeight="147.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                     <columns>
                       <TableColumn fx:id="season" minWidth="80.0" prefWidth="54.0" text="Season" />
                       <TableColumn fx:id="GP" minWidth="80.0" prefWidth="28.0" text="GP" />
@@ -53,7 +53,7 @@
                         <Image url="@../Images/Larkin.jpg" />
                      </image>
                   </ImageView>
-                  <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="55.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
+                  <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="72.0" prefWidth="390.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#31 Ryan Larkin&#9;Goaltender&#9;Height: 6'1&quot; &#9;  Weight: 201 Lbs&#9;Born: 6/10/97&#9;Clarkson, MI" unFocusColor="#ffffff00" />
                </children>
             </AnchorPane>
             <JFXButton buttonType="RAISED" layoutX="1478.0" layoutY="11.0" onAction="#GoalieHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
@@ -78,7 +78,7 @@
    <bottom>
       <AnchorPane prefHeight="688.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <TabPane layoutX="14.0" layoutY="56.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="14.0" layoutY="19.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Clips">
                   <content>
