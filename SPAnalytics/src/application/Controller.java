@@ -94,6 +94,7 @@ public class Controller {
 	@FXML ComboBox GamePicker;
 	@FXML ListView ClipList;
 	ArrayList<Clip> goalieClips;
+	Clip currentClip;
 	ArrayList<Object> gamesList;
 	ArrayList<String> playersList;
 	private static String currentUser;
@@ -111,7 +112,7 @@ public class Controller {
 	private GraphicsContext awayGC1;
 	private ArrayList<DrawnObject> homeSCItems = new ArrayList<DrawnObject>();
 	private ArrayList<DrawnObject> awaySCItems = new ArrayList<DrawnObject>();
-	
+
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
 	@FXML private Canvas HomeNetChartCanvas;
@@ -224,30 +225,46 @@ public class Controller {
 
 			String jerseyNo = null;
 			if (newScene.equals(GOALIE_CARD) || newScene.equals(PLAYER_CARD)) {
-				
+
 				if (newScene.equals(GOALIE_CARD)) {
-					jerseyNo = m.getJerseyNo(currentUser);
-					//Get the player stats needed
-					HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
-					//make the observable list
-					ObservableList<GoalieModel> data = makeGoalieTable(map);
-					//find the table needed to be added to
-					TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
-					//add the items to be updated
-					tbData.setItems(data);
-					makeGoalieCols(tbData); //create the columns
+					try {
+						jerseyNo = m.getJerseyNo(currentUser);
+						//Get the player stats needed
+						HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+						//make the observable list
+						ObservableList<GoalieModel> data = makeGoalieTable(map);
+						//find the table needed to be added to
+						TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
+						//add the items to be updated
+						tbData.setItems(data);
+						makeGoalieCols(tbData); //create the columns						
+					} catch(Exception e) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("No Player Info Found");
+						alert.setHeaderText("Some information not loaded");
+						alert.setContentText("Please check with the database admins");
+						alert.show();						
+					}
 
 				} else if (newScene.equals(PLAYER_CARD)) {
-					jerseyNo = m.getJerseyNo(currentUser); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
-					//Get the player stats
-					HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
-					//make the observable list
-					ObservableList<MemberModel> data = makeMemberTable(map);
-					//find the table needed to be added to
-					TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
-					//add the items to be updated
-					tbData.setItems(data);
-					makeMemberCols(tbData); //create the columns
+					try {
+						jerseyNo = m.getJerseyNo(currentUser);
+						//Get the player stats
+						HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+						//make the observable list
+						ObservableList<MemberModel> data = makeMemberTable(map);
+						//find the table needed to be added to
+						TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
+						//add the items to be updated
+						tbData.setItems(data);
+						makeMemberCols(tbData); //create the columns
+					} catch(Exception e) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("No Player Info Found");
+						alert.setHeaderText("Some information not loaded");
+						alert.setContentText("Please check with the database admins");
+						alert.show();
+					}
 
 				}
 
@@ -273,28 +290,30 @@ public class Controller {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
-						goalieClips = m.getClips(game.replace(".", "")); //SHOULD NOT NEED REPLACED, DB issue
+						goalieClips = m.getClips(game); 
 						System.out.println(game);
-						
-						homeNetChartItems = m.getChart("defense", "Miami vs. Test2", "netChart");
-						awayNetChartItems = m.getChart("defense", "Miami vs. Test2", "netChart");
-						homeSCItems = m.getChart("offense", "Miami vs. Test2", "scoringChart");
-						awaySCItems = m.getChart("offense", "Miami vs. Test2", "scoringChart");
-						
+
+						homeNetChartItems = m.getChart("offense", game, "netChart");
+						awayNetChartItems = m.getChart("defense", game, "netChart");
+						homeSCItems = m.getChart("offense", game, "scoringChart");
+						awaySCItems = m.getChart("defense", game, "scoringChart");
+
 						System.out.println(homeNetChartItems.size());
-						
+
 						drawOvals(homeNetChartItems, homeGC);
 						drawOvals(awayNetChartItems, awayGC);
 						drawOvals(homeSCItems, homeGC1);
 						drawOvals(awaySCItems, awayGC1);
-						
+
 						ClipList.getItems().clear();
 						for(Clip c : goalieClips) {
 							if(c.getPlayers().contains(currentUser)) {
-								ClipList.getItems().add(c.getTitle());
+								String clipText = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
+								ClipList.getItems().add(clipText);
 							}
 						}
 					}
+
 				});
 			}
 
@@ -384,6 +403,7 @@ public class Controller {
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 						int index = TimeStamps.getSelectionModel().getSelectedIndex();
 						TimeStampNotes.setText(clips.get(index).getTitle());
+						NCHC_URL.setText(clips.get(index).getURL());
 						copyDrawList(clips.get(index).getRinkDiagram());
 						rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						drawLinesAndNumbers(drawList, rinkGC);
@@ -394,6 +414,18 @@ public class Controller {
 
 					}
 
+				});
+
+				GamePicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
+						clips = m.getClips(game);
+						System.out.println(clips.size());
+						for(Clip c : clips) {
+							TimeStamps.getItems().add(c.getTime());
+						}
+					}
 				});
 
 				gamesList = m.getGameStats();
@@ -453,15 +485,15 @@ public class Controller {
 	 */
 	@FXML
 	public void OpenGameButtonClicked() {
-		HashMap games = m.getGameStats("Miami vs. Test2");
-		HashMap game = (HashMap) games.get("Miami vs. Test2");
-		String url = game.get("url").toString();
-		try {
-			Desktop.getDesktop().browse(new URL(url).toURI());
-		} catch (Exception e) {
-			e.printStackTrace();
+		System.out.println("hit");
+		if(currentClip != null) {
+			System.out.println(currentClip.getURL());
+			try {
+				Desktop.getDesktop().browse(new URL(currentClip.getURL()).toURI());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 	/*
@@ -469,17 +501,22 @@ public class Controller {
 	 */
 	@FXML
 	public void ClipListSelectionChanged() {
+
 		if(ClipList.getSelectionModel().getSelectedItem() == null) return;
 		String clipName = ClipList.getSelectionModel().getSelectedItem().toString();
-		Clip c = new Clip();
+		System.out.println(clipName);
 		for(int i = 0; i < goalieClips.size(); i++) {
-			if(goalieClips.get(i).getTitle().equals(clipName)) {
-				c = goalieClips.get(i);
+			Clip c = goalieClips.get(i);
+			String clipMsg = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
+			if(clipMsg.equals(clipName)) {
+				System.out.println("hit");
+				currentClip = c;
 				break;
 			}
 		}
+
 		//System.out.println(c.getRinkDiagram().get(0).getText());
-		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
+		drawLinesAndNumbers(currentClip.getRinkDiagram(), rinkGC);
 	}
 
 	/**
@@ -488,19 +525,19 @@ public class Controller {
 	@FXML
 	public void submitKey() {
 		primaryStage.getScene().setCursor(Cursor.WAIT);
-	    Task<Boolean> task = new Task<Boolean>() {
-	        @Override
-	        public Boolean call() {
+		Task<Boolean> task = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
 				String key = databaseKey.getText();
 				boolean authenticated = m.makeDatabase(key);
 				Boolean result = Boolean.valueOf(authenticated);
-	            return result ;
-	        }
-	    };
+				return result ;
+			}
+		};
 
-	    task.setOnSucceeded(e -> {
-	        boolean authenticated = task.getValue().booleanValue();
-	        primaryStage.getScene().setCursor(Cursor.DEFAULT);
+		task.setOnSucceeded(e -> {
+			boolean authenticated = task.getValue().booleanValue();
+			primaryStage.getScene().setCursor(Cursor.DEFAULT);
 			if(authenticated == true) {
 				loadScene(LOGIN_SCENE);		
 			} else {
@@ -508,10 +545,10 @@ public class Controller {
 				Alert err = new Alert(AlertType.CONFIRMATION, msg);
 				err.show();
 			}
-	    });
+		});
 
-	    new Thread(task).start();
-		
+		new Thread(task).start();
+
 
 	}
 
@@ -666,7 +703,7 @@ public class Controller {
 			homeGC.fillText(""+ ++homeNetChartIndex, p2.getX(), p2.getY());
 			DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+homeNetChartIndex);
 			homeNetChartItems.add(number);
-				
+
 		} else if(netChartCanvas == AwayNetChartCanvas) {
 			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), awayGC.getStroke());
 			awayGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
@@ -754,6 +791,7 @@ public class Controller {
 	private static void drawLinesAndNumbers(ArrayList<DrawnObject> d, GraphicsContext gc) {
 		for(int i = 0; i < d.size(); i++) {
 			DrawnObject obj = d.get(i);
+			System.out.println("Points size: " + obj.getPoints().size());
 			if(obj.getText() == null) {
 				gc.beginPath();
 				gc.setLineWidth(obj.getWidth());
@@ -764,7 +802,7 @@ public class Controller {
 					gc.stroke();
 				}
 			} else {
-				Point p = obj.getPoint(0);
+				Point p = obj.getPoint(obj.size()-1);
 				gc.setFill(p.getColor());
 				gc.fillText(obj.getText(), p.getX(), p.getY());
 			}
@@ -880,6 +918,26 @@ public class Controller {
 	}
 
 	/**
+	 * Method saves all clips to the database
+	 */
+	@FXML
+	public void SaveClipsToDBClicked() {
+		if(GamePicker.getSelectionModel().getSelectedItem()	 == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+		} else {
+			String game = GamePicker.getSelectionModel().getSelectedItem().toString();
+			for(int i = 0; i < clips.size(); i++) {
+				clips.get(i).setGame(game);
+				m.addClip(clips.get(i));
+			}
+		}
+	}
+
+	/**
 	 * Method saves diagram to current clip
 	 */
 	@FXML
@@ -908,20 +966,12 @@ public class Controller {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
+		clips.get(index).setURL(NCHC_URL.getText());
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Saved");
-		alert.setHeaderText("Title Saved");
-		alert.setContentText("Title of clip saved");
+		alert.setHeaderText("Title and URL Saved");
+		alert.setContentText("Title and URL of clip saved");
 		alert.show();
-	}
-
-	/**
-	 * Method saves the NCHC link
-	 * NOT YET IMPLEMENTED
-	 */
-	@FXML
-	public void NCHCSaveButtonClicked() {
-
 	}
 
 	/**
