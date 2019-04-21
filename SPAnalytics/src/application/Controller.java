@@ -217,16 +217,19 @@ public class Controller {
 			String jerseyNo = null;
 			if (newScene.equals(GOALIE_CARD)) {
 				jerseyNo = m.getJerseyNo("Ryan Larkin");
-				//Get the player stats needed
-				HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+				//Get the goalie stats
+				Object check = m.getPlayerStats(jerseyNo);
+				
+				if (check != null) {
 				//make the observable list
+				HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
 				ObservableList<GoalieModel> data = makeGoalieTable(map);
 				//find the table needed to be added to
 				TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
 				//add the items to be updated
 				tbData.setItems(data);
 				makeGoalieCols(tbData); //create the columns
-				
+				}
 				rinkGC = RinkCanvas.getGraphicsContext2D();
 				goalieClips = m.getClips("testGame");
 				for(Clip c : goalieClips) {
@@ -242,15 +245,19 @@ public class Controller {
 			} else if (newScene.equals(PLAYER_CARD)) {
 				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
 				//Get the player stats
-				HashMap<String, HashMap> map = m.getPlayerStats(jerseyNo);
+			
+				Object check = m.getPlayerStats(jerseyNo);
+				
+				if (check != null) {  
 				//make the observable list
+				HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
 				ObservableList<MemberModel> data = makeMemberTable(map);
 				//find the table needed to be added to
 				TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
 				//add the items to be updated
 				tbData.setItems(data);
 				makeMemberCols(tbData); //create the columns
-
+				}
 			}
 
 			if (textArea != null && jerseyNo != null) {

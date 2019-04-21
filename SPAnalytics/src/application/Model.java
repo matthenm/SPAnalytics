@@ -59,11 +59,24 @@ public class Model {
 				FirebaseApp.initializeApp(options,"data");
 				this.docRef = db.collection("information").document("players");
 				this.docTeamRef = db.collection("information").document("team");
+				this.docClipRef = db.collection("information").document("clip");
+//				ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
+//				DrawnObject text = new DrawnObject(100-12, 100+12, Color.BLACK, 0, "Test");
+//				drawList.add(text);
+//				ArrayList<String> players = new ArrayList<String>();
+//				players.add("TestName1");
+//				players.add("TestName2");
+//				Clip c = new Clip("TestTime", "Miami vs. Omaha", players, drawList, "testurl", "testGame2");
+//				addClip(c);
+				ArrayList<DrawnObject> obj = new ArrayList<DrawnObject>();
+				addChartToPosition("defense", "Miami vs. Test2", obj, "netChart");
+				//addGame("opponentTest", "9/3/2018");
 				//getPlayer(db, "6");
 				//getPlayers(db);
 				//getGameStats("Miami vs. Omaha");
 				//addMember(docRef);
 				//addGoalie();
+				
 				//deletePlayerGoalie(docRef);
 				// getPlayerStats("6");
 				//createTeam(docRefTeam);
@@ -455,6 +468,29 @@ public class Model {
 	}
 
 	/**
+	 * Add a game with string opponent and string date
+	 */
+	public void addGame(String opponent, String date) {
+		Game game = new Game();
+		game.gameName = opponent + " " + date;
+		TeamScore offense = new TeamScore();
+		offense.teamName = "Miami";
+		TeamScore defense = new TeamScore();
+		defense.teamName = opponent;
+		game.offense = offense;
+		game.defense = defense;
+		Team team = new Team();
+		team.teamName = "Miami";
+		Map<String, Game> games = new HashMap<String, Game>();
+		//games.put("Miami vs. " + opponent, game);
+		games.put(game.gameName, game);
+		team.games = games;
+		addTeam(team);
+		
+	}
+	
+	
+	/**
 	 * get a specific player based on their jersey no
 	 * 
 	 * @param db
@@ -505,8 +541,11 @@ public class Model {
 
 		try {
 			document = future.get();
-			HashMap map = (HashMap) document.get(jerseyNo + ".stats");
-
+			
+			Object snap =  document.get(jerseyNo + ".stats");
+			if (snap != null) {
+			HashMap map = (HashMap) snap;
+			
 			if (map.size() > 0) {
 				for (Object s : map.keySet()) { // for each game
 					// System.out.println(s);
@@ -580,13 +619,19 @@ public class Model {
 						}
 					}
 				}
+			} 
 			}
-			return allStats;
+				else {
+				
+				return null;
+			}
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-		return null;
+		
+		return allStats;
 
 	}
 
@@ -725,8 +770,10 @@ public class Model {
 
 		try {
 			document = future.get();
-			HashMap map = (HashMap) document.get(jerseyNo + ".stats");
-
+			
+			Object snap =  document.get(jerseyNo + ".stats");  //will throw a null pointer exception if this is null
+			if (snap != null) {
+			HashMap map = (HashMap) snap;
 			// System.out.println(map);
 			if (map.size() > 0) {
 
@@ -739,7 +786,9 @@ public class Model {
 					}
 				}
 			}
-
+			} else {  //return something or else an exception will be thrown later
+				return "";
+			}
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -818,6 +867,32 @@ public class Model {
 
 		return names;
 
+	}
+	
+	public void addChartToPosition(String position, String game, ArrayList<DrawnObject> chart, String typeOfChart) {
+		
+		
+		ApiFuture<DocumentSnapshot> future = this.docTeamRef.get();
+		DocumentSnapshot document;
+		
+		try {
+			document = future.get();
+			HashMap map = (HashMap) document.get("Miami.games");
+
+			// System.out.println(map);
+			if (map.size() > 0) {
+
+				for (Object s : map.keySet()) { // for each game
+					Object detailsOnGame = map.get(s);
+					System.out.println(s + "=>" + detailsOnGame);
+				}
+			}
+
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	
+	}
 	}
 
 	// position = defense or offense, and string game
