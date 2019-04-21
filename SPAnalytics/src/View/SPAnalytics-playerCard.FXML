@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.canvas.Canvas?>
@@ -15,11 +22,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="234.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="45.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
+            <TableView fx:id="tbData" editable="true" layoutX="147.0" layoutY="78.0" prefHeight="138.0" prefWidth="885.0" style="-fx-background-color: black; text-color: white;">
                <columns>
                   <TableColumn fx:id="season" prefWidth="59.0" text="Season" />
                   <TableColumn fx:id="GP" prefWidth="59.0" text="GP" />
@@ -44,7 +51,7 @@
                   <Image url="@../Images/Mahalak.jpg" />
                </image>
             </ImageView>
-            <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="41.0" prefWidth="302.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#9;  Height: 5'9&quot;&#9;  Weight: 161 Lbs&#9;Born: 9/14/98&#9;  Monroe, MI" unFocusColor="#ffffff00" />
+            <JFXTextArea fx:id="playerInfo" layoutX="147.0" prefHeight="72.0" prefWidth="353.0" style="-fx-background-color: black; -fx-text-fill: white;" text="#6 Alec Mahalak&#9;Defense&#9;  Height: 5'9&quot;&#9;  Weight: 161 Lbs&#9;Born: 9/14/98&#9;  Monroe, MI" unFocusColor="#ffffff00" />
             <JFXButton buttonType="RAISED" layoutX="1490.0" layoutY="2.0" onAction="#PlayerHomeButtonClicked" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #C42134;" text="HOME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
@@ -55,14 +62,19 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-            <ComboBox layoutX="1100.0" layoutY="45.0" prefWidth="300.0" promptText="Game Log" />
+            <JFXButton buttonType="RAISED" layoutX="1456.0" layoutY="148.0" onAction="#OpenGameButtonClicked" prefHeight="40.0" prefWidth="122.0" style="-fx-background-color: #C42134;" text="Open Game" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <ComboBox fx:id="GamePicker" layoutX="1242.0" layoutY="155.0" prefHeight="31.0" prefWidth="183.0" promptText="Game" style="-fx-background-color: White;" />
          </children>
       </AnchorPane>
    </top>
    <center>
-                 <AnchorPane prefHeight="688.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="688.0" prefWidth="1600.0" BorderPane.alignment="CENTER">
          <children>
-            <TabPane layoutX="14.0" layoutY="56.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="14.0" layoutY="24.0" prefHeight="618.0" prefWidth="1411.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Clips">
                   <content>
@@ -74,12 +86,7 @@
                                  </image>
                               </ImageView>
                               <Canvas fx:id="RinkCanvas" height="549.0" layoutX="36.0" layoutY="13.0" onMouseDragged="#CanvasMouseDragged" onMousePressed="#CanvasMousePressed" width="1095.0" />
-                              <ListView layoutX="1146.0" layoutY="90.0" prefHeight="433.0" prefWidth="254.0" />
-                              <JFXButton buttonType="RAISED" layoutX="1145.0" onAction="#PlayerLogoutButtonClicked" prefHeight="70.0" prefWidth="254.0" style="-fx-background-color: #C42134;" text="Game Link" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="25.0" />
-                                 </font>
-                              </JFXButton>
+                              <ListView fx:id="ClipList" layoutX="1146.0" layoutY="64.0" onMouseReleased="#ClipListSelectionChanged" prefHeight="459.0" prefWidth="254.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -131,7 +138,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="HomeNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="HomeSCCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -145,7 +152,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="AwayNetChartCanvas1" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="AwaySCCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>

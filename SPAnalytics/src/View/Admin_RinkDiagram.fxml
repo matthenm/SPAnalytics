@@ -84,12 +84,7 @@
                               </JFXButton>
                               <TextArea fx:id="TimeStampNotes" layoutX="279.0" layoutY="53.0" prefHeight="28.0" prefWidth="200.0" promptText="Title" />
                               <ComboBox fx:id="TimeStamps" layoutX="12.0" layoutY="51.0" prefHeight="31.0" prefWidth="261.0" promptText="Time Stamps" style="-fx-background-color: white;" />
-                              <JFXButton buttonType="RAISED" layoutX="494.0" layoutY="8.0" onAction="#NCHCSaveButtonClicked" prefHeight="32.0" prefWidth="99.0" style="-fx-background-color: #C42134;" text="Save Link" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </JFXButton>
-                              <JFXButton buttonType="RAISED" layoutX="495.0" layoutY="51.0" onAction="#SaveNotesButtonClicked" prefHeight="32.0" prefWidth="99.0" style="-fx-background-color: #C42134;" text="Save Title" textFill="WHITE">
+                              <JFXButton buttonType="RAISED" layoutX="495.0" layoutY="7.0" onAction="#SaveNotesButtonClicked" prefHeight="76.0" prefWidth="99.0" style="-fx-background-color: #C42134;" text="Save Link and Title to Clip" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
@@ -97,23 +92,6 @@
                            </children>
                         </AnchorPane>
                      </content>
-                  </Tab>
-                  <Tab text="YouTube">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="129.0" prefWidth="345.0">
-                           <children>
-                              <TextField layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="55.0" promptText="URL" />
-                              <TextArea layoutX="14.0" layoutY="55.0" prefHeight="76.0" prefWidth="126.0" promptText="Timestamps/Notes" />
-                              <Button layoutX="77.0" layoutY="14.0" mnemonicParsing="false" text="Update" />
-                              <WebView layoutX="154.0" layoutY="14.0" prefHeight="116.0" prefWidth="114.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab text="Drive">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
                   </Tab>
                </tabs>
             </TabPane>
@@ -123,6 +101,11 @@
                   <Font size="18.0" />
                </font>
             </Text>
+            <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="74.0" onAction="#SaveClipsToDBClicked" prefHeight="52.0" prefWidth="101.0" style="-fx-background-color: #C42134;" text="Save All Clips to DB" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
    </top>

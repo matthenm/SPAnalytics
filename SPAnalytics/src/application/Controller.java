@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,18 +23,22 @@ import java.util.concurrent.TimeUnit;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.css.Style;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -71,6 +76,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sun.misc.GC;
 
 public class Controller {
@@ -84,26 +90,33 @@ public class Controller {
 	private ChoiceBox<String>		rosterList;
 	@FXML
 	private ComboBox<String>		users;
-	
+
 	@FXML
 	private PasswordField			adminPass;
-	
+
 	//Player/Goalie card variables
 	@FXML ComboBox GamePicker;
 	@FXML ListView ClipList;
 	ArrayList<Clip> goalieClips;
+	Clip currentClip;
 	ArrayList<Object> gamesList;
 	ArrayList<String> playersList;
+	private static String currentUser;
 
-
-	
 	//key scene variables
 	@FXML
 	private JFXButton			keySubmit;
 	@FXML
-	private JFXTextField		databaseKey;
-    
-	
+	private TextField			databaseKey;
+
+	//Scoring Chances vars
+	@FXML private Canvas AwaySCCanvas;
+	@FXML private Canvas HomeSCCanvas;
+	private GraphicsContext homeGC1;
+	private GraphicsContext awayGC1;
+	private ArrayList<DrawnObject> homeSCItems = new ArrayList<DrawnObject>();
+	private ArrayList<DrawnObject> awaySCItems = new ArrayList<DrawnObject>();
+
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
 	@FXML private Canvas HomeNetChartCanvas;
@@ -165,9 +178,53 @@ public class Controller {
 	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
 	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
 	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
+	private final String	ADMIN_ADD				= "/view/ADMIN_ADD.fxml";
 	private final String	KEY						= "/view/Admin_Key.fxml";
 	private final String	CSS						= "/view/application.css";
 
+	
+	//add player to database variables
+	@FXML
+	private JFXTextField		fullName;
+	@FXML
+	private JFXTextField		birthDate;
+	@FXML
+	private JFXTextField		height;
+	@FXML
+	private JFXTextField		weight;
+	@FXML
+	private JFXTextField		homeTown;
+	@FXML
+	private JFXTextField		addJerseyNumber;
+	@FXML
+	private JFXButton			addPlayer;
+	@FXML 
+	private Label 				playerSuccess;
+	@FXML 
+	private Label 				playerRemoved;
+	@FXML 
+	private Label 				gameSuccess;
+	
+	
+	
+	//remove player to database variables
+	@FXML
+	private JFXTextField		removeJerseyNumber;
+	@FXML
+	private JFXButton			removePlayer;
+	
+	
+	//add a game to database variables
+	@FXML
+	private JFXTextField		opponent;
+	@FXML
+	private JFXTextField		date;
+	@FXML
+	private JFXButton			addGame;
+	
+	
+	
+	
 	//Database connection
 	Model m = new Model();
 
@@ -185,7 +242,7 @@ public class Controller {
 	 * Helper method that will load scene
 	 */
 	private void loadScene(String newScene) {
-		
+
 		if (newScene.equals(LOGIN_SCENE)) {
 			isLogin = true;
 		} else {
@@ -203,7 +260,7 @@ public class Controller {
 
 			// Loading the new FXML file
 			parent = fxmlLoader.load();
-			
+
 			playersList = m.playerNames();
 			users.getItems().add("ADMIN");
 			users.getItems().addAll(playersList);
@@ -215,49 +272,109 @@ public class Controller {
 
 
 			String jerseyNo = null;
-			if (newScene.equals(GOALIE_CARD)) {
-				jerseyNo = m.getJerseyNo("Ryan Larkin");
-				//Get the goalie stats
-				Object check = m.getPlayerStats(jerseyNo);
-				
-				if (check != null) {
-				//make the observable list
-				HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
-				ObservableList<GoalieModel> data = makeGoalieTable(map);
-				//find the table needed to be added to
-				TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
-				//add the items to be updated
-				tbData.setItems(data);
-				makeGoalieCols(tbData); //create the columns
+
+			if (newScene.equals(GOALIE_CARD) || newScene.equals(PLAYER_CARD)) {
+
+				if (newScene.equals(GOALIE_CARD)) {
+					try {
+						jerseyNo = m.getJerseyNo(currentUser);
+						Object check = m.getPlayerStats(jerseyNo);
+						
+						if (check != null) {
+						//make the observable list
+						HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
+						ObservableList<GoalieModel> data = makeGoalieTable(map);
+						//find the table needed to be added to
+						TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
+						//add the items to be updated
+						tbData.setItems(data);
+						makeGoalieCols(tbData); //create the columns
+						}						
+					} catch(Exception e) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("No Player Info Found");
+						alert.setHeaderText("Some information not loaded");
+						alert.setContentText("Please check with the database admins");
+						alert.show();						
+					}
+
+				} else if (newScene.equals(PLAYER_CARD)) {
+					try {
+						jerseyNo = m.getJerseyNo(currentUser);
+						//Get the player stats
+						Object check = m.getPlayerStats(jerseyNo);
+						
+						if (check != null) {
+						HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
+						//make the observable list
+						ObservableList<MemberModel> data = makeMemberTable(map);
+						//find the table needed to be added to
+						TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
+						//add the items to be updated
+						tbData.setItems(data);
+						makeMemberCols(tbData); //create the columns
+						}
+					} catch(Exception e) {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("No Player Info Found");
+						alert.setHeaderText("Some information not loaded");
+						alert.setContentText("Please check with the database admins");
+						alert.show();
+					}
+
 				}
+
+				//Set up all canvases
 				rinkGC = RinkCanvas.getGraphicsContext2D();
-				goalieClips = m.getClips("testGame");
-				for(Clip c : goalieClips) {
-					ClipList.getItems().add(c.getTitle());
-				}
+				homeGC = HomeNetChartCanvas.getGraphicsContext2D();
+				homeGC.setLineWidth(7);
+				awayGC = AwayNetChartCanvas.getGraphicsContext2D();
+				awayGC.setLineWidth(7);
+				homeGC1 = HomeSCCanvas.getGraphicsContext2D();
+				homeGC1.setLineWidth(7);
+				awayGC1 = AwaySCCanvas.getGraphicsContext2D();
+				awayGC1.setLineWidth(7);
+
+				//Populate the games list with all games for Miami
 				gamesList = m.getGameStats();
 				for(Object s : gamesList) {
 					GamePicker.getItems().add(s.toString());
 				}
-				
 
+				//Load charts and information based on selected game
+				GamePicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
+						goalieClips = m.getClips(game); 
+						System.out.println(game);
 
-			} else if (newScene.equals(PLAYER_CARD)) {
-				jerseyNo = m.getJerseyNo("Alec Mahalak"); //WILL NEED TO CHANGE TO ACCOMODATE MORE PLAYERS
-				//Get the player stats
-			
-				Object check = m.getPlayerStats(jerseyNo);
-				
-				if (check != null) {  
-				//make the observable list
-				HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
-				ObservableList<MemberModel> data = makeMemberTable(map);
-				//find the table needed to be added to
-				TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
-				//add the items to be updated
-				tbData.setItems(data);
-				makeMemberCols(tbData); //create the columns
-				}
+						homeNetChartItems = m.getChart("offense", game, "netChart");
+						awayNetChartItems = m.getChart("defense", game, "netChart");
+						homeSCItems = m.getChart("offense", game, "scoringChart");
+						awaySCItems = m.getChart("defense", game, "scoringChart");
+
+						homeGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						homeGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						awayGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						awayGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+						
+						drawOvals(homeNetChartItems, homeGC);
+						drawOvals(awayNetChartItems, awayGC);
+						drawOvals(homeSCItems, homeGC1);
+						drawOvals(awaySCItems, awayGC1);
+
+						ClipList.getItems().clear();
+						for(Clip c : goalieClips) {
+							if(c.getPlayers().contains(currentUser)) {
+								String clipText = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
+								ClipList.getItems().add(clipText);
+							}
+						}
+					}
+
+				});
+
 			}
 
 			if (textArea != null && jerseyNo != null) {
@@ -283,7 +400,7 @@ public class Controller {
 			double h = height/bp.getPrefHeight();
 			Scale scale = new Scale(w,h,0,0);
 			root.getTransforms().add(scale);
-			
+
 			//Setting a Scene KeyListener
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 				@Override
@@ -327,7 +444,7 @@ public class Controller {
 				} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
 					ovalWidth = 20;
 				}
-				
+
 				GamePicker.getItems().addAll(m.getGameStats());
 
 			} catch(Exception e) {}
@@ -346,6 +463,7 @@ public class Controller {
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 						int index = TimeStamps.getSelectionModel().getSelectedIndex();
 						TimeStampNotes.setText(clips.get(index).getTitle());
+						NCHC_URL.setText(clips.get(index).getURL());
 						copyDrawList(clips.get(index).getRinkDiagram());
 						rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						drawLinesAndNumbers(drawList, rinkGC);
@@ -357,12 +475,24 @@ public class Controller {
 					}
 
 				});
-				
+
+				GamePicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
+						clips = m.getClips(game);
+						System.out.println(clips.size());
+						for(Clip c : clips) {
+							TimeStamps.getItems().add(c.getTime());
+						}
+					}
+				});
+
 				gamesList = m.getGameStats();
 				for(Object s : gamesList) {
 					GamePicker.getItems().add(s.toString());
 				}
-				
+
 				PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 				PlayerList.getItems().addAll(m.playerNames());
 			} catch(Exception e) {}
@@ -415,43 +545,73 @@ public class Controller {
 	 */
 	@FXML
 	public void OpenGameButtonClicked() {
-		
+		System.out.println("hit");
+		if(currentClip != null) {
+			System.out.println(currentClip.getURL());
+			try {
+				Desktop.getDesktop().browse(new URL(currentClip.getURL()).toURI());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
 	/*
 	 * Method Draws selected Clip's diagram
 	 */
 	@FXML
 	public void ClipListSelectionChanged() {
+
+		if(ClipList.getSelectionModel().getSelectedItem() == null) return;
 		String clipName = ClipList.getSelectionModel().getSelectedItem().toString();
-		Clip c = new Clip();
+		System.out.println(clipName);
 		for(int i = 0; i < goalieClips.size(); i++) {
-			if(goalieClips.get(i).getTitle().equals(clipName)) {
-				c = goalieClips.get(i);
+			Clip c = goalieClips.get(i);
+			String clipMsg = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
+			if(clipMsg.equals(clipName)) {
+				System.out.println("hit");
+				currentClip = c;
 				break;
 			}
 		}
+
 		//System.out.println(c.getRinkDiagram().get(0).getText());
-		drawLinesAndNumbers(c.getRinkDiagram(), rinkGC);
+		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
+		drawLinesAndNumbers(currentClip.getRinkDiagram(), rinkGC);
 	}
-	
+
 	/**
 	 * Checks the database connection before login
 	 */
 	@FXML
 	public void submitKey() {
-		String key = databaseKey.getText();
-		boolean authenticated = m.makeDatabase(key);
-		if(authenticated == true) {
-			loadScene(LOGIN_SCENE);		
-		} else {
-			String msg = "Error on getting key";
-			Alert err = new Alert(AlertType.CONFIRMATION, msg);
-			err.show();
-		}
+		primaryStage.getScene().setCursor(Cursor.WAIT);
+		Task<Boolean> task = new Task<Boolean>() {
+			@Override
+			public Boolean call() {
+				String key = databaseKey.getText();
+				boolean authenticated = m.makeDatabase(key);
+				Boolean result = Boolean.valueOf(authenticated);
+				return result ;
+			}
+		};
+
+		task.setOnSucceeded(e -> {
+			boolean authenticated = task.getValue().booleanValue();
+			primaryStage.getScene().setCursor(Cursor.DEFAULT);
+			if(authenticated == true) {
+				loadScene(LOGIN_SCENE);		
+			} else {
+				String msg = "Error on getting key";
+				Alert err = new Alert(AlertType.CONFIRMATION, msg);
+				err.show();
+			}
+		});
+
+		new Thread(task).start();
+
+
 	}
-	
-	
 	
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
@@ -461,6 +621,7 @@ public class Controller {
 	 */
 	@FXML
 	public void loginButtonClicked() {
+		currentUser = users.getValue();
 		if(users.getValue().equals("Ryan Larkin")) {
 			loadScene(GOALIE_HOME);
 		}else if(users.getValue().equals("ADMIN")) {
@@ -481,6 +642,74 @@ public class Controller {
 	public void goBack() {
 		loadScene(ADMIN_HOME);
 	}
+	
+	/**
+	 * This is the method that will go to the admin database.
+	 */
+	@FXML
+	public void databaseClicked() {
+		loadScene(ADMIN_ADD);
+	}
+	
+
+	/**
+	 * This is the method that will add a player to the database.
+	 */
+	@FXML
+	public void addPlayer() {
+		Player player = new Player(Integer.parseInt(addJerseyNumber.getText()), fullName.getText(), 
+									height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
+		m.addPlayer(player);
+		playerSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> playerSuccess.setVisible(false)
+		);
+		visiblePause.play();	
+	}
+	
+	/**
+	 * This is the method that will remove player from the database.
+	 */
+	@FXML
+	public void removePlayer() {
+		Player Removeplayer = new Player(Integer.parseInt(removeJerseyNumber.getText()));
+		m.deletePlayer(Removeplayer);
+		playerRemoved.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> playerRemoved.setVisible(false)
+		);
+		visiblePause.play();	
+	}
+	
+
+	/**
+	 * This is the method that will add a game to the database.
+	 */
+	@FXML
+	public void addGame() {
+		String opp = opponent.getText();
+		String day = date.getText();
+		String name = opp + " " + day;
+		//System.out.println(name);
+		Game game = new Game(name);
+		m.addGame(opp, day);
+		
+		gameSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(
+		        Duration.seconds(2)
+		);
+		visiblePause.setOnFinished(
+		        event -> gameSuccess.setVisible(false)
+		);
+		visiblePause.play();	
+	}
+	
 
 	/**
 	 * This is the method that will go to the net chart scene.
@@ -497,6 +726,7 @@ public class Controller {
 	public void ScoringChancesClicked() {
 		loadScene(ADMIN_SCORINGCHANCES);
 	}
+	
 
 	/**
 	 * This is the method that will go to the rink diagram scene.
@@ -515,7 +745,7 @@ public class Controller {
 	public void PlayerCardClicked() {
 		System.out.print("player card clicked");
 		loadScene(PLAYER_CARD);
-		
+
 	}
 
 	/**
@@ -603,6 +833,7 @@ public class Controller {
 			homeGC.fillText(""+ ++homeNetChartIndex, p2.getX(), p2.getY());
 			DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+homeNetChartIndex);
 			homeNetChartItems.add(number);
+
 		} else if(netChartCanvas == AwayNetChartCanvas) {
 			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), awayGC.getStroke());
 			awayGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
@@ -669,12 +900,16 @@ public class Controller {
 	private static void drawOvals(ArrayList<DrawnObject> d, GraphicsContext gc) {
 		for(int i = 0; i < d.size(); i++) {
 			DrawnObject obj = d.get(i);
+			System.out.println("[" + obj.getLastPoint().getX() + ", " + obj.getLastPoint().getY() + "]");
+			System.out.println(obj.getWidth());
+
 			if(obj.getText() == null) {
-				Point p = obj.getPoint(0);
+				Point p = obj.getLastPoint();
 				gc.setStroke(p.getColor());
 				gc.strokeOval(p.getX(), p.getY(), obj.getWidth(), obj.getWidth());
 			} else {
-				Point p = obj.getPoint(0);;
+				System.out.println("text: " + obj.getText());
+				Point p = obj.getLastPoint();
 				gc.fillText(obj.getText(), p.getX(), p.getY());
 			}
 		}
@@ -686,6 +921,7 @@ public class Controller {
 	private static void drawLinesAndNumbers(ArrayList<DrawnObject> d, GraphicsContext gc) {
 		for(int i = 0; i < d.size(); i++) {
 			DrawnObject obj = d.get(i);
+			System.out.println("Points size: " + obj.getPoints().size());
 			if(obj.getText() == null) {
 				gc.beginPath();
 				gc.setLineWidth(obj.getWidth());
@@ -696,26 +932,59 @@ public class Controller {
 					gc.stroke();
 				}
 			} else {
-				Point p = obj.getPoint(0);
+				Point p = obj.getPoint(obj.size()-1);
 				gc.setFill(p.getColor());
 				gc.fillText(obj.getText(), p.getX(), p.getY());
 			}
 		}
-	}	
+	}
+	
+	@FXML
+	/**
+	 * Saving the home scoring chart
+	 */
+	public void ScoringChartSaveHomePressed() {
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
+		}
+		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", homeNetChartItems);
+	}
+	
+	@FXML
+	/**
+	 * Saving the home scoring chart
+	 */
+	public void ScoringChartSaveAwayPressed() {
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
+		}
+		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", awayNetChartItems);
+	}
 
 	@FXML
 	/**
 	 * Method saves the home chart
 	 */
 	public void NetChartSaveHomePressed() {
-		for(DrawnObject obj : homeNetChartItems) {
-			if(obj.getText() != null) {
-				System.out.println(obj.getText());
-			} else {
-				Point p = obj.getLastPoint();
-				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
-			}
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
 		}
+		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", homeNetChartItems);
 	}
 
 	@FXML
@@ -723,14 +992,15 @@ public class Controller {
 	 * Method saves the away chart
 	 */
 	public void NetChartSaveAwayPressed() {
-		for(DrawnObject obj : awayNetChartItems) {
-			if(obj.getText() != null) {
-				System.out.println(obj.getText());
-			} else {
-				Point p = obj.getLastPoint();
-				System.out.print("(" + p.getX() + ", " + p.getY() + "), Color: " + p.getColor() + ", Width: " + obj.getWidth() + ", Text: ");
-			}
+		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+			return;
 		}
+		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", awayNetChartItems);
 	}
 
 	/**
@@ -812,6 +1082,26 @@ public class Controller {
 	}
 
 	/**
+	 * Method saves all clips to the database
+	 */
+	@FXML
+	public void SaveClipsToDBClicked() {
+		if(GamePicker.getSelectionModel().getSelectedItem()	 == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No Game");
+			alert.setHeaderText("Game Not Selected");
+			alert.setContentText("Please make sure a game is selected before saving");
+			alert.show();
+		} else {
+			String game = GamePicker.getSelectionModel().getSelectedItem().toString();
+			for(int i = 0; i < clips.size(); i++) {
+				clips.get(i).setGame(game);
+				m.addClip(clips.get(i));
+			}
+		}
+	}
+
+	/**
 	 * Method saves diagram to current clip
 	 */
 	@FXML
@@ -840,20 +1130,12 @@ public class Controller {
 		int index = TimeStamps.getSelectionModel().getSelectedIndex();
 		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
+		clips.get(index).setURL(NCHC_URL.getText());
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Saved");
-		alert.setHeaderText("Title Saved");
-		alert.setContentText("Title of clip saved");
+		alert.setHeaderText("Title and URL Saved");
+		alert.setContentText("Title and URL of clip saved");
 		alert.show();
-	}
-
-	/**
-	 * Method saves the NCHC link
-	 * NOT YET IMPLEMENTED
-	 */
-	@FXML
-	public void NCHCSaveButtonClicked() {
-
 	}
 
 	/**

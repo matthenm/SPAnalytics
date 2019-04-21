@@ -55,6 +55,10 @@ public class DrawnObject {
 		return points.get(points.size()-1);
 	}
 	
+	public ArrayList<Point> getPoints() {
+		return points;
+	}
+	
 	public void removeLast() {
 		points.remove(points.size()-1);
 	}

@@ -57,6 +57,7 @@ public class Main extends Application {
 			primaryStage.setTitle("SP Analytics");
 			primaryStage.setMaximized(true);
 			primaryStage.setFullScreen(true);
+			primaryStage.setFullScreenExitHint("");
 			primaryStage.show();
 			
 		} catch (Exception e) {
