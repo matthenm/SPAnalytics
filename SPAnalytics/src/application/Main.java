@@ -2,6 +2,8 @@ package application;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -63,7 +65,7 @@ public class Main extends Application {
 		} catch (Exception e) {
 			String msg = "Error";
 			System.out.println(e);
-			Alert err = new Alert(AlertType.CONFIRMATION, msg);
+			Alert err = new Alert(AlertType.CONFIRMATION, e.toString());
 			err.show();
 		}
 	}

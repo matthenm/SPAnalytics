@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,12 +56,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -97,6 +100,7 @@ public class Controller {
 	//Player/Goalie card variables
 	@FXML ComboBox GamePicker;
 	@FXML ListView ClipList;
+	@FXML ListView GameList;
 	ArrayList<Clip> goalieClips;
 	Clip currentClip;
 	ArrayList<Object> gamesList;
@@ -167,22 +171,22 @@ public class Controller {
 
 	private boolean	isLogin		= true;
 
-	private final String	LOGIN_SCENE				= "/view/SPAnalytics-Login.fxml";
-	private final String	PLAYER_HOME				= "/view/PlayerHome.fxml";
-	private final String	GOALIE_HOME				= "/view/GoalieHome.fxml";
-	private final String	TEAM_PROFILE			= "/view/TeamProfile.fxml";
-	private final String	PLAYER_CARD				= "/view/SPAnalytics-playerCard.FXML";
-	private final String	GOALIE_CARD				= "/view/SPAnalytics-goalieCard.fxml";
-	private final String	GOALIE_CARD_PERCENT		= "/view/SPAnalytics-goalieCardPercent.fxml";
-	private final String	ADMIN_SCORINGCHANCES	= "/view/Admin_ScoringChances.fxml";
-	private final String	ADMIN_RINKDIAGRAM		= "/view/Admin_RinkDiagram.fxml";
-	private final String	ADMIN_NETCHART			= "/view/Admin_NetChart.fxml";
-	private final String	ADMIN_HOME				= "/view/AdminHome.fxml";
-	private final String	ADMIN_ADD				= "/view/ADMIN_ADD.fxml";
-	private final String	KEY						= "/view/Admin_Key.fxml";
-	private final String	CSS						= "/view/application.css";
+	private final String	LOGIN_SCENE				= "/View/SPAnalytics-Login.fxml";
+	private final String	PLAYER_HOME				= "/View/PlayerHome.fxml";
+	private final String	GOALIE_HOME				= "/View/GoalieHome.fxml";
+	private final String	TEAM_PROFILE			= "/View/TeamProfile.fxml";
+	private final String	PLAYER_CARD				= "/View/SPAnalytics-playerCard.FXML";
+	private final String	GOALIE_CARD				= "/View/SPAnalytics-goalieCard.fxml";
+	private final String	GOALIE_CARD_PERCENT		= "/View/SPAnalytics-goalieCardPercent.fxml";
+	private final String	ADMIN_SCORINGCHANCES	= "/View/Admin_ScoringChances.fxml";
+	private final String	ADMIN_RINKDIAGRAM		= "/View/Admin_RinkDiagram.fxml";
+	private final String	ADMIN_NETCHART			= "/View/Admin_NetChart.fxml";
+	private final String	ADMIN_HOME				= "/View/AdminHome.fxml";
+	private final String	ADMIN_ADD				= "/View/ADMIN_ADD.fxml";
+	private final String	KEY						= "/View/Admin_Key.fxml";
+	private final String	CSS						= "/View/application.css";
 
-	
+
 	//add player to database variables
 	@FXML
 	private JFXTextField		fullName;
@@ -204,16 +208,16 @@ public class Controller {
 	private Label 				playerRemoved;
 	@FXML 
 	private Label 				gameSuccess;
-	
-	
-	
+	@FXML private CheckBox		GoalieCheckBox;
+
+
 	//remove player to database variables
 	@FXML
 	private JFXTextField		removeJerseyNumber;
 	@FXML
 	private JFXButton			removePlayer;
-	
-	
+
+
 	//add a game to database variables
 	@FXML
 	private JFXTextField		opponent;
@@ -221,10 +225,10 @@ public class Controller {
 	private JFXTextField		date;
 	@FXML
 	private JFXButton			addGame;
-	
-	
-	
-	
+
+
+
+
 	//Database connection
 	Model m = new Model();
 
@@ -234,7 +238,15 @@ public class Controller {
 	 */
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
-
+		
+		try {
+			Scanner f = new Scanner(new File("Key.txt"));
+			String key = f.nextLine();
+			databaseKey.setText(key);
+			f.close();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 
@@ -279,16 +291,16 @@ public class Controller {
 					try {
 						jerseyNo = m.getJerseyNo(currentUser);
 						Object check = m.getPlayerStats(jerseyNo);
-						
+
 						if (check != null) {
-						//make the observable list
-						HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
-						ObservableList<GoalieModel> data = makeGoalieTable(map);
-						//find the table needed to be added to
-						TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
-						//add the items to be updated
-						tbData.setItems(data);
-						makeGoalieCols(tbData); //create the columns
+							//make the observable list
+							HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
+							ObservableList<GoalieModel> data = makeGoalieTable(map);
+							//find the table needed to be added to
+							TableView<GoalieModel> tbData = (TableView<GoalieModel>) parent.lookup("#tbData");
+							//add the items to be updated
+							tbData.setItems(data);
+							makeGoalieCols(tbData); //create the columns
 						}						
 					} catch(Exception e) {
 						Alert alert = new Alert(AlertType.INFORMATION);
@@ -303,16 +315,16 @@ public class Controller {
 						jerseyNo = m.getJerseyNo(currentUser);
 						//Get the player stats
 						Object check = m.getPlayerStats(jerseyNo);
-						
+
 						if (check != null) {
-						HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
-						//make the observable list
-						ObservableList<MemberModel> data = makeMemberTable(map);
-						//find the table needed to be added to
-						TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
-						//add the items to be updated
-						tbData.setItems(data);
-						makeMemberCols(tbData); //create the columns
+							HashMap<String, HashMap> map = (HashMap<String, HashMap>) check;
+							//make the observable list
+							ObservableList<MemberModel> data = makeMemberTable(map);
+							//find the table needed to be added to
+							TableView<MemberModel> tbData = (TableView<MemberModel>) parent.lookup("#tbData");
+							//add the items to be updated
+							tbData.setItems(data);
+							makeMemberCols(tbData); //create the columns
 						}
 					} catch(Exception e) {
 						Alert alert = new Alert(AlertType.INFORMATION);
@@ -338,39 +350,48 @@ public class Controller {
 				//Populate the games list with all games for Miami
 				gamesList = m.getGameStats();
 				for(Object s : gamesList) {
-					GamePicker.getItems().add(s.toString());
+					GameList.getItems().add(s.toString());
 				}
 
+				GameList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
 				//Load charts and information based on selected game
-				GamePicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				GameList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
-						goalieClips = m.getClips(game); 
-						System.out.println(game);
-
-						homeNetChartItems = m.getChart("offense", game, "netChart");
-						awayNetChartItems = m.getChart("defense", game, "netChart");
-						homeSCItems = m.getChart("offense", game, "scoringChart");
-						awaySCItems = m.getChart("defense", game, "scoringChart");
-
 						homeGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						homeGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						awayGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						awayGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
-						
-						drawOvals(homeNetChartItems, homeGC);
-						drawOvals(awayNetChartItems, awayGC);
-						drawOvals(homeSCItems, homeGC1);
-						drawOvals(awaySCItems, awayGC1);
 
 						ClipList.getItems().clear();
-						for(Clip c : goalieClips) {
-							if(c.getPlayers().contains(currentUser)) {
-								String clipText = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
-								ClipList.getItems().add(clipText);
+						
+						Object[] games = GameList.getSelectionModel().getSelectedItems().toArray();
+						for(int i = 0; i < games.length; i++) {
+							String game = games[i].toString();
+
+							goalieClips = m.getClips(game); 
+							System.out.println(game);
+
+							homeNetChartItems = m.getChart("offense", game, "netChart");
+							awayNetChartItems = m.getChart("defense", game, "netChart");
+							homeSCItems = m.getChart("offense", game, "scoringChart");
+							awaySCItems = m.getChart("defense", game, "scoringChart");
+
+							drawOvals(homeNetChartItems, homeGC);
+							drawOvals(awayNetChartItems, awayGC);
+							drawOvals(homeSCItems, homeGC1);
+							drawOvals(awaySCItems, awayGC1);						
+
+							for(Clip c : goalieClips) {
+								if(c.getPlayers().contains(currentUser)) {
+									String clipText = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
+									ClipList.getItems().add(clipText);
+								}
 							}
 						}
+
+
 					}
 
 				});
@@ -482,6 +503,7 @@ public class Controller {
 						String game = GamePicker.getSelectionModel().getSelectedItem().toString();
 						clips = m.getClips(game);
 						System.out.println(clips.size());
+						TimeStamps.getItems().clear();
 						for(Clip c : clips) {
 							TimeStamps.getItems().add(c.getTime());
 						}
@@ -586,6 +608,7 @@ public class Controller {
 	@FXML
 	public void submitKey() {
 		primaryStage.getScene().setCursor(Cursor.WAIT);
+		String keyVal = databaseKey.getText();
 		Task<Boolean> task = new Task<Boolean>() {
 			@Override
 			public Boolean call() {
@@ -600,6 +623,14 @@ public class Controller {
 			boolean authenticated = task.getValue().booleanValue();
 			primaryStage.getScene().setCursor(Cursor.DEFAULT);
 			if(authenticated == true) {
+				try {
+					File keyFile = new File("Key.txt");					
+					PrintWriter pw = new PrintWriter(keyFile);
+					pw.println(keyVal);
+					pw.close();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 				loadScene(LOGIN_SCENE);		
 			} else {
 				String msg = "Error on getting key";
@@ -612,7 +643,7 @@ public class Controller {
 
 
 	}
-	
+
 	/**
 	 * This is the method that will switch to the home screen once login is clicked
 	 * If player --> player home screen.
@@ -642,7 +673,7 @@ public class Controller {
 	public void goBack() {
 		loadScene(ADMIN_HOME);
 	}
-	
+
 	/**
 	 * This is the method that will go to the admin database.
 	 */
@@ -650,7 +681,7 @@ public class Controller {
 	public void databaseClicked() {
 		loadScene(ADMIN_ADD);
 	}
-	
+
 
 	/**
 	 * This is the method that will add a player to the database.
@@ -658,18 +689,24 @@ public class Controller {
 	@FXML
 	public void addPlayer() {
 		Player player = new Player(Integer.parseInt(addJerseyNumber.getText()), fullName.getText(), 
-									height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
-		m.addPlayer(player);
+				height.getText(), weight.getText(), birthDate.getText(), homeTown.getText());
+		String position;
+		if(GoalieCheckBox.isSelected()) {
+			position = "goalie";
+		} else {
+			position = "player";
+		}
+		m.addPlayerWithPosition(player, position);
 		playerSuccess.setVisible(true);
 		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(2)
-		);
+				Duration.seconds(2)
+				);
 		visiblePause.setOnFinished(
-		        event -> playerSuccess.setVisible(false)
-		);
+				event -> playerSuccess.setVisible(false)
+				);
 		visiblePause.play();	
 	}
-	
+
 	/**
 	 * This is the method that will remove player from the database.
 	 */
@@ -679,14 +716,14 @@ public class Controller {
 		m.deletePlayer(Removeplayer);
 		playerRemoved.setVisible(true);
 		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(2)
-		);
+				Duration.seconds(2)
+				);
 		visiblePause.setOnFinished(
-		        event -> playerRemoved.setVisible(false)
-		);
+				event -> playerRemoved.setVisible(false)
+				);
 		visiblePause.play();	
 	}
-	
+
 
 	/**
 	 * This is the method that will add a game to the database.
@@ -699,17 +736,17 @@ public class Controller {
 		//System.out.println(name);
 		Game game = new Game(name);
 		m.addGame(opp, day);
-		
+
 		gameSuccess.setVisible(true);
 		PauseTransition visiblePause = new PauseTransition(
-		        Duration.seconds(2)
-		);
+				Duration.seconds(2)
+				);
 		visiblePause.setOnFinished(
-		        event -> gameSuccess.setVisible(false)
-		);
+				event -> gameSuccess.setVisible(false)
+				);
 		visiblePause.play();	
 	}
-	
+
 
 	/**
 	 * This is the method that will go to the net chart scene.
@@ -726,7 +763,7 @@ public class Controller {
 	public void ScoringChancesClicked() {
 		loadScene(ADMIN_SCORINGCHANCES);
 	}
-	
+
 
 	/**
 	 * This is the method that will go to the rink diagram scene.
@@ -938,7 +975,7 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	@FXML
 	/**
 	 * Saving the home scoring chart
@@ -954,7 +991,7 @@ public class Controller {
 		}
 		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", homeNetChartItems);
 	}
-	
+
 	@FXML
 	/**
 	 * Saving the home scoring chart

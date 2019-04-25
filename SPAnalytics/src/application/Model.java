@@ -374,6 +374,52 @@ public class Model {
 		}
 
 	}
+	
+	public void addPlayerWithPosition(Player player, String position) {
+
+		Map<String, Player> players = new HashMap<>();
+
+		// ...
+
+		if (player.stats == null) {
+
+			Position createdPosition = new Position();
+			createdPosition.namePosition = position;
+
+			if (position.equals("goalie")) {
+
+				Goalie goalie = new Goalie(0,0,0,0,0,0,0,0,0);
+				createdPosition.goalie = goalie;
+
+			} else if (position.equals("player")) {
+
+				Member mem = new Member(0,0,0,0,0,0,0,0,0,0,0,0,0);
+				createdPosition.member = mem;
+			} 
+
+			Map<String, PlayerStats> stats = new HashMap<String, PlayerStats>();
+			PlayerStats pStats = new PlayerStats("", 0, createdPosition);
+			stats.put("stats", pStats);
+			player.stats = stats;
+
+		}
+
+		players.put("" + player.jerseyNo, player);
+		ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
+
+		try {
+
+			System.out.println("Update time : " + result.get().getUpdateTime());
+
+		} catch (InterruptedException | ExecutionException e) {
+
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+
+		}
+
+	}
 
 	/**
 	 * adds an array of players to the database (does not override the database only

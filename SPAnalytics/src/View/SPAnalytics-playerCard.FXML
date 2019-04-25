@@ -67,7 +67,12 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
-            <ComboBox fx:id="GamePicker" layoutX="1242.0" layoutY="155.0" prefHeight="31.0" prefWidth="183.0" promptText="Game" style="-fx-background-color: White;" />
+            <Label alignment="CENTER" layoutX="1171.0" layoutY="21.0" prefHeight="25.0" prefWidth="260.0" text="Games List" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ListView fx:id="GameList" layoutX="1172.0" layoutY="54.0" prefHeight="178.0" prefWidth="258.0" />
          </children>
       </AnchorPane>
    </top>
@@ -103,10 +108,10 @@
                                              <children>
                                                 <ImageView fitHeight="537.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../images/half_rink.jpg" />
+                                                      <Image url="@../Images/half_rink.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="HomeNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                                <Canvas fx:id="HomeSCCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -117,10 +122,10 @@
                                              <children>
                                                 <ImageView fitHeight="537.0" fitWidth="724.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@../images/half_rink.jpg" />
+                                                      <Image url="@../Images/half_rink.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="AwayNetChartCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
+                                                <Canvas fx:id="AwaySCCanvas" height="537.0" onMousePressed="#drawCircle" width="611.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -138,7 +143,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="HomeSCCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="HomeNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -152,7 +157,7 @@
                                                       <Image url="@../Images/NetChart.jpg" />
                                                    </image>
                                                 </ImageView>
-                                                <Canvas fx:id="AwaySCCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
+                                                <Canvas fx:id="AwayNetChartCanvas" height="448.0" layoutX="43.0" layoutY="12.0" onMousePressed="#drawCircle" width="731.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
