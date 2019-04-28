@@ -653,16 +653,18 @@ public class Controller {
 	@FXML
 	public void loginButtonClicked() {
 		currentUser = users.getValue();
-		if(users.getValue().equals("Ryan Larkin")) {
-			loadScene(GOALIE_HOME);
-		}else if(users.getValue().equals("ADMIN")) {
+		String number = m.getJerseyNo(currentUser);
+		String position = m.getPosition(number);
+		if(position.equals("goalie")) {
+			loadScene(GOALIE_CARD);
+		}else if(currentUser.equals("ADMIN")) {
 			adminPass.setVisible(true);
-			if(adminPass.getText().equals("test")) {
+			if(position.equals("test")) {
 				loadScene(ADMIN_HOME);
 			}		
 		}
 		else {	
-			loadScene(PLAYER_HOME);
+			loadScene(PLAYER_CARD);
 		}
 	}
 	//Admin card button functionalities
