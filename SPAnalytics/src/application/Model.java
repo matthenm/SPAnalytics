@@ -381,28 +381,26 @@ public class Model {
 
 		// ...
 
-		if (player.stats == null) {
-
-			Position createdPosition = new Position();
-			createdPosition.namePosition = position;
-
+		Position createdPosition = new Position();
+		createdPosition.namePosition = position;
+		System.out.println("I got here");
 			if (position.equals("goalie")) {
 
 				Goalie goalie = new Goalie(0,0,0,0,0,0,0,0,0);
 				createdPosition.goalie = goalie;
 
-			} else if (position.equals("player")) {
+			} else {
 
 				Member mem = new Member(0,0,0,0,0,0,0,0,0,0,0,0,0);
 				createdPosition.member = mem;
 			} 
 
 			Map<String, PlayerStats> stats = new HashMap<String, PlayerStats>();
-			PlayerStats pStats = new PlayerStats("", 0, createdPosition);
-			stats.put("stats", pStats);
+			PlayerStats pStats = new PlayerStats(null, 0, createdPosition);
+			stats.put("current", pStats);
 			player.stats = stats;
 
-		}
+		
 
 		players.put("" + player.jerseyNo, player);
 		ApiFuture<WriteResult> result = this.docRef.set(players, SetOptions.merge());
