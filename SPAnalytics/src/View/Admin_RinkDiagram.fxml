@@ -106,6 +106,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
+            <Label alignment="CENTER" layoutX="403.0" layoutY="126.0" prefHeight="21.0" prefWidth="324.0" text="Save a time stamp by pressing the 'S' key" textFill="#a19e9e" />
          </children>
       </AnchorPane>
    </top>

@@ -239,6 +239,7 @@ public class Controller {
 	public void setPrimaryStage(Stage inStage) {
 		primaryStage = inStage;
 		
+		//Read the users keypath if it exists and populate the text field with the path
 		try {
 			Scanner f = new Scanner(new File("Key.txt"));
 			String key = f.nextLine();
@@ -285,6 +286,7 @@ public class Controller {
 
 			String jerseyNo = null;
 
+			//Handle the scene for goalie/player cards
 			if (newScene.equals(GOALIE_CARD) || newScene.equals(PLAYER_CARD)) {
 
 				if (newScene.equals(GOALIE_CARD)) {
@@ -353,12 +355,14 @@ public class Controller {
 					GameList.getItems().add(s.toString());
 				}
 
+				//Allow the game list to have multiple choices at once, for aggregate charts
 				GameList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 				//Load charts and information based on selected game
 				GameList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+						//clear out pre-existing data from charts
 						homeGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						homeGC1.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 						awayGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
@@ -366,6 +370,7 @@ public class Controller {
 
 						ClipList.getItems().clear();
 						
+						//get all games selected by user, populate the associated charts
 						Object[] games = GameList.getSelectionModel().getSelectedItems().toArray();
 						for(int i = 0; i < games.length; i++) {
 							String game = games[i].toString();
@@ -383,6 +388,7 @@ public class Controller {
 							drawOvals(homeSCItems, homeGC1);
 							drawOvals(awaySCItems, awayGC1);						
 
+							//add the clips matching the user and current game
 							for(Clip c : goalieClips) {
 								if(c.getPlayers().contains(currentUser)) {
 									String clipText = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
@@ -398,6 +404,7 @@ public class Controller {
 
 			}
 
+			//Populate player bio information
 			if (textArea != null && jerseyNo != null) {
 
 				HashMap playerInfo = m.getPlayer(jerseyNo); //based on jersey no
@@ -422,7 +429,7 @@ public class Controller {
 			Scale scale = new Scale(w,h,0,0);
 			root.getTransforms().add(scale);
 
-			//Setting a Scene KeyListener
+			//Setting a Scene KeyListener, allows user to add clip with the S key
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 				@Override
 				public void handle(KeyEvent event) {
@@ -444,8 +451,11 @@ public class Controller {
 		} catch (Exception err) {
 			System.out.println(err);
 		}
+		
+		//Setting up the net/scoring chances charts
 		if(newScene.equals(ADMIN_NETCHART) || newScene.equals(ADMIN_SCORINGCHANCES)) {
 			try {
+				//chart graphics settings
 				netChartCanvas = HomeNetChartCanvas;
 
 				homeGC = HomeNetChartCanvas.getGraphicsContext2D();
@@ -465,7 +475,8 @@ public class Controller {
 				} else if(newScene.equals(ADMIN_SCORINGCHANCES)) {
 					ovalWidth = 20;
 				}
-
+				
+				//add games to picker dropdown
 				GamePicker.getItems().addAll(m.getGameStats());
 
 			} catch(Exception e) {}
@@ -473,12 +484,15 @@ public class Controller {
 
 		if(newScene.equals(ADMIN_RINKDIAGRAM)) {
 			try {
+				//setting up rink diagram graphics
 				RinkCP.setValue(Color.BLACK);
 				rinkGC = RinkCanvas.getGraphicsContext2D();
 				rinkGC.setStroke(RinkCP.getValue());
 				rinkGC.setFill(RinkCP.getValue());
 				rinkGC.setLineWidth(RinkSlider.getValue());
 				rinkGC.setFont(new Font("Verdana", 24));
+				
+				//draws associated diagram and populates information for a selected timestamp
 				TimeStamps.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -497,6 +511,7 @@ public class Controller {
 
 				});
 
+				//gets the clips for a specific game selected
 				GamePicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 					@Override
 					public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -510,11 +525,13 @@ public class Controller {
 					}
 				});
 
+				//populate gamepicker
 				gamesList = m.getGameStats();
 				for(Object s : gamesList) {
 					GamePicker.getItems().add(s.toString());
 				}
 
+				//allow multiple selection, add players to list
 				PlayerList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 				PlayerList.getItems().addAll(m.playerNames());
 			} catch(Exception e) {}
@@ -531,6 +548,7 @@ public class Controller {
 
 	/**
 	 * Helper method that converts milliseconds to a stopwatch time format
+	 * example output is 19:03 1st
 	 */
 	private static String formatTime(final long l)
 	{
@@ -550,7 +568,7 @@ public class Controller {
 	}
 
 	/**
-	 * Returns the current time on the timer
+	 * creates a new clip with the current time on the timer, range of 15 seconds
 	 */
 	private void getTime() {
 		long sTime = currentTime - TimeUnit.SECONDS.toMillis(15);
@@ -563,11 +581,11 @@ public class Controller {
 	}
 
 	/**
-	 * Opens NCHC link when clicked
+	 * Opens provided link when clicked
 	 */
 	@FXML
 	public void OpenGameButtonClicked() {
-		System.out.println("hit");
+
 		if(currentClip != null) {
 			System.out.println(currentClip.getURL());
 			try {
@@ -591,7 +609,6 @@ public class Controller {
 			Clip c = goalieClips.get(i);
 			String clipMsg = "Clip: " + c.getTime() + "\n" + "Description: " + c.getTitle();
 			if(clipMsg.equals(clipName)) {
-				System.out.println("hit");
 				currentClip = c;
 				break;
 			}
@@ -609,6 +626,8 @@ public class Controller {
 	public void submitKey() {
 		primaryStage.getScene().setCursor(Cursor.WAIT);
 		String keyVal = databaseKey.getText();
+		
+		//Create a task to connect to database, async call
 		Task<Boolean> task = new Task<Boolean>() {
 			@Override
 			public Boolean call() {
@@ -618,12 +637,16 @@ public class Controller {
 				return result ;
 			}
 		};
-
+		
+		//get the result of db connection
+		//if success -> go to login page
+		//if fail -> alert error to user
 		task.setOnSucceeded(e -> {
 			boolean authenticated = task.getValue().booleanValue();
 			primaryStage.getScene().setCursor(Cursor.DEFAULT);
 			if(authenticated == true) {
 				try {
+					//Write the user's choice for future use
 					File keyFile = new File("Key.txt");					
 					PrintWriter pw = new PrintWriter(keyFile);
 					pw.println(keyVal);
@@ -699,6 +722,7 @@ public class Controller {
 			position = "player";
 		}
 		m.addPlayerWithPosition(player, position);
+		//Displays success text for 2 seconds
 		playerSuccess.setVisible(true);
 		PauseTransition visiblePause = new PauseTransition(
 				Duration.seconds(2)
@@ -861,24 +885,31 @@ public class Controller {
 	 */
 	@FXML
 	public void drawCircle(MouseEvent e) {
+		//set a home circle
 		if(netChartCanvas == HomeNetChartCanvas) {
+			
+			//draw the circle
 			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), homeGC.getStroke());
 			homeGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
 			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
 			homeNetChartItems.add(oval);
 
+			//draw the number of the shot (with offset to be in center of circle
 			int xOff = 2*(int)(Math.log10(Math.max(1, homeNetChartIndex))+1);
 			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, homeGC.getFill());
 			homeGC.fillText(""+ ++homeNetChartIndex, p2.getX(), p2.getY());
 			DrawnObject number = new DrawnObject(p2, p1.getColor(), 0, ""+homeNetChartIndex);
 			homeNetChartItems.add(number);
-
-		} else if(netChartCanvas == AwayNetChartCanvas) {
+		
+		} else if(netChartCanvas == AwayNetChartCanvas) { //away circle
+			
+			//draw circle
 			Point p1 = new Point(e.getX()-(ovalWidth/2), e.getY()-(ovalWidth/2), awayGC.getStroke());
 			awayGC.strokeOval(p1.getX(), p1.getY(), ovalWidth, ovalWidth);
 			DrawnObject oval = new DrawnObject(p1, p1.getColor(), ovalWidth);
 			awayNetChartItems.add(oval);
 
+			//draw number w/ offset
 			int xOff = 2*(int)(Math.log10(Math.max(1, awayNetChartIndex))+1);
 			Point p2 = new Point(e.getX()-(3+xOff), e.getY()+5, awayGC.getFill());
 			awayGC.fillText(""+ ++awayNetChartIndex, p2.getX(), p2.getY());
@@ -908,11 +939,13 @@ public class Controller {
 	 */
 	@FXML
 	public void NetChartUndoPressed() {
+		//removes the last circle, redraws chart
 		if(netChartCanvas == HomeNetChartCanvas) {
 			Color original = (Color) homeGC.getStroke();
 			homeGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
 			if(homeNetChartItems.size() < 2) return;
 
+			//have to remove two (one for circle, one for text)
 			homeNetChartItems.remove(homeNetChartItems.size()-1);
 			homeNetChartItems.remove(homeNetChartItems.size()-1);
 			drawOvals(homeNetChartItems, homeGC);
@@ -923,6 +956,7 @@ public class Controller {
 			awayGC.clearRect(0, 0, netChartCanvas.getWidth(), netChartCanvas.getHeight());
 			if(awayNetChartItems.size() < 2) return;
 
+			//have to remove two (one for circle, one for text)
 			awayNetChartItems.remove(awayNetChartItems.size()-1);
 			awayNetChartItems.remove(awayNetChartItems.size()-1);
 			drawOvals(awayNetChartItems, awayGC);
@@ -942,6 +976,7 @@ public class Controller {
 			System.out.println("[" + obj.getLastPoint().getX() + ", " + obj.getLastPoint().getY() + "]");
 			System.out.println(obj.getWidth());
 
+			//draw either the circle or the text inside
 			if(obj.getText() == null) {
 				Point p = obj.getLastPoint();
 				gc.setStroke(p.getColor());
@@ -962,8 +997,11 @@ public class Controller {
 			DrawnObject obj = d.get(i);
 			System.out.println("Points size: " + obj.getPoints().size());
 			if(obj.getText() == null) {
+				//start the line
 				gc.beginPath();
 				gc.setLineWidth(obj.getWidth());
+				
+				//draw all points on line
 				for(int xy = 0; xy < obj.size(); xy++) {
 					Point p = obj.getPoint(xy);
 					gc.setStroke(p.getColor());
@@ -971,6 +1009,7 @@ public class Controller {
 					gc.stroke();
 				}
 			} else {
+				//draw the text
 				Point p = obj.getPoint(obj.size()-1);
 				gc.setFill(p.getColor());
 				gc.fillText(obj.getText(), p.getX(), p.getY());
@@ -1074,6 +1113,7 @@ public class Controller {
 		timerOn = true;
 		timerStart = System.nanoTime();
 
+		//run stopwatch on thread to keep app from locking
 		Thread t = new Thread() {
 			public void run() {
 				while(timerOn) {
@@ -1082,6 +1122,7 @@ public class Controller {
 						String formattedTime = formatTime(currentTime);
 
 						Thread.sleep(10);
+						//update the application thread to show time
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
@@ -1217,6 +1258,7 @@ public class Controller {
 		rinkGC.clearRect(0, 0, RinkCanvas.getWidth(), RinkCanvas.getHeight());
 		if(drawList.size() < 1) return;
 
+		//delete last object, redraw
 		drawList.remove(drawList.size()-1);
 		drawLinesAndNumbers(drawList, rinkGC);
 
@@ -1382,6 +1424,7 @@ public class Controller {
 
 	}
 
+	//creates a table with goalie stats
 	public void makeGoalieCols(TableView<GoalieModel> tbData) {
 
 		TableColumn<GoalieModel, String> season = new TableColumn<GoalieModel, String>("Season");
@@ -1410,6 +1453,7 @@ public class Controller {
 		tbData.getColumns().setAll(season,GP,W,L,T,GA,GAA,SA,SV,SVpercent,SO);
 	}
 
+	//create table with player stats
 	public void makeMemberCols(TableView<MemberModel> tbData) {
 
 		TableColumn<MemberModel, String> season = new TableColumn<MemberModel, String>("Season");
