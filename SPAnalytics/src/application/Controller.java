@@ -162,6 +162,10 @@ public class Controller {
 	private GraphicsContext rinkGC;
 	private ArrayList<DrawnObject> drawList = new ArrayList<DrawnObject>();
 	private DrawnObject line;
+	@FXML private Label 				diagramSuccess;
+	@FXML private Label 				titleAndLinkSuccess;
+	@FXML private Label 				clipsSuccess;
+	@FXML private Label					selectGameFirst;
 
 	//instance variables
 	private Scene					scene;
@@ -1167,16 +1171,19 @@ public class Controller {
 	@FXML
 	public void SaveClipsToDBClicked() {
 		if(GamePicker.getSelectionModel().getSelectedItem()	 == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("No Game");
-			alert.setHeaderText("Game Not Selected");
-			alert.setContentText("Please make sure a game is selected before saving");
-			alert.show();
+			selectGameFirst.setVisible(true);
+			PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+			visiblePause.setOnFinished(event -> selectGameFirst.setVisible(false));
+			visiblePause.play();
 		} else {
 			String game = GamePicker.getSelectionModel().getSelectedItem().toString();
 			for(int i = 0; i < clips.size(); i++) {
 				clips.get(i).setGame(game);
 				m.addClip(clips.get(i));
+				clipsSuccess.setVisible(true);
+				PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+				visiblePause.setOnFinished(event -> clipsSuccess.setVisible(false));
+				visiblePause.play();
 			}
 		}
 	}
@@ -1195,11 +1202,11 @@ public class Controller {
 			playersAL.add(player);
 		}
 		clips.get(index).addPlayer(playersAL);
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Saved");
-		alert.setHeaderText("Diagram Saved");
-		alert.setContentText("Rink Diagram saved to clip");
-		alert.show();
+		
+		diagramSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> diagramSuccess.setVisible(false));
+		visiblePause.play();	
 	}
 
 	/**
@@ -1211,11 +1218,10 @@ public class Controller {
 		if (index == -1) return;
 		clips.get(index).setTitle(TimeStampNotes.getText());
 		clips.get(index).setURL(NCHC_URL.getText());
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Saved");
-		alert.setHeaderText("Title and URL Saved");
-		alert.setContentText("Title and URL of clip saved");
-		alert.show();
+		titleAndLinkSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> titleAndLinkSuccess.setVisible(false));
+		visiblePause.play();
 	}
 
 	/**
