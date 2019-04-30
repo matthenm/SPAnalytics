@@ -682,7 +682,7 @@ public class Controller {
 			loadScene(GOALIE_CARD);
 		}else if(currentUser.equals("ADMIN")) {
 			adminPass.setVisible(true);
-			if(position.equals("test")) {
+			if(adminPass.getText().equals("test")) {
 				loadScene(ADMIN_HOME);
 			}		
 		}
