@@ -120,6 +120,10 @@ public class Controller {
 	private GraphicsContext awayGC1;
 	private ArrayList<DrawnObject> homeSCItems = new ArrayList<DrawnObject>();
 	private ArrayList<DrawnObject> awaySCItems = new ArrayList<DrawnObject>();
+	@FXML private Label homeChartFail;
+	@FXML private Label homeChartSuccess;
+	@FXML private Label awayChartFail;
+	@FXML private Label awayChartSuccess;
 
 	//netChart variables
 	@FXML private Canvas AwayNetChartCanvas;
@@ -128,6 +132,11 @@ public class Controller {
 	private GraphicsContext awayGC;
 	private GraphicsContext homeGC;
 	private int ovalWidth;
+	@FXML private Label homeNetChartFail;
+	@FXML private Label homeNetChartSuccess;
+	@FXML private Label awayNetChartFail;
+	@FXML private Label awayNetChartSuccess;
+	
 
 	private ArrayList<DrawnObject> homeNetChartItems = new ArrayList<DrawnObject>();
 	private int homeNetChartIndex = 0;
@@ -1027,14 +1036,18 @@ public class Controller {
 	 */
 	public void ScoringChartSaveHomePressed() {
 		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("No Game");
-			alert.setHeaderText("Game Not Selected");
-			alert.setContentText("Please make sure a game is selected before saving");
-			alert.show();
+			homeChartFail.setVisible(true);
+			PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+			visiblePause.setOnFinished(event -> homeChartFail.setVisible(false));
+			visiblePause.play();
 			return;
 		}
 		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", homeNetChartItems);
+		homeChartSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> homeChartSuccess.setVisible(false));
+		visiblePause.play();
+		return;
 	}
 
 	@FXML
@@ -1043,14 +1056,17 @@ public class Controller {
 	 */
 	public void ScoringChartSaveAwayPressed() {
 		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("No Game");
-			alert.setHeaderText("Game Not Selected");
-			alert.setContentText("Please make sure a game is selected before saving");
-			alert.show();
+			awayChartFail.setVisible(true);
+			PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+			visiblePause.setOnFinished(event -> awayChartFail.setVisible(false));
+			visiblePause.play();
 			return;
 		}
 		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "scoringChart", awayNetChartItems);
+		awayChartSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> awayChartSuccess.setVisible(false));
+		visiblePause.play();	
 	}
 
 	@FXML
@@ -1059,14 +1075,17 @@ public class Controller {
 	 */
 	public void NetChartSaveHomePressed() {
 		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("No Game");
-			alert.setHeaderText("Game Not Selected");
-			alert.setContentText("Please make sure a game is selected before saving");
-			alert.show();
+			homeNetChartFail.setVisible(true);
+			PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+			visiblePause.setOnFinished(event -> homeNetChartFail.setVisible(false));
+			visiblePause.play();
 			return;
 		}
 		m.addChart("offense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", homeNetChartItems);
+		homeNetChartSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> homeNetChartSuccess.setVisible(false));
+		visiblePause.play();
 	}
 
 	@FXML
@@ -1075,14 +1094,17 @@ public class Controller {
 	 */
 	public void NetChartSaveAwayPressed() {
 		if(GamePicker.getSelectionModel().getSelectedItem() == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("No Game");
-			alert.setHeaderText("Game Not Selected");
-			alert.setContentText("Please make sure a game is selected before saving");
-			alert.show();
+			awayNetChartFail.setVisible(true);
+			PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+			visiblePause.setOnFinished(event -> awayNetChartFail.setVisible(false));
+			visiblePause.play();
 			return;
 		}
 		m.addChart("defense", GamePicker.getSelectionModel().getSelectedItem().toString(), "netChart", awayNetChartItems);
+		awayNetChartSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> awayNetChartSuccess.setVisible(false));
+		visiblePause.play();
 	}
 
 	/**
