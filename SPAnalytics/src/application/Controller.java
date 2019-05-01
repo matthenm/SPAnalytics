@@ -1202,12 +1202,12 @@ public class Controller {
 			for(int i = 0; i < clips.size(); i++) {
 				clips.get(i).setGame(game);
 				m.addClip(clips.get(i));
-				clipsSuccess.setVisible(true);
-				PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
-				visiblePause.setOnFinished(event -> clipsSuccess.setVisible(false));
-				visiblePause.play();
 			}
 		}
+		clipsSuccess.setVisible(true);
+		PauseTransition visiblePause = new PauseTransition(Duration.seconds(2));
+		visiblePause.setOnFinished(event -> clipsSuccess.setVisible(false));
+		visiblePause.play();
 	}
 
 	/**

@@ -21,7 +21,7 @@
             <JFXTextField fx:id="opponent" focusColor="#434343" layoutY="420.0" prefHeight="39.0" prefWidth="305.0" promptText="Opponent" style="-fx-background-color: white;" unFocusColor="#c42134" />
             <Label layoutY="210.0" prefHeight="38.0" prefWidth="305.0" text="Remove Player:" textFill="WHITE" />
             <Label layoutY="370.0" prefHeight="38.0" prefWidth="305.0" text="Add Games:" textFill="WHITE" />
-            <JFXTextField fx:id="date" focusColor="#434343" layoutY="470.0" prefHeight="39.0" prefWidth="305.0" promptText="Date" style="-fx-background-color: white;" unFocusColor="#c42134" />
+            <JFXTextField fx:id="date" focusColor="#434343" layoutY="470.0" prefHeight="39.0" prefWidth="305.0" promptText="Date MM-DD-YYYY" style="-fx-background-color: white;" unFocusColor="#c42134" />
             <JFXTextField fx:id="birthDate" focusColor="#434343" layoutY="95.0" prefHeight="39.0" prefWidth="305.0" promptText="Birth Date" style="-fx-background-color: white;" unFocusColor="#c42134" />
             <JFXTextField fx:id="height" focusColor="#434343" layoutY="140.0" prefHeight="39.0" prefWidth="305.0" promptText="Height" style="-fx-background-color: white;" unFocusColor="#c42134" />
             <JFXTextField fx:id="homeTown" focusColor="#434343" layoutX="310.0" layoutY="50.0" prefHeight="39.0" prefWidth="305.0" promptText="Hometown" style="-fx-background-color: white;" unFocusColor="#c42134" />
